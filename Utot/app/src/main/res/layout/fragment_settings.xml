@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.percent.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="insideOverlay"
+    android:scrollbars="vertical"
+    tools:context="utot.utot.alarm.SettingsFragment">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/aa_7"/>
+
+    <ImageView
+        android:layout_width="100dp"
+        app:layout_aspectRatio="100%"
+        android:scaleType="fitCenter"
+        android:layout_centerHorizontal="true"
+        app:layout_marginBottomPercent="7%"
+        app:layout_marginTopPercent="7%"
+        android:id="@+id/logo"
+        android:src="@drawable/aa_5"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:layout_below="@id/logo"
+        app:layout_widthPercent="85%"
+        style="@style/ButtonStyle_1"
+        android:text="bRODcast"
+        android:id="@+id/bRODcastButton"
+        android:background="@drawable/rounded_corners_rectangle"
+        />
+    <Button
+        android:layout_below="@id/bRODcastButton"
+        app:layout_widthPercent="85%"
+        style="@style/ButtonStyle_1"
+        android:text="Sync"
+        android:id="@+id/syncButton"
+        android:background="@drawable/rounded_corners_rectangle"/>
+    <Button
+        android:layout_below="@id/syncButton"
+        app:layout_widthPercent="85%"
+        style="@style/ButtonStyle_1"
+        android:background="@drawable/rounded_corners_rectangle"
+        android:text="How To"
+        android:id="@+id/howToButton" />
+    <Button
+        android:layout_below="@id/howToButton"
+        app:layout_widthPercent="85%"
+        style="@style/ButtonStyle_1"
+        android:text="Log Out"
+        android:id="@+id/logOutButton"
+        android:background="@drawable/rounded_corners_rectangle" />
+</android.support.percent.PercentRelativeLayout>

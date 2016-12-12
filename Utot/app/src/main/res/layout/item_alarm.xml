@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainwindow"
+    android:padding="10dp"
+    android:background="#3300ace6"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_gravity="center">
+    <android.support.percent.PercentRelativeLayout
+        app:layout_heightPercent="100%"
+        android:layout_width="wrap_content"
+        android:id="@+id/timeStuff"
+        app:layout_widthPercent="70%">
+        <TextView
+            android:layout_width="match_parent"
+            app:layout_heightPercent="65%"
+            android:gravity="center_vertical"
+            android:textSize="30sp"
+            android:id="@+id/alarmTime"
+            android:textColor="@color/whiteLogIn" />
+        <TextView
+            android:layout_below="@id/alarmTime"
+            android:layout_width="match_parent"
+            app:layout_heightPercent="35%"
+            android:id="@+id/alarmFrequency"
+            android:textSize="15sp"
+            android:textColor="@color/whiteLogIn" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <com.kyleduo.switchbutton.SwitchButton
+        android:layout_toRightOf="@id/timeStuff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:kswThumbMargin="2dp"
+        app:kswThumbWidth="35dp"
+        app:kswThumbHeight="35dp"
+        app:kswThumbColor="@color/whiteLogIn"
+        app:kswBackDrawable="@drawable/switch_track"
+        android:checked="true"
+        android:id="@+id/alarmStatus"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"/>
+    </android.support.percent.PercentRelativeLayout>

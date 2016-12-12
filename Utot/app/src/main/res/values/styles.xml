@@ -1,0 +1,65 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/whiteLogIn</item>
+        <item name="android:editTextStyle">@style/EditTextStyle_1</item>
+        <item name="editTextStyle">@style/EditTextStyle_1</item>
+      </style>
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="NoCaps" parent="Widget.AppCompat.Button">
+        <item name="android:textAllCaps">false</item>
+
+    </style>
+
+
+    <style name="EditTextStyle_1" parent="@android:style/Widget.EditText">
+        <item name="android:textColorHint">@color/hintTransparent</item>
+        <item name="android:paddingRight">@dimen/edittext_padding</item>
+        <item name="android:paddingLeft">@dimen/edittext_padding</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:alpha">0.7</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:layout_height">@dimen/edittext_height</item>
+    </style>
+    
+    <style name="ButtonStyle_1" parent="@android:style/Widget.Button">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/whiteLogIn</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_marginBottom">12dp</item>
+        <item name="android:layout_height">@dimen/settingbuttonheight</item>
+    </style>
+
+    <style name="Alarm_Function_Buttons" parent="@android:style/Widget.Button">
+        <item name="android:layout_width">@dimen/circle_button_size_big</item>
+        <item name="android:maxWidth">@dimen/circle_button_size_big</item>
+        <item name="android:minWidth">@dimen/circle_button_size</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@drawable/round_buttons</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/whiteLogIn</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="Alarm_Function_Buttons_2" parent="@android:style/Widget.Button">
+        <item name="android:enabled">false</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:onClick">weekNamesClick</item>
+        <item name="android:layout_width">@dimen/circle_button_size</item>
+        <item name="android:maxWidth">@dimen/circle_button_size_big</item>
+        <item name="android:minWidth">20dp</item>
+        <item name="android:layout_margin">0.5dp</item>
+        <item name="android:background">@drawable/round_buttons_2</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textColor">@color/weekNameText</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+</resources>

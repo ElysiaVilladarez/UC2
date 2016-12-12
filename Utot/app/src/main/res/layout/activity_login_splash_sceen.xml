@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:scrollbars="vertical"
+    android:scrollbarStyle="insideInset"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="utot.utot.login.LoginSplashScreen"
+    android:background="@drawable/aa_3"
+    android:backgroundTintMode="multiply"
+    android:backgroundTint="@android:color/holo_blue_bright">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:layout_gravity="center"
+        android:id="@+id/mainwindow"
+        android:tintMode="multiply"
+        android:tint="@android:color/holo_blue_bright"/>
+
+    <TextView
+        android:layout_gravity="center"
+        android:layout_width="350dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:textColor="@color/whiteLogIn"
+        android:text="Puro ka hugot, ibaon mo naman"
+        android:id="@+id/quote"
+
+        android:textSize="40sp"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/utotLogo"
+        android:visibility="gone"/>
+
+</FrameLayout>

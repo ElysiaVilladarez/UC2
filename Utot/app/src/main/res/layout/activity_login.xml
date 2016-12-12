@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="insideOverlay"
+        android:id="@+id/mainwindow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="utot.utot.register.RegisterActivity">
+
+        <ImageView
+            app:layout_heightPercent="100%"
+            android:layout_width="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/aa_11" />
+
+        <ImageView
+            android:id="@+id/utotLogo"
+            android:layout_width="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@drawable/aa_5"
+            android:scaleType="centerCrop"
+            app:layout_aspectRatio="35%"
+            app:layout_marginBottomPercent="5%" />
+
+
+        <android.support.percent.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/utotLogo"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <EditText
+                android:id="@+id/username"
+                style="@style/EditTextStyle_1"
+                android:layout_marginBottom="0.2dp"
+                android:background="@drawable/edittext_rounded_upper_corners"
+                android:hint="Email or phone"
+                app:layout_widthPercent="70%" />
+
+
+            <EditText
+                android:id="@+id/password"
+                style="@style/EditTextStyle_1"
+                android:layout_width="@dimen/edittext_width"
+                android:layout_height="@dimen/edittext_height"
+                android:layout_below="@id/username"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/edittext_rounded_lower_corners"
+                android:hint="Password"
+                app:layout_widthPercent="70%" />
+
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_height="@dimen/edittext_height"
+                android:layout_below="@id/password"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="13dp"
+                android:background="@drawable/rounded_corners_rectangle"
+                android:text="Log In"
+                android:textAllCaps="false"
+                android:textColor="@color/whiteLogIn"
+                app:layout_widthPercent="70%" />
+
+            <android.support.percent.PercentRelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/loginButton"
+                android:layout_centerHorizontal="true">
+                <Button
+                    android:id="@+id/forgetPasswordButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="Forgot Password?"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteLogIn"
+                    android:textSize="@dimen/medium_font" />
+                <Button
+                    android:id="@+id/helpCenterButton"
+                    android:layout_toRightOf="@+id/forgetPasswordButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:gravity="center"
+                    android:text="Help Center"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteLogIn"
+                    android:textSize="@dimen/medium_font" />
+                <!--<ImageView-->
+                <!--android:layout_width="7dp"-->
+                <!--android:layout_height="7dp"-->
+                <!--android:id="@+id/whitecircle"-->
+                <!--android:layout_gravity="center"-->
+                <!--android:scaleType="center"/>-->
+                <Button
+                    android:id="@+id/registerButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/helpCenterButton"
+                    android:background="@android:color/transparent"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:text="Create Account"
+                    android:textAllCaps="false"
+                    android:textColor="@color/whiteLogIn"
+                    android:textSize="@dimen/medium_font" />
+
+            </android.support.percent.PercentRelativeLayout>
+
+        </android.support.percent.PercentRelativeLayout>
+
+
+    </android.support.percent.PercentRelativeLayout>

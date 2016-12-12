@@ -1,0 +1,72 @@
+package utot.utot.alarm;
+
+import android.app.Fragment;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
+import io.realm.Realm;
+import io.realm.RealmResults;
+import utot.utot.R;
+import utot.utot.customobjects.Alarm;
+
+public class AlarmFragment extends Fragment {
+
+    public static AlarmFragment newInstance() {
+        AlarmFragment fragment = new AlarmFragment();
+        Bundle args = new Bundle();
+//        args.putString(ARG_PARAM1, param1);
+//        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public AlarmFragment() {
+        // Required empty public constructor
+    }
+
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
+//    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
+
+        rootView.findViewById(R.id.addAlarmButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlarmFragment.this.getActivity().startActivity(new Intent(AlarmFragment.this.getActivity(), CreatingAlarmActivity.class));
+                AlarmFragment.this.getActivity().finish();
+
+            }
+        });
+
+        RecyclerView alarmList = (RecyclerView)rootView.findViewById(R.id.alarmList);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        alarmList.setLayoutManager(llm);
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
+
+        alarmList.setHasFixedSize(true);
+        alarmList.setAdapter(new AlarmAdapter(alarms, getActivity()));
+        return rootView;
+    }
+
+}
+

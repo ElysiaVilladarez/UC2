@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="utot.utot" >
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar" >
+        <activity
+
+            android:name=".login.LoginActivity"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".register.RegisterActivity">
+        </activity>
+        <activity
+            android:name=".alarm.TabbedAlarm"
+            android:label="@string/title_activity_tabbed_alarm" >
+        </activity>
+        <activity android:name=".login.LoginSplashScreen" >
+        </activity>
+        <activity android:name=".alarm.CreatingAlarmActivity" >
+        </activity>
+        <activity android:name=".alarm.EditingAlarmActivity" >
+        </activity>
+    </application>
+
+</manifest>

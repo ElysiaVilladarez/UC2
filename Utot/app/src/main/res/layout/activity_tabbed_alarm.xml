@@ -1,0 +1,51 @@
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="utot.utot.alarm.TabbedAlarm"
+    android:id="@+id/mainwindow"
+    android:scrollbars="vertical"
+    android:scrollbarStyle="insideOverlay"
+    android:background="@drawable/aa_4"
+    android:backgroundTint="@android:color/holo_blue_light"
+    android:backgroundTintMode="multiply"
+    android:orientation="vertical">
+    <utot.utot.customobjects.CustomFrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:id="@+id/container"
+        android:layout_weight="3">
+
+    </utot.utot.customobjects.CustomFrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.3"
+        android:background="@color/whiteLogIn">
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:id="@+id/savedPoemsButton" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:id="@+id/alarmButton" />
+
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:layout_weight="1"
+            android:id="@+id/settingsButton" />
+    </LinearLayout>
+
+</LinearLayout>
