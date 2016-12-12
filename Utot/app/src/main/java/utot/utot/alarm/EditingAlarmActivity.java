@@ -64,7 +64,6 @@ public class EditingAlarmActivity extends AppCompatActivity {
                         new TimePickerDialog.OnTimeSetListener() {
                             @Override
                             public void onTimeSet(TimePickerDialog timePicker, int selectedHour, int selectedMinute, int second) {
-                                // eReminderTime.setText( ""selectedHour + ":" + selectedMinute);
                                 String time = selectedHour + ":" + selectedMinute;
                                 fmt = new SimpleDateFormat("HH:mm");
                                 try {
