@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.ToggleButton;
@@ -30,13 +31,16 @@ import java.util.Date;
 import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.DialogSize;
 
 public class CreatingAlarmActivity extends AppCompatActivity {
     private TextView timeSet;
     private Date alarmTime;
     private SimpleDateFormat fmt;
+    private String ringtoneText;
     private ToggleButton[] daysToggle;
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
+    private Realm realm;
 
     Calendar mcurrentTime;
 
@@ -44,7 +48,9 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creating_alarm);
+        realm = Realm.getDefaultInstance();
         fmt = new SimpleDateFormat("hh:mm a");
+        ringtoneText = "";
 
         mcurrentTime = Calendar.getInstance();
         final int hour = mcurrentTime.get(Calendar.HOUR);
@@ -57,7 +63,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         }
 
         timeSet = (TextView) findViewById(R.id.time);
-        String time = hour + ":" + minute + " " + amp;
+        String time = fmt.format(mcurrentTime.getTime());
         timeSet.setText(time);
 
         try {
@@ -104,7 +110,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
 
         daysToggle = new ToggleButton[7];
-        daysToggle[0] = (ToggleButton) findViewById(R.id.mondButton);;
+        daysToggle[0] = (ToggleButton) findViewById(R.id.mondButton);
         daysToggle[1] = (ToggleButton) findViewById(R.id.tuesButton);
         daysToggle[2] = (ToggleButton) findViewById(R.id.wedButton);
         daysToggle[3] = (ToggleButton) findViewById(R.id.thursButton);
@@ -115,7 +121,16 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         ringtoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final RingtoneDialog dialog = new RingtoneDialog(CreatingAlarmActivity.this);
+                dialog.doneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RadioButton ringtone= (RadioButton)  dialog.group.getChildAt(dialog.group.getCheckedRadioButtonId());
+                        ringtoneText = ringtone.getText().toString();
+                    }
+                });
+                dialog.show();
+                DialogSize.setSize(CreatingAlarmActivity.this, dialog);
             }
         });
 
@@ -173,44 +188,24 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         findViewById(R.id.confirmAlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                ArrayList<String> days = new ArrayList<>();
-//                if(everydayButton.isChecked()){
-//                    days.add("Everyday");
-//                } else{
-//                    if(weekdaysButton.isChecked()){
-//                        days.add("Weekdays");
-//                        for(int i = 5; i <= 6; i++){
-//                            if(daysToggle[i].isChecked()) days.add(daysToggle[i].getTextOn().toString());
-//                        }
-//                    } else if(weekendsButton.isChecked()){
-//                        days.add("Weekends");
-//                        for(int i = 0; i <= 4; i++){
-//                            if(daysToggle[i].isChecked()) days.add(daysToggle[i].getTextOn().toString());
-//                        }
-//                    } else{
-//
-//                    }
-//
-//
-//                }
-                String alarmDays ="";
-                if(repeatingSwitch.isChecked()) {
+                String alarmDays = "";
+                if (repeatingSwitch.isChecked()) {
                     boolean[] days = new boolean[7];
                     for (int i = 0; i < daysToggle.length; i++) {
                         days[i] = daysToggle[i].isChecked();
                     }
 
                     alarmDays = (new JSONArray(Arrays.asList(days))).toString();
-                } else{
+                } else {
                     alarmDays = "";
                 }
 
-                Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
                 Alarm alarm = realm.createObject(Alarm.class); // Create a new object
                 alarm.setPrimaryKey(System.currentTimeMillis());
                 alarm.setAlarmFrequency(alarmDays);
                 alarm.setAlarmTime(alarmTime);
+                alarm.setAlarmAudio(ringtoneText);
                 alarm.setIsOn(true);
                 alarm.setIsVibrate(vibrateSwitch.isChecked());
                 alarm.setAlarmAudio("Normal Ringtone");
@@ -257,7 +252,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
     }
 
-    public void weekNamesClick(View view){
+    public void weekNamesClick(View view) {
         checkOtherToggles();
     }
 

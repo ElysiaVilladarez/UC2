@@ -35,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
      // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
-        Picasso.with(this).load(R.drawable.aa_13).into((ImageView)findViewById(R.id.utotLogo));
+        Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_fb);
@@ -48,6 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 //                        + "\n" +
 //                        "Auth Token: "
 //                        + loginResult.getAccessToken().getToken()
+                LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginSplashScreen.class));
+                LoginActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                finish();
             }
 
             @Override

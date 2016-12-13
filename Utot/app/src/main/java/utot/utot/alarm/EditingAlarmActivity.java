@@ -6,9 +6,11 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.facebook.FacebookSdk;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import org.json.JSONArray;
@@ -24,9 +26,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
-
-
-
+import utot.utot.helpers.DialogSize;
 
 
 public class EditingAlarmActivity extends AppCompatActivity {
@@ -37,13 +37,16 @@ public class EditingAlarmActivity extends AppCompatActivity {
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
     private Realm realm;
     private Alarm alarm;
+    private String ringtoneText;
     Calendar mcurrentTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editing_alarm);
-
+        ringtoneText="";
         realm = Realm.getDefaultInstance();
         RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
         alarm = alarms.get(getIntent().getIntExtra("POS", 0));
@@ -105,8 +108,10 @@ public class EditingAlarmActivity extends AppCompatActivity {
         String alarmFrequency = alarm.getAlarmFrequency();
         if(alarmFrequency.trim().isEmpty()){
             repeatingSwitch.setChecked(false);
+            setEnabledRepeatButtons(false);
         } else{
             repeatingSwitch.setChecked(true);
+            setEnabledRepeatButtons(true);
             boolean[] days = new boolean[7];
             JSONArray arrayBool = null;
             try {
@@ -131,19 +136,24 @@ public class EditingAlarmActivity extends AppCompatActivity {
         ringtoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                final RingtoneDialog dialog = new RingtoneDialog(EditingAlarmActivity.this);
+                if(!alarm.getAlarmAudio().trim().isEmpty()) dialog.setRadioChecked(alarm.getAlarmAudio());
+                dialog.doneButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RadioButton ringtone= (RadioButton)  dialog.group.getChildAt(dialog.group.getCheckedRadioButtonId());
+                        ringtoneText = ringtone.getText().toString();
+                    }
+                });
+                dialog.show();
+                DialogSize.setSize(EditingAlarmActivity.this, dialog);
             }
         });
 
         repeatingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                everydayButton.setEnabled(b);
-                weekdaysButton.setEnabled(b);
-                weekendsButton.setEnabled(b);
-                for (int i = 0; i < daysToggle.length; i++) {
-                    daysToggle[i].setEnabled(b);
-                }
+                setEnabledRepeatButtons(b);
             }
         });
 
@@ -248,6 +258,15 @@ public class EditingAlarmActivity extends AppCompatActivity {
 
     public void weekNamesClick(View view){
         checkOtherToggles();
+    }
+
+    public void setEnabledRepeatButtons(boolean b){
+        everydayButton.setEnabled(b);
+        weekdaysButton.setEnabled(b);
+        weekendsButton.setEnabled(b);
+        for (int i = 0; i < daysToggle.length; i++) {
+            daysToggle[i].setEnabled(b);
+        }
     }
 
 }

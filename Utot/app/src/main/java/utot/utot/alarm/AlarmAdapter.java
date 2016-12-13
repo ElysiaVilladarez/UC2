@@ -1,6 +1,8 @@
 package utot.utot.alarm;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.widget.RecyclerView;
@@ -28,9 +30,8 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
  
     private RealmResults<Alarm> alarms;
 	private static Activity act;
-	private static int pos;
- 
- 
+ 	private Realm realm;
+
 	public String translation(boolean[] days){
 		String[] names = new String[7];
 		names[0] = "M";
@@ -77,12 +78,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
             alarmFrequency = (TextView) view.findViewById(R.id.alarmFrequency);
             alarmStatus = (SwitchButton) view.findViewById(R.id.alarmStatus);
 			mainwindow = (PercentRelativeLayout) view.findViewById(R.id.mainwindow);
+			deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
+
 			view.setOnClickListener(this);
         }
 		
 		public void onClick(View view){
 			Intent edits = new Intent(act, EditingAlarmActivity.class);
-			edits.putExtra("POS", pos);
+			edits.putExtra("POS", getAdapterPosition());
 			act.startActivity(edits);
 			act.finish();
 		}
@@ -104,11 +107,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
  
     @Override
     public void onBindViewHolder(ViewHolder holderT, int position) {
-        pos = position;
 		final ViewHolder holder = holderT;
-		final Alarm alarm = alarms.get(pos);
+		final Alarm alarm = alarms.get(position);
 		SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
-		
+		realm = Realm.getDefaultInstance();
 		holder.alarmTime.setText(fmt.format(alarm.getAlarmTime()));
 		holder.alarmStatus.setChecked(alarm.isOn());
 		if(holder.alarmStatus.isChecked()){
@@ -119,8 +121,12 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 		holder.alarmStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
 			public void onCheckedChanged(CompoundButton buttonView, boolean b) {
-				Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
+				if(b){
+					holder.mainwindow.setBackgroundColor(0x8C00ace6);
+				} else{
+					holder.mainwindow.setBackgroundColor(0x3300ace6);
+				}
+				realm.beginTransaction();
 				alarm.setIsOn(b);
 				realm.commitTransaction();
 			}
@@ -148,6 +154,27 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 		}
 		
 		holder.alarmFrequency.setText(freq);
+
+		holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+                new AlertDialog.Builder(act)
+                        .setTitle("Deleting Alarm")
+                        .setMessage("Do you really want to delete "+ holder.alarmTime.getText().toString() + " alarm?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                realm.beginTransaction();
+                                alarm.deleteFromRealm();
+                                realm.commitTransaction();
+
+                                AlarmAdapter.this.notifyDataSetChanged();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
+			}
+		});
     }
  
     @Override

@@ -203,7 +203,7 @@
             android:background="@drawable/round_buttons_3"
             android:padding="13dp"
             android:scaleType="fitXY"
-            android:src="@mipmap/ic_alarm_on_white_36dp"
+            android:src="@mipmap/ic_done_white_36dp"
             app:layout_aspectRatio="100%" />
     </android.support.percent.PercentRelativeLayout>
 

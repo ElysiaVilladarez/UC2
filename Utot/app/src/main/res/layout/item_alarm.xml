@@ -7,7 +7,7 @@
     android:padding="10dp"
     android:background="#3300ace6"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="110dp"
     android:layout_gravity="center">
     <android.support.percent.PercentRelativeLayout
         app:layout_heightPercent="100%"
@@ -30,17 +30,28 @@
             android:textColor="@color/whiteLogIn" />
     </android.support.percent.PercentRelativeLayout>
 
-    <com.kyleduo.switchbutton.SwitchButton
+    <android.support.percent.PercentFrameLayout
         android:layout_toRightOf="@id/timeStuff"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <com.kyleduo.switchbutton.SwitchButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="5dp"
         app:kswThumbMargin="2dp"
-        app:kswThumbWidth="35dp"
-        app:kswThumbHeight="35dp"
+        app:kswThumbWidth="23dp"
+        app:kswThumbHeight="23dp"
         app:kswThumbColor="@color/whiteLogIn"
         app:kswBackDrawable="@drawable/switch_track"
-        android:checked="true"
         android:id="@+id/alarmStatus"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"/>
+        android:layout_gravity="top|end"/>
+        <ImageButton
+            android:layout_gravity="bottom|end"
+            android:id="@+id/deleteButton"
+            android:background="@android:color/transparent"
+            android:scaleType="fitXY"
+            android:layout_width="25dp"
+            app:layout_aspectRatio="90%"
+            android:src="@mipmap/ic_delete_forever_white_36dp"/>
+    </android.support.percent.PercentFrameLayout>
     </android.support.percent.PercentRelativeLayout>

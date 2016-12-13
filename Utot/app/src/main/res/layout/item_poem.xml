@@ -3,24 +3,25 @@
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainwindow"
-    android:padding="10dp"
-    android:background="#3300ace6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center">
-	<ImageView
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:scaleType="centerCrop"
+    android:layout_gravity="center"
+    android:padding="10dp">
+
+    <ImageView
         android:id="@+id/backgroundPic"
-		/>
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
     <TextView
-            android:layout_width="match_parent"
-            app:layout_aspectRatio="100%"
-            android:gravity="center"
-			android:layout_centerInParent="true"
-            android:textSize="30sp"
-            android:id="@+id/poem"
-            android:textColor="@color/whiteLogIn" />
-       
-    </android.support.percent.PercentRelativeLayout>
+        android:id="@+id/poem"
+        android:layout_width="match_parent"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="Poem Sample"
+        android:textColor="@color/whiteLogIn"
+        android:textSize="@dimen/font_size_poem"
+        app:layout_aspectRatio="100%" />
+
+</android.support.percent.PercentRelativeLayout>

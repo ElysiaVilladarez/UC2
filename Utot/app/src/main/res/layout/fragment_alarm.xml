@@ -5,6 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="utot.utot.alarm.AlarmFragment">
+    <TextView
+        android:layout_width="match_parent"
+        android:id="@+id/noAlarmText"
+        android:padding="15dp"
+        android:layout_height="match_parent"
+        android:scrollHorizontally="false"
+        android:textSize="25sp"
+        android:textColor="#FFFFFF"
+        android:text="Add an alarm to get more hugot!"
+        android:layout_gravity="center"
+        android:gravity="center" />
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

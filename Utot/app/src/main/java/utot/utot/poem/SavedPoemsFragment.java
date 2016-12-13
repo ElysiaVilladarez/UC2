@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -33,14 +34,28 @@ public class SavedPoemsFragment extends Fragment {
 
         
         RecyclerView poemList = (RecyclerView)rootView.findViewById(R.id.poemList);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        poemList.setLayoutManager(llm);
+        TextView noPoemsText = (TextView) rootView.findViewById(R.id.noPoemsText);
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Poem> poems = realm.where(Poem.class).findAll();
 
-        poemList.setHasFixedSize(true);
-        poemList.setAdapter(new PoemAdapter(poems, getActivity()));
+        if(poems.size() <= 0){
+            poemList.setVisibility(View.GONE);
+            noPoemsText.setVisibility(View.VISIBLE);
+        } else {
+
+            poemList.setVisibility(View.VISIBLE);
+            noPoemsText.setVisibility(View.GONE);
+
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+            poemList.setLayoutManager(llm);
+
+
+            poemList.setHasFixedSize(true);
+            poemList.setAdapter(new PoemAdapter(poems, getActivity()));
+
+        }
+
         return rootView;
     }
 

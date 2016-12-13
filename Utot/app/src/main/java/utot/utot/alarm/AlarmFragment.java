@@ -20,6 +20,7 @@ import utot.utot.customobjects.Alarm;
 
 public class AlarmFragment extends Fragment {
 
+    private RecyclerView alarmList;
     public static AlarmFragment newInstance() {
         AlarmFragment fragment = new AlarmFragment();
         Bundle args = new Bundle();
@@ -56,15 +57,27 @@ public class AlarmFragment extends Fragment {
             }
         });
 
-        RecyclerView alarmList = (RecyclerView)rootView.findViewById(R.id.alarmList);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        alarmList.setLayoutManager(llm);
+        alarmList = (RecyclerView)rootView.findViewById(R.id.alarmList);
+        TextView noAlarmText = (TextView) rootView.findViewById(R.id.noAlarmText);
 
         Realm realm = Realm.getDefaultInstance();
         RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
+        if(alarms.size()<=0){
+            alarmList.setVisibility(View.GONE);
+            noAlarmText.setVisibility(View.VISIBLE);
+        } else{
+            alarmList.setVisibility(View.VISIBLE);
+            noAlarmText.setVisibility(View.GONE);
 
-        alarmList.setHasFixedSize(true);
-        alarmList.setAdapter(new AlarmAdapter(alarms, getActivity()));
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+            alarmList.setLayoutManager(llm);
+
+            AlarmAdapter alarmAdapter = new AlarmAdapter(alarms, getActivity());
+            alarmList.setHasFixedSize(true);
+            alarmList.setAdapter(alarmAdapter);
+            alarmAdapter.notifyDataSetChanged();
+        }
+
         return rootView;
     }
 
