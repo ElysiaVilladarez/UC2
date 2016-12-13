@@ -26,11 +26,65 @@
             app:layout_aspectRatio="35%"
             app:layout_marginBottomPercent="5%" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_fb"
+        android:layout_below="@id/utotLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
+    <Button
+        android:id="@+id/fb_login"
+        android:backgroundTint="@color/com_facebook_button_background_color"
+        android:layout_height="@dimen/fb_button_height"
+        android:layout_below="@id/utotLogo"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/rounded_corners_rectangle"
+        android:drawableStart="@drawable/fb_icon_2"
+        android:paddingLeft="10dp"
+        android:text="Login with Facebook"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        app:layout_widthPercent="70%"    />
 
-        <android.support.percent.PercentRelativeLayout
+    <android.support.percent.PercentRelativeLayout
+        android:layout_below="@id/fb_login"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/trans"
+        android:layout_height="wrap_content">
+    <TextView
+        android:id="@+id/or"
+        android:text="OR"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:textSize="14sp"
+        android:layout_centerInParent="true"
+        app:layout_marginPercent="3%"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"/>
+    <android.support.percent.PercentFrameLayout
+        android:layout_toLeftOf="@id/or"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="7dp"
+        android:layout_width="75dp"
+        android:layout_height="2dp"
+        android:background="@color/whiteLogIn"/>
+
+        <android.support.percent.PercentFrameLayout
+            android:layout_toRightOf="@id/or"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="7dp"
+            android:layout_width="75dp"
+            android:layout_height="2dp"
+            android:background="@color/whiteLogIn"/>
+
+    </android.support.percent.PercentRelativeLayout>
+    <android.support.percent.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/utotLogo"
+            android:layout_below="@id/trans"
             android:layout_gravity="center"
             android:gravity="center">
 

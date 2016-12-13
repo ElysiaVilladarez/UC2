@@ -10,6 +10,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
 import utot.utot.R;
@@ -18,14 +25,48 @@ import utot.utot.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
+    private CallbackManager callbackManager;
+    private LoginButton loginButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
      // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
         Picasso.with(this).load(R.drawable.aa_13).into((ImageView)findViewById(R.id.utotLogo));
 
+        callbackManager = CallbackManager.Factory.create();
+        loginButton = (LoginButton)findViewById(R.id.login_fb);
 
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+  //              "User ID: "
+//                        + loginResult.getAccessToken().getUserId()
+//                        + "\n" +
+//                        "Auth Token: "
+//                        + loginResult.getAccessToken().getToken()
+            }
+
+            @Override
+            public void onCancel() {
+               Toast.makeText(LoginActivity.this, "Login attempt cancelled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException e) {
+                Toast.makeText(LoginActivity.this, "An error has occurred during login", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        findViewById(R.id.fb_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                loginButton.performClick();
+            }
+        });
         findViewById(R.id.registerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,5 +95,10 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }
