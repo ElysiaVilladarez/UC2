@@ -1,6 +1,7 @@
 package utot.utot.alarm;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -89,6 +90,8 @@ public class EditingAlarmActivity extends AppCompatActivity {
             }
         });
 
+        Typeface customFont = Typeface.createFromAsset(this.getAssets(), getResources().getString(R.string.toggle_butons_font));
+
         ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
         final CheckBox vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
         CheckBox repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
@@ -105,6 +108,14 @@ public class EditingAlarmActivity extends AppCompatActivity {
         daysToggle[4] = (ToggleButton) findViewById(R.id.friButton);
         daysToggle[5] = (ToggleButton) findViewById(R.id.satButton);
         daysToggle[6] = (ToggleButton) findViewById(R.id.sunButton);
+
+        everydayButton.setTypeface(customFont);
+        weekendsButton.setTypeface(customFont);
+        weekdaysButton.setTypeface(customFont);
+        for (int i = 0; i < daysToggle.length; i++) {
+            daysToggle[i].setTypeface(customFont);
+        }
+
 
         String alarmFrequency = alarm.getAlarmFrequency();
         if(alarmFrequency.trim().isEmpty()){

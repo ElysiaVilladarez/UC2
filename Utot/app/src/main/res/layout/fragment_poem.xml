@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="utot.utot.poem.SavedPoemsFragment">
-    <TextView
-        android:layout_width="match_parent"
+    <utot.utot.customviews.TextViewPlus
+        style="@style/avenir_roman"
+    android:layout_width="match_parent"
         android:id="@+id/noPoemsText"
         android:padding="15dp"
         android:layout_height="match_parent"

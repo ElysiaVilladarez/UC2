@@ -14,4 +14,7 @@
 
     <string name="facebook_app_id">1762860773966518</string>
     <string name="fb_login_protocol_scheme">fb1762860773966518</string>
+
+    <string name="edittext_font">fonts/AvenirLTStd-Book.otf</string>
+    <string name="toggle_butons_font">fonts/Pangram-Light.otf</string>
 </resources>

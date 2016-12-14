@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/whiteLogIn</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
       </style>
@@ -23,12 +23,14 @@
         <item name="android:paddingRight">@dimen/edittext_padding</item>
         <item name="android:paddingLeft">@dimen/edittext_padding</item>
         <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:textColor">@android:color/black</item>
         <item name="android:alpha">0.7</item>
         <item name="android:singleLine">true</item>
         <item name="android:layout_height">@dimen/edittext_height</item>
     </style>
     
     <style name="ButtonStyle_1" parent="@android:style/Widget.Button">
+        <item name="font">@style/pangram_medium</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/whiteLogIn</item>
         <item name="android:layout_centerHorizontal">true</item>
@@ -38,7 +40,17 @@
         <item name="android:layout_height">@dimen/settingbuttonheight</item>
     </style>
 
+    <style name="login_buttons" parent="@android:style/Widget.Button">
+        <item name="font">@style/pangram_medium</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/whiteLogIn</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="Alarm_Function_Buttons" parent="@android:style/Widget.Button">
+        <item name="font">@style/pangram_bold</item>
         <item name="android:layout_width">@dimen/circle_button_size_big</item>
         <item name="android:maxWidth">@dimen/circle_button_size_big</item>
         <item name="android:minWidth">@dimen/circle_button_size</item>
@@ -50,6 +62,7 @@
     </style>
     <style name="Alarm_Function_Buttons_2" parent="@android:style/Widget.Button">
         <item name="android:enabled">false</item>
+        <item name="font">@style/pangram_medium</item>
         <item name="android:layout_weight">1</item>
         <item name="android:onClick">weekNamesClick</item>
         <item name="android:layout_width">@dimen/circle_button_size</item>
@@ -61,5 +74,35 @@
         <item name="android:textColor">@color/weekNameText</item>
         <item name="android:textSize">24sp</item>
     </style>
+
+    <style name="avenir_light" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/AvenirLTStd-Light.otf</item>
+    </style>
+
+    <style name="avenir_roman" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/AvenirLTStd-Roman.otf</item>
+    </style>
+
+    <style name="avenir_book" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/AvenirLTStd-Book.otf</item>
+    </style>
+
+    <style name="pangram_light" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/Pangram-Light.otf</item>
+    </style>
+
+    <style name="pangram_regular" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/Pangram-Regular.otf</item>
+    </style>
+    <style name="pangram_bold" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/Pangram-Bold.otf</item>
+    </style>
+    <style name="pangram_extrabold" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/Pangram-ExtraBold.otf</item>
+    </style>
+    <style name="pangram_medium" parent="@android:style/Widget.TextView">
+        <item name="font">fonts/Pangram-Medium.otf</item>
+    </style>
+
 
 </resources>

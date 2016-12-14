@@ -1,185 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:layout_height="match_parent">
 
-    <android.support.percent.PercentRelativeLayout
-        android:id="@+id/mainwindow"
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical"
-        tools:context="utot.utot.register.RegisterActivity">
-
-        <ImageView
-        app:layout_heightPercent="100%"
-        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/aa_11" />
 
-
-        <ImageView
-            android:id="@+id/utotLogo"
-            android:layout_width="@dimen/logo_1_width"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            app:layout_aspectRatio="35%"
-            app:layout_marginBottomPercent="5%"
-            app:layout_marginTopPercent="5%" />
-
-        <com.facebook.login.widget.LoginButton
-            android:id="@+id/login_fb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/utotLogo"
-            android:layout_centerHorizontal="true"
-            android:visibility="gone" />
-
-        <Button
-            android:id="@+id/fb_login"
-            android:layout_height="@dimen/fb_button_height"
-            android:layout_below="@id/utotLogo"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/fb_login_button"
-            android:drawableStart="@drawable/fb_icon_2"
-            android:paddingLeft="10dp"
-            android:text="Login with Facebook"
-            android:textAllCaps="false"
-            android:textColor="#ffffff"
-            app:layout_widthPercent="75%" />
+    <ScrollView
+        android:layout_centerInParent="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fillViewport="true">
 
         <android.support.percent.PercentRelativeLayout
-            android:id="@+id/trans"
+            android:id="@+id/mainwindow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/fb_login"
-            android:layout_centerHorizontal="true">
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbars="vertical"
+            android:layout_marginBottom="10dp"
+            tools:context="utot.utot.register.RegisterActivity">
 
-            <TextView
-                android:id="@+id/or"
+
+            <ImageView
+                android:id="@+id/utotLogo"
+                android:layout_width="@dimen/logo_1_width"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_marginBottom="25dp"
+                android:scaleType="fitXY"
+                app:layout_aspectRatio="35%" />
+
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/login_fb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center"
-                android:text="OR"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                app:layout_marginPercent="3%" />
-
-            <android.support.percent.PercentFrameLayout
-                android:layout_width="@dimen/line_width"
-                android:layout_height="@dimen/line_height"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="4dp"
-                android:layout_toLeftOf="@id/or"
-                android:background="@color/whiteLogIn" />
-
-            <android.support.percent.PercentFrameLayout
-                android:layout_width="@dimen/line_width"
-                android:layout_height="@dimen/line_height"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="4dp"
-                android:layout_toRightOf="@id/or"
-                android:background="@color/whiteLogIn" />
-
-        </android.support.percent.PercentRelativeLayout>
-
-        <android.support.percent.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/trans"
-            android:layout_gravity="center"
-            android:gravity="center">
-
-            <EditText
-                android:id="@+id/username"
-                style="@style/EditTextStyle_1"
-                android:layout_marginBottom="0.2dp"
-                android:background="@drawable/edittext_rounded_upper_corners"
-                android:hint="Email or phone"
-                app:layout_widthPercent="70%" />
-
-
-            <EditText
-                android:id="@+id/password"
-                style="@style/EditTextStyle_1"
-                android:layout_width="@dimen/edittext_width"
-                android:layout_height="@dimen/edittext_height"
-                android:layout_below="@id/username"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/edittext_rounded_lower_corners"
-                android:hint="Password"
-                app:layout_widthPercent="70%" />
-
-
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_height="@dimen/edittext_height"
-                android:layout_below="@id/password"
+                android:layout_below="@id/utotLogo"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="13dp"
-                android:background="@drawable/login_button"
-                android:text="Log In"
-                android:textAllCaps="false"
-                android:textColor="@color/whiteLogIn"
-                app:layout_widthPercent="70%" />
+                android:visibility="gone" />
+
+            <utot.utot.customviews.ButtonPlus
+                style="@style/login_buttons"
+                android:id="@+id/fb_login"
+                android:layout_height="@dimen/fb_button_height"
+                android:layout_below="@id/utotLogo"
+                android:background="@drawable/fb_login_button"
+                android:drawableStart="@drawable/fb_icon_2"
+                android:paddingLeft="10dp"
+                android:text="Login with Facebook"
+                app:layout_widthPercent="75%" />
 
             <android.support.percent.PercentRelativeLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/trans"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/loginButton"
+                android:layout_below="@id/fb_login"
                 android:layout_centerHorizontal="true">
 
-                <Button
-                    android:id="@+id/forgetPasswordButton"
-                    android:layout_width="100dp"
+                <utot.utot.customviews.TextViewPlus
+                    android:id="@+id/or"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:gravity="center"
-                    android:text="Forgot Password?"
-                    android:textAllCaps="false"
-                    android:textColor="@color/whiteLogIn"
-                    android:textSize="@dimen/medium_font" />
+                    android:layout_centerInParent="true"
+                    android:layout_gravity="center"
+                    android:text="OR"
+                    android:textColor="#FFFFFF"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:layout_marginPercent="3%" />
 
-                <Button
-                    android:id="@+id/helpCenterButton"
-                    android:layout_width="100dp"
+                <android.support.percent.PercentFrameLayout
+                    android:layout_width="@dimen/line_width"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="4dp"
+                    android:layout_toLeftOf="@id/or"
+                    android:background="@color/whiteLogIn" />
+
+                <android.support.percent.PercentFrameLayout
+                    android:layout_width="@dimen/line_width"
+                    android:layout_height="@dimen/line_height"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="4dp"
+                    android:layout_toRightOf="@id/or"
+                    android:background="@color/whiteLogIn" />
+
+            </android.support.percent.PercentRelativeLayout>
+
+            <android.support.percent.PercentRelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/trans"
+                android:layout_gravity="center"
+                android:gravity="center">
+
+                <utot.utot.customviews.EdittextPlus
+                    android:id="@+id/username"
+                    style="@style/EditTextStyle_1"
+                    android:layout_marginBottom="0.2dp"
+                    android:background="@drawable/edittext_rounded_upper_corners"
+                    android:hint="Email or phone"
+                    app:layout_widthPercent="70%" />
+
+
+                <utot.utot.customviews.EdittextPlus
+                    android:id="@+id/password"
+                    style="@style/EditTextStyle_1"
+                    android:layout_width="@dimen/edittext_width"
+                    android:layout_height="@dimen/edittext_height"
+                    android:layout_below="@id/username"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/edittext_rounded_lower_corners"
+                    android:hint="Password"
+                    app:layout_widthPercent="70%" />
+
+
+                <utot.utot.customviews.ButtonPlus
+                    android:id="@+id/loginButton"
+                    style="@style/login_buttons"
+                    android:layout_height="@dimen/edittext_height"
+                    android:layout_below="@id/password"
+                    android:layout_marginBottom="13dp"
+                    android:background="@drawable/login_button"
+                    android:text="Log In"
+                    app:layout_widthPercent="70%" />
+
+                <android.support.percent.PercentRelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/forgetPasswordButton"
-                    android:background="@android:color/transparent"
-                    android:gravity="center"
-                    android:text="Help Center"
-                    android:textAllCaps="false"
-                    android:textColor="@color/whiteLogIn"
-                    android:textSize="@dimen/medium_font" />
-                <!--<ImageView-->
-                <!--android:layout_width="7dp"-->
-                <!--android:layout_height="7dp"-->
-                <!--android:id="@+id/whitecircle"-->
-                <!--android:layout_gravity="center"-->
-                <!--android:scaleType="center"/>-->
-                <Button
-                    android:id="@+id/registerButton"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_toRightOf="@id/helpCenterButton"
-                    android:background="@android:color/transparent"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:text="Create Account"
-                    android:textAllCaps="false"
-                    android:textColor="@color/whiteLogIn"
-                    android:textSize="@dimen/medium_font" />
+                    android:layout_below="@id/loginButton"
+                    android:layout_centerHorizontal="true">
+
+                    <utot.utot.customviews.ButtonPlus
+                        style="@style/login_buttons"
+                        android:layout_centerHorizontal="false"
+                        android:id="@+id/forgetPasswordButton"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:text="Forgot Password?"
+                        android:textSize="@dimen/medium_font" />
+
+                    <utot.utot.customviews.ButtonPlus
+                        style="@style/login_buttons"
+                        android:layout_centerHorizontal="false"
+                        android:id="@+id/helpCenterButton"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@+id/forgetPasswordButton"
+                        android:background="@android:color/transparent"
+                        android:text="Help Center"
+                        android:textSize="@dimen/medium_font" />
+                    <!--<ImageView-->
+                    <!--android:layout_width="7dp"-->
+                    <!--android:layout_height="7dp"-->
+                    <!--android:id="@+id/whitecircle"-->
+                    <!--android:layout_gravity="center"-->
+                    <!--android:scaleType="center"/>-->
+                    <utot.utot.customviews.ButtonPlus
+                        style="@style/login_buttons"
+                        android:layout_centerHorizontal="false"
+                        android:id="@+id/registerButton"
+                        android:layout_width="100dp"
+                        android:layout_height="wrap_content"
+                        android:layout_toRightOf="@id/helpCenterButton"
+                        android:background="@android:color/transparent"
+                        android:clickable="true"
+                        android:text="Create Account"
+                        android:textSize="@dimen/medium_font" />
+
+                </android.support.percent.PercentRelativeLayout>
 
             </android.support.percent.PercentRelativeLayout>
 
         </android.support.percent.PercentRelativeLayout>
 
-    </android.support.percent.PercentRelativeLayout>
-
-</ScrollView>
+    </ScrollView>
+</android.support.percent.PercentRelativeLayout>

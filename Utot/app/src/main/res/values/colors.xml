@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#AC8A9B</color>
+    <color name="colorAccent">#AC8A9B</color>
     <color name="colorPrimaryDark">#540E3A</color>
-    <color name="colorAccent">#55626F</color>
+    <color name="colorPrimary">#55626F</color>
 
     <color name="hintTransparent">#B3000000</color>
     <color name="whiteLogIn">#E6FFFFFF</color>

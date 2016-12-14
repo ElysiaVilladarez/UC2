@@ -14,14 +14,16 @@
         android:layout_width="wrap_content"
         android:id="@+id/timeStuff"
         app:layout_widthPercent="70%">
-        <TextView
+        <utot.utot.customviews.TextViewPlus
+            style="@style/avenir_roman"
             android:layout_width="match_parent"
             app:layout_heightPercent="65%"
             android:gravity="center_vertical"
             android:textSize="30sp"
             android:id="@+id/alarmTime"
             android:textColor="@color/whiteLogIn" />
-        <TextView
+        <utot.utot.customviews.TextViewPlus
+            style="@style/avenir_light"
             android:layout_below="@id/alarmTime"
             android:layout_width="match_parent"
             app:layout_heightPercent="35%"

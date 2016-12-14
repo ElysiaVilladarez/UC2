@@ -5,6 +5,7 @@ import android.media.session.PlaybackState;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatDelegate;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -36,7 +37,6 @@ public class LoginActivity extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
      // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
-        Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
 
         AccessToken facebookAccessToken = AccessToken.getCurrentAccessToken();
         boolean sessionExpired;
@@ -51,6 +51,9 @@ public class LoginActivity extends AppCompatActivity {
             LoginActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             finish();
         }
+
+        Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
+
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_fb);

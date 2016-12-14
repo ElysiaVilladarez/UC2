@@ -1,17 +1,15 @@
 package utot.utot.alarm;
 
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import android.view.View;
 
-import android.widget.Button;
 import android.widget.ImageButton;
 
 
@@ -22,56 +20,63 @@ import utot.utot.poem.SavedPoemsFragment;
 
 public class TabbedAlarm extends AppCompatActivity {
 
+    private ImageButton savedPoemsButton, alarmButton, settingsButton;
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
+    private int cur;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tabbed_alarm);
         Picasso.with(this).load(R.mipmap.ic_import_contacts_black_36dp).into((ImageButton) findViewById(R.id.savedPoemsButton));
         Picasso.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
         Picasso.with(this).load(R.mipmap.ic_settings_black_36dp).into((ImageButton) findViewById(R.id.settingsButton));
 
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, AlarmFragment.newInstance()); // newInstance() is a static factory method.
+        cur = 1; // currently in alarmFragment
+
+        manager = getSupportFragmentManager();
+        transaction = manager.beginTransaction();
+        transaction.replace(R.id.container, AlarmFragment.newInstance());
         transaction.commit();
 
 
-        final ImageButton alarmButton = (ImageButton) findViewById(R.id.alarmButton);
-        final ImageButton settingsButton = (ImageButton)findViewById(R.id.settingsButton);
-        final ImageButton savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
+        alarmButton = (ImageButton) findViewById(R.id.alarmButton);
+        settingsButton = (ImageButton)findViewById(R.id.settingsButton);
+        savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
 
-        alarmButton.setBackgroundColor(0xbababa);
-        settingsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
-        savedPoemsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+        changeButtonBG(alarmButton, savedPoemsButton, settingsButton);
 
         savedPoemsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Go to SavedPoemsFragment
+                if(cur!=0) {
+                    transaction = manager.beginTransaction();
+                    transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+                    transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
+                    transaction.commit();
 
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
-                transaction.commit();
-
-                savedPoemsButton.setBackgroundColor(0xbababa);
-                alarmButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
-                settingsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+                    changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
+                    cur = 0;
+                }
             }
         });
         alarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Go to AlarmFragment
+                if(cur!=1) {
+                    transaction = manager.beginTransaction();
+                    if(cur==2) transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+                    if(cur==0) transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+                    transaction.replace(R.id.container, AlarmFragment.newInstance());
+                    transaction.commit();
 
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, AlarmFragment.newInstance()); // newInstance() is a static factory method.
-                transaction.commit();
+                    changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
 
-                alarmButton.setBackgroundColor(0xbababa);
-                settingsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
-                savedPoemsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+                    cur = 1;
+                }
             }
         });
 
@@ -80,19 +85,25 @@ public class TabbedAlarm extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // Go to SettingsFragment
-                FragmentManager manager = getFragmentManager();
-                FragmentTransaction transaction = manager.beginTransaction();
-                transaction.replace(R.id.container, SettingsFragment.newInstance()); // newInstance() is a static factory method.
-                transaction.commit();
-                settingsButton.setBackgroundColor(0xbababa);
-                alarmButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
-                savedPoemsButton.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+                if(cur!=2) {
+                    transaction = manager.beginTransaction();
+                    transaction.setCustomAnimations(R.animator.pull_in_right, R.animator.push_out_left);
+                    transaction.replace(R.id.container, SettingsFragment.newInstance());
+                    transaction.commit();
+
+                    changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
+                    cur =2;
+                }
             }
         });
 
     }
 
-
+    protected void changeButtonBG(ImageButton b1, ImageButton b2, ImageButton b3){
+        b1.setBackgroundColor(Color.parseColor("#bababa"));
+        b2.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+        b3.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
+    }
 
 
 }

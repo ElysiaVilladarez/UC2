@@ -14,8 +14,10 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
-    <TextView
+    <utot.utot.customviews.TextViewPlus
+        style="@style/avenir_light"
         android:id="@+id/poem"
+        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:gravity="center"
