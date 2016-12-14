@@ -9,8 +9,6 @@
     android:scrollbars="vertical"
     android:scrollbarStyle="insideOverlay"
     android:background="@drawable/aa_4"
-    android:backgroundTint="@android:color/holo_blue_light"
-    android:backgroundTintMode="multiply"
     android:orientation="vertical">
     <utot.utot.customobjects.CustomFrameLayout
         android:layout_width="match_parent"

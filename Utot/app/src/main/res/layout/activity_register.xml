@@ -19,7 +19,7 @@
 
     <ImageView
         android:id="@+id/utotLogo"
-        android:layout_width="32dp"
+        android:layout_width="@dimen/logo_1_width"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:scaleType="fitXY"
@@ -36,17 +36,16 @@
         android:visibility="gone"/>
     <Button
         android:id="@+id/fb_register"
-        android:backgroundTint="@color/com_facebook_button_background_color"
         android:layout_height="@dimen/fb_button_height"
         android:layout_below="@id/utotLogo"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/rounded_corners_rectangle"
+        android:background="@drawable/fb_login_button"
         android:drawableStart="@drawable/fb_icon_2"
         android:paddingLeft="10dp"
         android:text="Register with Facebook"
         android:textAllCaps="false"
         android:textColor="#ffffff"
-        app:layout_widthPercent="70%"    />
+        app:layout_widthPercent="75%"    />
 
     <android.support.percent.PercentRelativeLayout
         android:layout_below="@id/fb_register"
@@ -125,7 +124,7 @@
             android:layout_below="@id/confirmPassword"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="13dp"
-            android:background="@drawable/rounded_corners_rectangle"
+            android:background="@drawable/register_button"
             android:text="Create Account"
             android:textAllCaps="false"
             android:textColor="@color/whiteLogIn"

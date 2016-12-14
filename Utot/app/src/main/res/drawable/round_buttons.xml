@@ -2,23 +2,23 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="false" android:state_checked="false" android:state_enabled="true">
         <shape android:shape="oval">
-            <stroke android:width="2dp" android:color="#ff6734"/>
+            <stroke android:width="2dp" android:color="@color/round_buttons_alarm_1"/>
 
         </shape>
     </item>
     <item android:state_pressed="true" android:state_enabled="true">
         <shape android:shape="oval">
-            <solid android:color="#e63a00"/>
+            <solid android:color="@color/round_buttons_alarm__1_pressed"/>
         </shape>
     </item>
       <item android:state_checked="true" android:state_enabled="true">
         <shape android:shape="oval">
-        <solid android:color="#ff6734"/>
+        <solid android:color="@color/round_buttons_alarm__1_pressed"/>
         </shape>
     </item>
     <item android:state_enabled="false">
         <shape android:shape="oval">
-            <solid android:color="#aeaeae"/>
+            <solid android:color="@color/button_disabled"/>
         </shape>
     </item>
 

@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -36,6 +37,20 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
      // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
         Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
+
+        AccessToken facebookAccessToken = AccessToken.getCurrentAccessToken();
+        boolean sessionExpired;
+        if(facebookAccessToken != null){
+            sessionExpired = facebookAccessToken.isExpired();
+        }else{
+            sessionExpired = true;
+        }
+
+        if(!sessionExpired){
+            LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginSplashScreen.class));
+            LoginActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            finish();
+        }
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_fb);

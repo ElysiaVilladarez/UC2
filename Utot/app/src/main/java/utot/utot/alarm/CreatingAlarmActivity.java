@@ -122,14 +122,14 @@ public class CreatingAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 final RingtoneDialog dialog = new RingtoneDialog(CreatingAlarmActivity.this);
-                dialog.doneButton.setOnClickListener(new View.OnClickListener() {
+                dialog.show();
+                dialog.setDialogResult(new RingtoneDialog.OnMyDialogResult() {
                     @Override
-                    public void onClick(View view) {
-                        RadioButton ringtone= (RadioButton)  dialog.group.getChildAt(dialog.group.getCheckedRadioButtonId());
-                        ringtoneText = ringtone.getText().toString();
+                    public void finish(String result) {
+                        ringtoneText = result;
                     }
                 });
-                dialog.show();
+
                 DialogSize.setSize(CreatingAlarmActivity.this, dialog);
             }
         });

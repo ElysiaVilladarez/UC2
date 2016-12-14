@@ -44,7 +44,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container,false);
-        Picasso.with(getActivity()).load(R.drawable.aa_10).into((ImageView)rootView.findViewById(R.id.logo));
+        Picasso.with(getActivity()).load(R.drawable.utotlogo1).into((ImageView)rootView.findViewById(R.id.logo));
 
         rootView.findViewById(R.id.bRODcastButton).setOnClickListener(new View.OnClickListener() {
             @Override

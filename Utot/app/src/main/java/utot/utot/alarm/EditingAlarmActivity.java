@@ -1,4 +1,5 @@
 package utot.utot.alarm;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -138,14 +139,13 @@ public class EditingAlarmActivity extends AppCompatActivity {
             public void onClick(View view) {
                 final RingtoneDialog dialog = new RingtoneDialog(EditingAlarmActivity.this);
                 if(!alarm.getAlarmAudio().trim().isEmpty()) dialog.setRadioChecked(alarm.getAlarmAudio());
-                dialog.doneButton.setOnClickListener(new View.OnClickListener() {
+                dialog.show();
+                dialog.setDialogResult(new RingtoneDialog.OnMyDialogResult() {
                     @Override
-                    public void onClick(View view) {
-                        RadioButton ringtone= (RadioButton)  dialog.group.getChildAt(dialog.group.getCheckedRadioButtonId());
-                        ringtoneText = ringtone.getText().toString();
+                    public void finish(String result) {
+                        ringtoneText = result;
                     }
                 });
-                dialog.show();
                 DialogSize.setSize(EditingAlarmActivity.this, dialog);
             }
         });

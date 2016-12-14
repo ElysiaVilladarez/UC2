@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#AC8A9B</color>
+    <color name="colorPrimaryDark">#540E3A</color>
+    <color name="colorAccent">#55626F</color>
 
     <color name="hintTransparent">#B3000000</color>
     <color name="whiteLogIn">#E6FFFFFF</color>
@@ -11,5 +11,33 @@
 
     <color name="switchbutton_checked">#BF47d247</color>
     <color name="switch_button_unchecked">#f5f5f5</color>
+
+    <color name="button_disabled">#aeaeae</color>
+
+    <color name="round_buttons_alarm_1">#F0978C</color>
+    <color name="round_buttons_alarm__1_pressed">#FD6A6B</color>
+
+    <color name="round_buttons_alarm_2_pressed">#f5f5f5</color>
+    <color name="round_button_alarm_2_checked">#e0e0e0</color>
+
+    <color name="button_shadow">#66000000</color>
+
+    <color name="login_button_color">#4D93D3</color>
+    <color name="login_button_color_pressed">#3A6E9E</color>
+
+    <color name="register_button_color">#FD6A6C</color>
+    <color name="register_button_color_pressed">#BE5051</color>
+
+    <color name="broadcast_button_color">#99D3E1D0</color>
+    <color name="broadcast_button_color_pressed">#D3E1D0</color>
+
+    <color name="sync_button_color">#99E1C6AB</color>
+    <color name="sync_button_color_pressed">#E1C6AB</color>
+
+    <color name="howto_button_color">#99F0978C</color>
+    <color name="howto_button_color_pressed">#F0978C</color>
+
+    <color name="logout_button_color">#99FD6A63</color>
+    <color name="logout_button_color_pressed">#FD6A63</color>
 
 </resources>
