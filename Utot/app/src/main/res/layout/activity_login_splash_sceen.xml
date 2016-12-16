@@ -10,12 +10,15 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:scaleType="centerCrop"
         android:layout_gravity="center"
         android:src="@drawable/aa_5"
         android:id="@+id/mainwindow"/>
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
+        android:animateLayoutChanges="true"
+        android:id="@+id/quoteLay"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true">
 
@@ -42,6 +45,7 @@
         android:textSize="35sp"/>
 
     <android.support.percent.PercentFrameLayout
+
         android:id="@+id/lineBelow"
         app:layout_widthPercent="80%"
         android:layout_below="@id/quote"
@@ -54,8 +58,11 @@
 
     <ImageView
         android:layout_width="wrap_content"
+        android:animateLayoutChanges="true"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:id="@+id/utotLogo"
+        android:src="@drawable/utotlogo1"
         android:visibility="gone"/>
 
 

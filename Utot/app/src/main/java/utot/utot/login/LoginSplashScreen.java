@@ -28,23 +28,35 @@ public class LoginSplashScreen extends Activity {
         // 2. Make sure we keep the source Activity as a WeakReference (more on that later)
         private WeakReference mActivity;
         /** Duration of wait **/
-        private final int LOGO_DISPLAY_LENGTH = 2000;
+        private final int LOGO_DISPLAY_LENGTH = 2500;
         private View view1, view2;
-        private Animation slide_up;
 
-        private StartMainActivityRunnable(Activity activity, View view1, View view2, Animation slide_up) {
+        private StartMainActivityRunnable(Activity activity, View view1, View view2) {
             mActivity = new WeakReference(activity);
             this.view1 = view1;
             this.view2 = view2;
-            this.slide_up = slide_up;
-        }
+            }
 
         @Override
         public void run() {
             // 3. Check that the reference is valid and execute the code
             if (mActivity.get() != null) {
-                view2.setVisibility(View.VISIBLE);
-                view1.setVisibility(View.GONE);
+                view1.animate().alpha(0.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+                        view1.setVisibility(View.GONE);
+                        view2.setAlpha(0.0f);
+                        view2.setVisibility(View.VISIBLE);
+
+                        view2.animate().alpha(1.0f).setDuration(300).setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                            }
+                        });
+                    }
+                });
 
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -79,10 +91,10 @@ public class LoginSplashScreen extends Activity {
         View view2 = findViewById(R.id.utotLogo);
 
       //  Picasso.with(this).load(R.drawable.aa_1).into((CustomFrameLayout) findViewById(R.id.mainwindow));
-        Picasso.with(this).load(R.drawable.aa_4).into((ImageView)view2);
+      //  Picasso.with(this).load(R.drawable.aa_4).into((ImageView)view2);
 
         // 5. Pass a new instance of StartMainActivityRunnable with reference to 'this'.
-        mHandler.postDelayed(new StartMainActivityRunnable(this, findViewById(R.id.quote), view2, slide_up), QUOTE_DISPLAY_LENGTH);
+        mHandler.postDelayed(new StartMainActivityRunnable(this, findViewById(R.id.quoteLay), view2), QUOTE_DISPLAY_LENGTH);
     }
 
     // 6. Override onDestroy()

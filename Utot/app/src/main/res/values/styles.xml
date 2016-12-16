@@ -19,6 +19,7 @@
 
 
     <style name="EditTextStyle_1" parent="@android:style/Widget.EditText">
+        <item name="android:cursorVisible">true</item>
         <item name="android:textColorHint">@color/hintTransparent</item>
         <item name="android:paddingRight">@dimen/edittext_padding</item>
         <item name="android:paddingLeft">@dimen/edittext_padding</item>

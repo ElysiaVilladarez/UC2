@@ -2,6 +2,7 @@ package utot.utot.alarm;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.percent.PercentRelativeLayout;
@@ -25,6 +26,8 @@ import io.realm.RealmResults;
 import utot.utot.R;
 import utot.utot.alarm.EditingAlarmActivity;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.Computations;
+import utot.utot.triggeralarm.AlarmReceiver;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
  
@@ -32,39 +35,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 	private static Activity act;
  	private Realm realm;
 
-	public String translation(boolean[] days){
-		String[] names = new String[7];
-		names[0] = "M";
-		names[1] = "T";
-		names[2] = "W";
-		names[3] = "Th";
-		names[4] = "F";
-		names[5] = "Sa";
-		names[6] = "Su";
-		String display="";
-		
-		if(days[0] && days[1] && days[2] && days[3] && days[4] && days[5] && days[6]){
-			display+= "Everyday ";
-		} else if(days[0] && days[1] && days[2] && days[3] && days[4]){
-			display += "Weekdays ";
-			if(days[5])display += names[5] + " ";
-			if(days[6])display += names[6] + " ";
-		} else if(days[5] && days[6]){
-			if(days[0])display += names[0] + " ";
-			if(days[1])display += names[1] + " ";
-			if(days[2])display += names[2] + " ";
-			if(days[3])display += names[3] + " ";
-			if(days[4])display += names[4] + " ";
-			display += "Weekends";
-		} else{
-			for(int i =0; i <days.length;i++){
-				if(days[i]) display += names[i] + " ";
-			}
-		}
-		
-		
-		return display;
-	}
+
 	
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView alarmTime, alarmFrequency;
@@ -136,21 +107,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 		if(alarm.getAlarmFrequency().trim().isEmpty()){
 			freq = "Once";
 		} else{
-			boolean[] days = new boolean[7];
-            JSONArray arrayBool = null;
-            try {
-                arrayBool = new JSONArray(alarm.getAlarmFrequency());
-                if (arrayBool != null) {
-                    JSONArray lol = arrayBool.getJSONArray(0);
-                    for (int i = 0; i < lol.length(); i++) {
-                        days[i] = lol.getBoolean(i);
-                    }
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-			freq = translation(days);
+			freq = Computations.translationToReadableText(Computations.transformToBooleanArray(alarm.getAlarmFrequency().trim()));
 		}
 		
 		holder.alarmFrequency.setText(freq);
@@ -165,11 +122,18 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
+								Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
+								PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), (int) alarm.getPrimaryKey(),
+										myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+								pendingIntent.cancel();
+
                                 realm.beginTransaction();
                                 alarm.deleteFromRealm();
                                 realm.commitTransaction();
 
                                 AlarmAdapter.this.notifyDataSetChanged();
+
+
                             }})
                         .setNegativeButton(android.R.string.no, null).show();
 

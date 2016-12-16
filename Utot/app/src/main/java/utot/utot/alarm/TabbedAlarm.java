@@ -53,7 +53,8 @@ public class TabbedAlarm extends AppCompatActivity {
                 // Go to SavedPoemsFragment
                 if(cur!=0) {
                     transaction = manager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+                   // transaction.setCustomAnimations(R.anim.left_to_right_slide_slow, R.anim.right_to_left_slide_slow);
+                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
                     transaction.commit();
 
@@ -68,8 +69,14 @@ public class TabbedAlarm extends AppCompatActivity {
                 // Go to AlarmFragment
                 if(cur!=1) {
                     transaction = manager.beginTransaction();
-                    if(cur==2) transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
-                    if(cur==0) transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+                    if(cur==2) {
+                      //  transaction.setCustomAnimations(R.anim.left_to_right_slide_slow, R.anim.right_to_left_slide_slow);
+                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
+                    if(cur==0) {
+                      //  transaction.setCustomAnimations(R.anim.pull_in_right_slow, R.anim.push_out_left_slow);
+                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                    }
                     transaction.replace(R.id.container, AlarmFragment.newInstance());
                     transaction.commit();
 
@@ -87,7 +94,8 @@ public class TabbedAlarm extends AppCompatActivity {
                 // Go to SettingsFragment
                 if(cur!=2) {
                     transaction = manager.beginTransaction();
-                    transaction.setCustomAnimations(R.animator.pull_in_right, R.animator.push_out_left);
+                   // transaction.setCustomAnimations(R.anim.pull_in_right_slow, R.anim.push_out_left_slow);
+                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     transaction.replace(R.id.container, SettingsFragment.newInstance());
                     transaction.commit();
 

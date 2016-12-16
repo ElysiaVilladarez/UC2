@@ -53,15 +53,15 @@ public class Alarm extends RealmObject {
         this.isVibrate = isVibrate;
     }
 
-    public long getPrimaryKey() {
+    public int getPrimaryKey() {
         return primaryKey;
     }
 
-    public void setPrimaryKey(long primaryKey) {
+    public void setPrimaryKey(int primaryKey) {
         this.primaryKey = primaryKey;
     }
 
-    private long primaryKey;
+    private int primaryKey;
     private Date alarmTime;
     private String alarmFrequency;
     private String alarmAudio;

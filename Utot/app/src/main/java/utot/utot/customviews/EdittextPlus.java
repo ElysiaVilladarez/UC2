@@ -2,6 +2,7 @@ package utot.utot.customviews;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,7 +13,7 @@ import utot.utot.R;
  * Created by elysi on 12/14/2016.
  */
 
-public class EdittextPlus extends EditText {
+public class EdittextPlus extends AppCompatEditText {
 
 
     private Context context;

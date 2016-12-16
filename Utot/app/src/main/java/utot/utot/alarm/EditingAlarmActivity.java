@@ -28,6 +28,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.Computations;
 import utot.utot.helpers.DialogSize;
 
 
@@ -124,21 +125,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
         } else{
             repeatingSwitch.setChecked(true);
             setEnabledRepeatButtons(true);
-            boolean[] days = new boolean[7];
-            JSONArray arrayBool = null;
-            try {
-                arrayBool = new JSONArray(alarmFrequency);
-                if (arrayBool != null) {
-                    JSONArray lol = arrayBool.getJSONArray(0);
-                    for (int i = 0; i < lol.length(); i++) {
-                        System.out.println("CHECK: " + lol.getBoolean(i));
-                        days[i] = lol.getBoolean(i);
-                    }
-
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            boolean[] days = Computations.transformToBooleanArray(alarmFrequency.trim());
             for (int i = 0; i < days.length; i++) {
                 daysToggle[i].setChecked(days[i]);
             }
@@ -218,7 +205,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
                 String alarmDays = (new JSONArray(Arrays.asList(days))).toString();
 
                 realm.beginTransaction();
-                alarm.setPrimaryKey(System.currentTimeMillis());
+                alarm.setPrimaryKey((int)System.currentTimeMillis());
                 alarm.setAlarmFrequency(alarmDays);
                 alarm.setAlarmTime(alarmTime);
                 alarm.setIsOn(true);

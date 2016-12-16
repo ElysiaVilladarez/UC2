@@ -65,7 +65,7 @@
                 android:layout_below="@id/fb_login"
                 android:layout_centerHorizontal="true">
 
-                <utot.utot.customviews.TextViewPlus
+                <TextView
                     android:id="@+id/or"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

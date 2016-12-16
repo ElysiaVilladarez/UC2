@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_triggered"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="utot.utot.triggeralarm.TriggeredActivity">
+
+    <ImageView
+        android:id="@+id/bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/aa_8" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:id="@+id/timeIndicate"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_heightPercent="67%">
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/utotLogo"/>
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/time"
+            android:layout_centerInParent="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="28sp" />
+
+        <!--<utot.utot.customviews.TextViewPlus-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@+id/time"-->
+            <!--android:id="@+id/amp"-->
+            <!--android:gravity="center"-->
+            <!--android:text="PM"-->
+            <!--android:textSize="21sp" />-->
+    </android.support.percent.PercentRelativeLayout>
+    <android.support.percent.PercentRelativeLayout
+        android:layout_below="@id/timeIndicate"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        app:layout_heightPercent="33%">
+        <utot.utot.customviews.ButtonPlus
+            android:id="@+id/sleepButton"
+            style="@style/Alarm_Function_Buttons"
+            android:layout_width="@dimen/circle_button_size_bigger"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:text="Snooze"
+            app:layout_aspectRatio="100%" />
+        <utot.utot.customviews.ButtonPlus
+        android:id="@+id/dismissButton"
+            android:layout_toEndOf="@id/sleepButton"
+            app:layout_marginLeftPercent="15%"
+        style="@style/Alarm_Function_Buttons"
+        android:layout_width="@dimen/circle_button_size_bigger"
+        android:textAllCaps="true"
+        android:textSize="13sp"
+        android:text="Dismiss"
+        app:layout_aspectRatio="100%" />
+    </android.support.percent.PercentRelativeLayout>
+
+</android.support.percent.PercentRelativeLayout>

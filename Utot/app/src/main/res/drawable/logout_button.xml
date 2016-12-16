@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:left="2dp"
-        android:top="2dp">
-        <shape>
-            <corners android:radius="@dimen/rounded_corners_radius" />
-            <solid android:color="@color/button_shadow" />
-        </shape>
-    </item>
-    <item>
-        <inset>
-            <selector>
+            <selector xmlns:android="http://schemas.android.com/apk/res/android">
                 <item
                     android:bottom="2dp"
                     android:right="2dp"
@@ -57,6 +46,4 @@
 
                 </item>
             </selector>
-        </inset>
-    </item>
-</layer-list>
+

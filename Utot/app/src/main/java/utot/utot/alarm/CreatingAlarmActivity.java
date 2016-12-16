@@ -1,7 +1,11 @@
 package utot.utot.alarm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
@@ -30,11 +35,20 @@ import java.util.Calendar;
 import java.util.Date;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.Computations;
 import utot.utot.helpers.DialogSize;
+import utot.utot.triggeralarm.AlarmReceiver;
+import utot.utot.triggeralarm.AlarmService;
 
 public class CreatingAlarmActivity extends AppCompatActivity {
+    public static final String ALARM_TIME_SET = "ATS";
+    public static final String ALARM_DATE_SET = "ADS";
+    public static final String ALARM_PRIMARY_KEY = "PK";
+
     private TextView timeSet;
     private Date alarmTime;
     private SimpleDateFormat fmt;
@@ -43,6 +57,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
     private Realm realm;
     Calendar mcurrentTime;
+    private int pk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -202,8 +217,9 @@ public class CreatingAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String alarmDays = "";
+                boolean[] days = new boolean[7];
+
                 if (repeatingSwitch.isChecked()) {
-                    boolean[] days = new boolean[7];
                     for (int i = 0; i < daysToggle.length; i++) {
                         days[i] = daysToggle[i].isChecked();
                     }
@@ -212,10 +228,11 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                 } else {
                     alarmDays = "";
                 }
-
+                Alarm alarm;
                 realm.beginTransaction();
-                Alarm alarm = realm.createObject(Alarm.class); // Create a new object
-                alarm.setPrimaryKey(System.currentTimeMillis());
+                alarm = realm.createObject(Alarm.class); // Create a new object
+                pk = (int) System.currentTimeMillis();
+                alarm.setPrimaryKey(pk);
                 alarm.setAlarmFrequency(alarmDays);
                 alarm.setAlarmTime(alarmTime);
                 alarm.setAlarmAudio(ringtoneText);
@@ -224,6 +241,20 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                 alarm.setAlarmAudio("Normal Ringtone");
                 realm.commitTransaction();
 
+                //  new CreatingAlarmAsync().execute(alarmDays);
+                Computations.makeAlarm(CreatingAlarmActivity.this, alarmDays, days, alarmTime, pk);
+//
+////                AlarmManager alarmManager = (AlarmManager) CreatingAlarmActivity.this.
+////                        getSystemService(CreatingAlarmActivity.ALARM_SERVICE);
+//                Intent myIntent = new Intent(CreatingAlarmActivity.this.getApplicationContext(), AlarmService.class);
+//                myIntent.putExtra("ALARM DATE", alarmDays);
+//                myIntent.putExtra("ALARM TIME", fmt.format(alarmTime));
+//                myIntent.putExtra("PK", pk);
+//                startService(myIntent);
+////                PendingIntent pendingIntent = PendingIntent.getService(CreatingAlarmActivity.this.getApplicationContext(),
+////                        pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+////                alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), pendingIntent);
+
                 CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
                 CreatingAlarmActivity.this.finish();
 
@@ -231,6 +262,50 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         });
 
     }
+
+////    class CreatingAlarmAsync extends AsyncTask<String, Void, Date>{
+////
+////
+////        @Override
+////        protected Date doInBackground(String... a) {
+////            int dayOfWeek = -1;
+////            boolean[] days = Computations.transformToBooleanArray(a[0]);
+////            for(int i = Calendar.getInstance().get(Calendar.DAY_OF_WEEK); i < days.length; i++){
+////                if(days[i]){
+////                    if(i==0){
+////                        dayOfWeek = 0;
+////                    } else{
+////                        dayOfWeek = i+1;
+////                    }
+////                    break;
+////                }
+////
+////                if(i==6) i =0;
+////            }
+////
+////            mcurrentTime = Calendar.getInstance();
+////            if(dayOfWeek!=-1) mcurrentTime.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+////            Calendar timeA = Calendar.getInstance();
+////            timeA.setTime(alarmTime);
+////            mcurrentTime.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
+////            mcurrentTime.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
+////
+////
+////            AlarmManager alarmManager = (AlarmManager) CreatingAlarmActivity.this.
+////                    getSystemService(CreatingAlarmActivity.ALARM_SERVICE);
+////            Intent myIntent = new Intent(CreatingAlarmActivity.this.getApplicationContext(), AlarmReceiver.class);
+////            PendingIntent pendingIntent = PendingIntent.getBroadcast(CreatingAlarmActivity.this.getApplicationContext(),
+////                    pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+////            alarmManager.set(AlarmManager.RTC_WAKEUP, mcurrentTime.getTimeInMillis(), pendingIntent);
+////
+////            return mcurrentTime.getTime();
+////        }
+//
+//        protected void onPostExecute(Date result){
+//            Toast.makeText(CreatingAlarmActivity.this, result .toString(), Toast.LENGTH_LONG).show();
+//
+//        }
+//    }
 
     private void checkOtherToggles() {
         boolean everdayCheck = true;

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="utot.utot" >
+    xmlns:tools="http://schemas.android.com/tools"
+    package="utot.utot">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -14,14 +15,16 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme"
+        tools:node="replace">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
         <activity
-            android:windowSoftInputMode="adjustResize|stateHidden"
             android:name=".login.LoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" >
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -29,36 +32,44 @@
             </intent-filter>
         </activity>
         <activity
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:name=".register.RegisterActivity">
-        </activity>
+            android:name=".register.RegisterActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".alarm.TabbedAlarm"
-            android:label="@string/title_activity_tabbed_alarm" >
-        </activity>
-        <activity android:name=".login.LoginSplashScreen" >
-        </activity>
-        <activity android:name=".alarm.CreatingAlarmActivity" >
-        </activity>
-        <activity android:name=".alarm.EditingAlarmActivity" >
-        </activity>
-
-        <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/title_activity_tabbed_alarm" />
+        <activity android:name=".login.LoginSplashScreen" />
+        <activity android:name=".alarm.CreatingAlarmActivity" />
+        <activity android:name=".alarm.EditingAlarmActivity" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
-
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
 
+        <service
+            android:name=".triggeralarm.AlarmService"
+            android:enabled="true" />
+
+        <receiver android:name=".triggeralarm.AlarmReceiver">
+            <action android:name="android.intent.action.BOOT_COMPLETED"/>
+        </receiver>
+
+
+        <activity android:name=".triggeralarm.TriggeredActivity"
+            android:launchMode="singleInstance">
+
+        </activity>
     </application>
 
 </manifest>
