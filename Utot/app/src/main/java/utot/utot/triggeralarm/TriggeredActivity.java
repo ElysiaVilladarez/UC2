@@ -35,6 +35,7 @@ public class TriggeredActivity extends AppCompatActivity {
     private Date alarmDate;
     private Vibrator vibrate;
     private boolean isVibrate;
+    private Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,8 @@ public class TriggeredActivity extends AppCompatActivity {
             vibrate = null;
         }
 
-        Uri uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        System.out.println("CHECK: " + getIntent().getStringExtra(CreatingAlarmActivity.ALARM_RINGTONE));
+        uri = Uri.parse(getIntent().getStringExtra(CreatingAlarmActivity.ALARM_RINGTONE));
         ringtone = new MediaPlayer();
         try {
             ringtone.setDataSource(this, uri);
@@ -133,7 +135,7 @@ public class TriggeredActivity extends AppCompatActivity {
                     timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
                     timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
 
-                    Computations.makeAlarm(TriggeredActivity.this, alarmDays, now, alarmDate, pk, true, isVibrate);
+                    Computations.makeAlarm(TriggeredActivity.this, alarmDays, now, alarmDate, pk, true, isVibrate, uri.toString());
 
                 }
 

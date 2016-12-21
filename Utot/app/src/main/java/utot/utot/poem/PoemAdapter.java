@@ -81,7 +81,6 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         holder.shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(act, "SHARE BUTTON CLICKED", Toast.LENGTH_LONG).show();
                 Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(holder.displayImg, holder.displayImg.getWidth(),
                         holder.displayImg.getHeight());
                 String filename = Integer.toString(poem.getPrimaryKey());

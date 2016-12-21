@@ -94,8 +94,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 
             public void onCheckedChanged(CompoundButton buttonView, boolean b) {
                 if (b) {
-                    Computations.makeAlarm(act, alarm.getAlarmFrequency(), Calendar.getInstance(),
-                            alarm.getAlarmTime(), alarm.getPrimaryKey(), alarm.isRepeating(), alarm.isVibrate());
+                    Computations.makeAlarm(act, alarm, Calendar.getInstance());
                     holder.mainwindow.setBackgroundColor(0x8C00ace6);
                 } else {
                     Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);

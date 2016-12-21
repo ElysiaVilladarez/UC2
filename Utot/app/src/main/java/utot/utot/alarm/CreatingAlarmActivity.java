@@ -2,6 +2,7 @@ package utot.utot.alarm;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Typeface;
@@ -39,6 +40,7 @@ import io.realm.RealmResults;
 import io.realm.Sort;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.DialogSize;
 import utot.utot.triggeralarm.AlarmReceiver;
@@ -51,6 +53,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     public static final String ALARM_PRIMARY_KEY = "PK";
     public static final String ALARM_IS_REPEATING = "AIS";
     public static final String ALARM_VIBRATE = "AV";
+    public static final String ALARM_RINGTONE = "AR";
 
     private CheckBox repeatingSwitch, vibrateSwitch;
     private TextView timeSet;
@@ -74,9 +77,9 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         ringtoneText = "";
 
         mcurrentTime = Calendar.getInstance();
-        final int hour = mcurrentTime.get(Calendar.HOUR);
-        final int hour24 = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-        final int minute = mcurrentTime.get(Calendar.MINUTE);
+//        final int hour = mcurrentTime.get(Calendar.HOUR);
+//        final int hour24 = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+//        final int minute = mcurrentTime.get(Calendar.MINUTE);
         String amp;
         if (mcurrentTime.get(Calendar.AM_PM) == Calendar.AM) {
             amp = "AM";
@@ -94,6 +97,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
             e.printStackTrace();
         }
+
         findViewById(R.id.timePicker).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,8 +119,8 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                                 timeSet.setText(fmt2.format(alarmTime));
                             }
                         },
-                        hour24,
-                        minute,
+                        getHour(mcurrentTime),
+                        getMinute(mcurrentTime),
                         false);
                 mTimePicker.show(getFragmentManager(), "Timepickerdialog");
                 mTimePicker.setTitle("Set Time");
@@ -126,7 +130,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         Typeface customFont = Typeface.createFromAsset(this.getAssets(), getResources().getString(R.string.toggle_butons_font));
 
 
-        ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
+        final ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
         vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
         repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
         everydayButton = (ToggleButton) findViewById(R.id.everydayButton);
@@ -154,12 +158,15 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         ringtoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final RingtoneDialog dialog = new RingtoneDialog(CreatingAlarmActivity.this);
+                System.out.println("CHECK: ringtonetext "+ringtoneText);
+                RingtoneDialog dialog = new RingtoneDialog(CreatingAlarmActivity.this, ringtoneText);
                 dialog.show();
-                dialog.setDialogResult(new RingtoneDialog.OnMyDialogResult() {
+
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void finish(String result) {
-                        ringtoneText = result;
+                    public void onDismiss(DialogInterface dialog) {
+                        ringtoneText = RingtoneDialog.ringtoneName;
+                        System.out.println("CHECK: " + RingtoneDialog.ringtoneName + " = "+ ringtoneText);
                     }
                 });
 
@@ -249,14 +256,11 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                     alarm.setOn(true);
                     alarm.setVibrate(vibrateSwitch.isChecked());
                     alarm.setRepeating(repeatingSwitch.isChecked());
-                    alarm.setAlarmAudio("Normal Ringtone");
                     realm.commitTransaction();
 
                     //  new CreatingAlarmAsync().execute(alarmDays);
                     Calendar now = Calendar.getInstance();
-
-                    Computations.makeAlarm(CreatingAlarmActivity.this, alarmDays, now, alarmTime, pk,
-                            repeatingSwitch.isChecked(), vibrateSwitch.isChecked());
+                    Computations.makeAlarm(CreatingAlarmActivity.this, alarm, now);
                     CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
                     CreatingAlarmActivity.this.finish();
                 } else{
@@ -360,4 +364,27 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         }
     }
 
+    public int getHour(Calendar mcurrentTime){
+        String time = timeSet.getText().toString();
+        Date date = null;
+        try {
+            date = fmt.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mcurrentTime.setTime(date);
+        return mcurrentTime.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute(Calendar mcurrentTime){
+        String time = timeSet.getText().toString();
+        Date date = null;
+        try {
+            date = fmt.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mcurrentTime.setTime(date);
+        return mcurrentTime.get(Calendar.MINUTE);
+    }
 }

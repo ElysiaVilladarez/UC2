@@ -17,7 +17,7 @@ public class DialogSize {
         int width = displaymetrics.widthPixels;
 
         Window d = dialog.getWindow();
-        d.setLayout(height / 2, width);
+        d.setLayout(width-10, height / 2);
 
     }
 }

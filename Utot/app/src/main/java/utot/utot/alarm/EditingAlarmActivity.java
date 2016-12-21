@@ -86,8 +86,8 @@ public class EditingAlarmActivity extends AppCompatActivity {
                                 timeSet.setText(fmt2.format(alarmTime));
                             }
                         },
-                        hour,
-                        minute,
+                        getHour(mcurrentTime),
+                        getMinute(mcurrentTime),
                         false);
                 mTimePicker.show(getFragmentManager(), "Timepickerdialog");
                 mTimePicker.setTitle("Set Time");
@@ -136,17 +136,19 @@ public class EditingAlarmActivity extends AppCompatActivity {
             daysToggle[i].setChecked(days[i]);
         }
         checkOtherToggles();
+        ringtoneText = alarm.getAlarmAudio();
 
         ringtoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final RingtoneDialog dialog = new RingtoneDialog(EditingAlarmActivity.this);
-                if(!alarm.getAlarmAudio().trim().isEmpty()) dialog.setRadioChecked(alarm.getAlarmAudio());
+                System.out.println("CHECK: ringtonetext "+ringtoneText + " alarm audio " + alarm.getAlarmAudio());
+                RingtoneDialog dialog = new RingtoneDialog(EditingAlarmActivity.this, ringtoneText);
                 dialog.show();
-                dialog.setDialogResult(new RingtoneDialog.OnMyDialogResult() {
+                dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
-                    public void finish(String result) {
-                        ringtoneText = result;
+                    public void onDismiss(DialogInterface dialog) {
+                        ringtoneText = RingtoneDialog.ringtoneName;
+                        System.out.println("CHECK: " + RingtoneDialog.ringtoneName + " = "+ ringtoneText);
                     }
                 });
                 DialogSize.setSize(EditingAlarmActivity.this, dialog);
@@ -205,7 +207,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String alarmDays = "";
-                int dayOfWeek = -1;
+//                int dayOfWeek = -1;
                 boolean[] days = new boolean[7];
 
                 for (int i = 0; i < daysToggle.length; i++) {
@@ -224,20 +226,18 @@ public class EditingAlarmActivity extends AppCompatActivity {
                     alarmDays = (new JSONArray(Arrays.asList(days))).toString();
 
                     realm.beginTransaction();
-                    int pk = (int) System.currentTimeMillis();
                     alarm.setPrimaryKey((int)System.currentTimeMillis());
                     alarm.setAlarmFrequency(alarmDays);
                     alarm.setAlarmTime(alarmTime);
                     alarm.setIsOn(true);
                     alarm.setIsVibrate(vibrateSwitch.isChecked());
                     alarm.setRepeating(repeatingSwitch.isChecked());
-                    alarm.setAlarmAudio("Normal Ringtone");
+                    alarm.setAlarmAudio(ringtoneText);
                     realm.commitTransaction();
 
                     Calendar now = Calendar.getInstance();
 
-                    Computations.makeAlarm(EditingAlarmActivity.this, alarmDays, now, alarmTime, pk,
-                            repeatingSwitch.isChecked(),vibrateSwitch.isChecked());
+                    Computations.makeAlarm(EditingAlarmActivity.this, alarm, now);
 
                     EditingAlarmActivity.this.startActivity(new Intent(EditingAlarmActivity.this, TabbedAlarm.class));
                     EditingAlarmActivity.this.finish();
@@ -302,6 +302,30 @@ public class EditingAlarmActivity extends AppCompatActivity {
         everydayButton.setEnabled(b);
         weekdaysButton.setEnabled(b);
         weekendsButton.setEnabled(b);
+    }
+
+    public int getHour(Calendar mcurrentTime){
+        String time = timeSet.getText().toString();
+        Date date = null;
+        try {
+            date = fmt.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mcurrentTime.setTime(date);
+        return mcurrentTime.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute(Calendar mcurrentTime){
+        String time = timeSet.getText().toString();
+        Date date = null;
+        try {
+            date = fmt.parse(time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        mcurrentTime.setTime(date);
+        return mcurrentTime.get(Calendar.MINUTE);
     }
 
 }

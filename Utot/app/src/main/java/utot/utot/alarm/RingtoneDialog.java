@@ -24,17 +24,17 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class RingtoneDialog extends Dialog {
 
-    private Context context;
+    private Context c;
     private RingtoneManager ringtoneManager;
-    private Ringtone[] alarms;
+    private Uri[] alarms;
     private Ringtone r;
     public static RadioGroup group;
     public static Button doneButton;
-    private OnMyDialogResult mDialogResult;
-    public RingtoneDialog(Context context) {
+    public static String ringtoneName;
+    public RingtoneDialog(Context context, String rName) {
         super(context);
 
-        this.context = context;
+        this.c = context;
         setContentView(R.layout.dialog_ringtone);
         setTitle("Ringtones");
 
@@ -42,10 +42,10 @@ public class RingtoneDialog extends Dialog {
         doneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if( mDialogResult != null ){
-                    RadioButton rad = (RadioButton)findViewById(group.getCheckedRadioButtonId());
-                    mDialogResult.finish(rad.getText().toString());
-                }
+//                if( mDialogResult != null ){
+//                    RadioButton rad = (RadioButton)findViewById(group.getCheckedRadioButtonId());
+//                    mDialogResult.finish(rad.getText().toString());
+//                }
 
                 if(r!=null && r.isPlaying()){
                     r.stop();
@@ -56,17 +56,36 @@ public class RingtoneDialog extends Dialog {
             }
         });
 
+
         ringtoneManager = new RingtoneManager(context);
         group = (RadioGroup)findViewById(R.id.radioRingtone);
         alarms = getDefaultAlarms();
+
+
         final int alarmCount = alarms.length;
         for(int i=0; i <alarmCount; i++){
             RadioButton ringtone = new RadioButton(context);
-            ringtone.setText(alarms[i].getTitle(context));
+            ringtone.setText(RingtoneManager.getRingtone(context, alarms[i]).getTitle(context));
             ringtone.setPadding(10,10,10,10);
             group.addView(ringtone);
         }
-        ((RadioButton)group.getChildAt(0)).setChecked(true);
+
+        this.ringtoneName = rName;
+        if(ringtoneName == null || ringtoneName.trim().isEmpty()) {
+            System.out.println("CHECK: RINGTONE NULL");
+            ringtoneName = alarms[0].toString();
+            ((RadioButton)group.getChildAt(0)).setChecked(true);
+        } else{
+            System.out.println("CHECK: RINGTONE NOT NULL");
+            for(int i =0; i <alarmCount; i++){
+                if(alarms[i].toString().equals(ringtoneName)){
+                    group.check(group.getChildAt(i).getId());
+                    System.out.println("CHECK: RAD " + ((RadioButton)group.getChildAt(i)).getText().toString());
+                    break;
+                }
+            }
+        }
+
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
@@ -76,7 +95,8 @@ public class RingtoneDialog extends Dialog {
                 }
                 View radioButton = group.findViewById(i);
                 int index = group.indexOfChild(radioButton);
-                r = alarms[index];
+                r = RingtoneManager.getRingtone(c, alarms[index]);
+                ringtoneName = alarms[index].toString();
                 r.play();
             }
         });
@@ -107,28 +127,20 @@ public class RingtoneDialog extends Dialog {
     }
 
 
-    public Ringtone[] getDefaultAlarms(){
+    public Uri[] getDefaultAlarms(){
         ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
         Cursor alarmsCursor = ringtoneManager.getCursor();
         int alarmsCount = alarmsCursor.getCount();
         if (alarmsCount == 0 && !alarmsCursor.moveToFirst()) {
             return null;
         }
-        Ringtone[] alarms = new Ringtone[alarmsCount];
+        Uri[] alarms = new Uri[alarmsCount];
         while(!alarmsCursor.isAfterLast() && alarmsCursor.moveToNext()) {
             int currentPosition = alarmsCursor.getPosition();
-            alarms[currentPosition] = ringtoneManager.getRingtone(context, ringtoneManager.getRingtoneUri(currentPosition));
+            alarms[currentPosition] = ringtoneManager.getRingtoneUri(currentPosition);
 
         }
         alarmsCursor.close();
         return alarms;
-    }
-
-    public void setDialogResult(OnMyDialogResult dialogResult){
-        mDialogResult = dialogResult;
-    }
-
-    public interface OnMyDialogResult{
-        void finish(String result);
     }
 }

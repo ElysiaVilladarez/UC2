@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import utot.utot.alarm.CreatingAlarmActivity;
+import utot.utot.customobjects.Alarm;
 import utot.utot.triggeralarm.AlarmReceiver;
 
 /**
@@ -118,8 +119,46 @@ public class Computations {
         return dayOfWeek;
     }
 
+    public static boolean makeAlarm(Context context, Alarm alarm, Calendar now) {
+        //boolean[] days = Computations.transformToBooleanArray(alarmDays);
+        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
+
+        Calendar timeA = Calendar.getInstance();
+        int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
+        timeA.setTime(alarm.getAlarmTime());
+        timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
+        timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
+        timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+        now.set(Calendar.DAY_OF_WEEK, nowDay);
+        int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarm.getAlarmFrequency()), now, timeA);
+        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+        now.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
+        now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
+        now.set(Calendar.SECOND, 0);
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+
+        Intent myIntent = new Intent(context, AlarmReceiver.class);
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_TIME_SET, fmt.format(alarm.getAlarmTime()));
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_DATE_SET, alarm.getAlarmFrequency());
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, alarm.getPrimaryKey());
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, alarm.isRepeating());
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, alarm.isVibrate());
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_RINGTONE, alarm.getAlarmAudio());
+
+
+        System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: " + timeA.getTime());
+
+        long alarmMilli = now.getTimeInMillis();
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                alarm.getPrimaryKey(), myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+
+        return true;
+    }
+
     public static boolean makeAlarm(Context context, String alarmDays, Calendar now, Date alarmTime, int pk,
-                                    boolean isRepeating, boolean isVibrating){
+                                    boolean isRepeating, boolean isVibrating, String ringtone){
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
         SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
 
@@ -144,6 +183,7 @@ public class Computations {
         myIntent.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, pk);
         myIntent.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, isRepeating);
         myIntent.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, isVibrating);
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_RINGTONE, ringtone);
 
 
         System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: "+ timeA.getTime());
