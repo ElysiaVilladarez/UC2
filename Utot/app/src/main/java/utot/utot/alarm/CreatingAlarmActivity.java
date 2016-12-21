@@ -43,12 +43,16 @@ import utot.utot.helpers.Computations;
 import utot.utot.helpers.DialogSize;
 import utot.utot.triggeralarm.AlarmReceiver;
 import utot.utot.triggeralarm.AlarmService;
+import utot.utot.triggeralarm.TriggeredActivity;
 
 public class CreatingAlarmActivity extends AppCompatActivity {
     public static final String ALARM_TIME_SET = "ATS";
     public static final String ALARM_DATE_SET = "ADS";
     public static final String ALARM_PRIMARY_KEY = "PK";
+    public static final String ALARM_IS_REPEATING = "AIS";
+    public static final String ALARM_VIBRATE = "AV";
 
+    private CheckBox repeatingSwitch, vibrateSwitch;
     private TextView timeSet;
     private Date alarmTime;
     private SimpleDateFormat fmt;
@@ -71,6 +75,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
         mcurrentTime = Calendar.getInstance();
         final int hour = mcurrentTime.get(Calendar.HOUR);
+        final int hour24 = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         final int minute = mcurrentTime.get(Calendar.MINUTE);
         String amp;
         if (mcurrentTime.get(Calendar.AM_PM) == Calendar.AM) {
@@ -110,7 +115,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                                 timeSet.setText(fmt2.format(alarmTime));
                             }
                         },
-                        hour,
+                        hour24,
                         minute,
                         false);
                 mTimePicker.show(getFragmentManager(), "Timepickerdialog");
@@ -122,8 +127,8 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
 
         ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
-        final CheckBox vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
-        final CheckBox repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
+        vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
+        repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
         everydayButton = (ToggleButton) findViewById(R.id.everydayButton);
         weekendsButton = (ToggleButton) findViewById(R.id.weekendsButton);
         weekdaysButton = (ToggleButton) findViewById(R.id.weekdaysButton);
@@ -168,9 +173,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                 everydayButton.setEnabled(b);
                 weekdaysButton.setEnabled(b);
                 weekendsButton.setEnabled(b);
-                for (int i = 0; i < daysToggle.length; i++) {
-                    daysToggle[i].setEnabled(b);
-                }
+                checkOtherToggles();
             }
         });
 
@@ -217,46 +220,51 @@ public class CreatingAlarmActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String alarmDays = "";
+                int dayOfWeek = -1;
                 boolean[] days = new boolean[7];
 
-                if (repeatingSwitch.isChecked()) {
-                    for (int i = 0; i < daysToggle.length; i++) {
-                        days[i] = daysToggle[i].isChecked();
+                for (int i = 0; i < daysToggle.length; i++) {
+                    days[i] = daysToggle[i].isChecked();
+                }
+                boolean selectedDate = false;
+                for (int i = 0; i < days.length; i++) {
+                    if (days[i]) {
+                        selectedDate = true;
+                        break;
                     }
 
-                    alarmDays = (new JSONArray(Arrays.asList(days))).toString();
-                } else {
-                    alarmDays = "";
                 }
-                Alarm alarm;
-                realm.beginTransaction();
-                alarm = realm.createObject(Alarm.class); // Create a new object
-                pk = (int) System.currentTimeMillis();
-                alarm.setPrimaryKey(pk);
-                alarm.setAlarmFrequency(alarmDays);
-                alarm.setAlarmTime(alarmTime);
-                alarm.setAlarmAudio(ringtoneText);
-                alarm.setIsOn(true);
-                alarm.setIsVibrate(vibrateSwitch.isChecked());
-                alarm.setAlarmAudio("Normal Ringtone");
-                realm.commitTransaction();
 
-                //  new CreatingAlarmAsync().execute(alarmDays);
-                Computations.makeAlarm(CreatingAlarmActivity.this, alarmDays, days, alarmTime, pk);
-//
-////                AlarmManager alarmManager = (AlarmManager) CreatingAlarmActivity.this.
-////                        getSystemService(CreatingAlarmActivity.ALARM_SERVICE);
-//                Intent myIntent = new Intent(CreatingAlarmActivity.this.getApplicationContext(), AlarmService.class);
-//                myIntent.putExtra("ALARM DATE", alarmDays);
-//                myIntent.putExtra("ALARM TIME", fmt.format(alarmTime));
-//                myIntent.putExtra("PK", pk);
-//                startService(myIntent);
-////                PendingIntent pendingIntent = PendingIntent.getService(CreatingAlarmActivity.this.getApplicationContext(),
-////                        pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-////                alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis(), pendingIntent);
+                if(selectedDate){
+                    alarmDays = (new JSONArray(Arrays.asList(days))).toString();
 
-                CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
-                CreatingAlarmActivity.this.finish();
+                    Alarm alarm;
+                    realm.beginTransaction();
+                    alarm = realm.createObject(Alarm.class); // Create a new object
+                    pk = (int) System.currentTimeMillis();
+                    alarm.setPrimaryKey(pk);
+                    alarm.setAlarmFrequency(alarmDays);
+                    alarm.setAlarmTime(alarmTime);
+                    alarm.setAlarmAudio(ringtoneText);
+                    alarm.setOn(true);
+                    alarm.setVibrate(vibrateSwitch.isChecked());
+                    alarm.setRepeating(repeatingSwitch.isChecked());
+                    alarm.setAlarmAudio("Normal Ringtone");
+                    realm.commitTransaction();
+
+                    //  new CreatingAlarmAsync().execute(alarmDays);
+                    Calendar now = Calendar.getInstance();
+
+                    Computations.makeAlarm(CreatingAlarmActivity.this, alarmDays, now, alarmTime, pk,
+                            repeatingSwitch.isChecked(), vibrateSwitch.isChecked());
+                    CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
+                    CreatingAlarmActivity.this.finish();
+                } else{
+                    Toast.makeText(CreatingAlarmActivity.this, "Please select a day to set the alarm", Toast.LENGTH_SHORT).show();
+                }
+
+
+
 
             }
         });
@@ -341,7 +349,15 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     }
 
     public void weekNamesClick(View view) {
-        checkOtherToggles();
+        if (repeatingSwitch.isChecked()) {
+            checkOtherToggles();
+        } else {
+            for (ToggleButton otherdays : daysToggle) {
+                if (otherdays != view) {
+                    otherdays.setChecked(false);
+                }
+            }
+        }
     }
 
 }

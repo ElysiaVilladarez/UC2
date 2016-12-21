@@ -11,9 +11,10 @@
     android:layout_gravity="center">
     <android.support.percent.PercentRelativeLayout
         app:layout_heightPercent="100%"
+        android:clickable="true"
         android:layout_width="wrap_content"
         android:id="@+id/timeStuff"
-        app:layout_widthPercent="70%">
+        app:layout_widthPercent="82%">
         <utot.utot.customviews.TextViewPlus style="@style/avenir_roman"
             android:layout_width="match_parent"
             app:layout_heightPercent="65%"

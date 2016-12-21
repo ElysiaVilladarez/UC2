@@ -3,16 +3,26 @@
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/mainwindow"
+    android:layout_height="400dp"
+    android:paddingBottom="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:padding="10dp">
-
+    android:layout_gravity="center">
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/displayImg">
     <ImageView
         android:id="@+id/backgroundPic"
+        android:src="@drawable/aa_5"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
+
 
     <utot.utot.customviews.TextViewPlus
         style="@style/avenir_light"
@@ -25,5 +35,28 @@
         android:textColor="@color/whiteLogIn"
         android:textSize="@dimen/font_size_poem"
         app:layout_aspectRatio="100%" />
+    </android.support.percent.PercentRelativeLayout>
+
+    <ImageButton
+        android:layout_margin="8dp"
+        android:id="@+id/deleteButton"
+        android:layout_alignParentBottom="true"
+        android:layout_height="30dp"
+        android:layout_width="28dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:src="@mipmap/ic_delete_forever_white_36dp"/>
+
+    <utot.utot.customviews.ButtonPlus
+        android:id="@+id/shareButton"
+        android:layout_margin="8dp"
+        android:background="@drawable/fb_login_button"
+        android:drawableStart="@drawable/fb_icon_4"
+        android:textAllCaps="false"
+        android:text="Share"
+        android:layout_alignParentEnd="true"
+        app:layout_aspectRatio="250%"
+        android:layout_height="31dp"/>
+
 
 </android.support.percent.PercentRelativeLayout>

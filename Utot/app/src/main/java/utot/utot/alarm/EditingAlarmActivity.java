@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.facebook.FacebookSdk;
@@ -40,6 +41,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
     private Realm realm;
     private Alarm alarm;
+    private CheckBox repeatingSwitch;
     private String ringtoneText;
     Calendar mcurrentTime;
 
@@ -56,7 +58,8 @@ public class EditingAlarmActivity extends AppCompatActivity {
         fmt = new SimpleDateFormat("hh:mm a");
 
         mcurrentTime = Calendar.getInstance();
-        final int hour = mcurrentTime.get(Calendar.HOUR);
+        mcurrentTime.setTime(alarm.getAlarmTime());
+        final int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         final int minute = mcurrentTime.get(Calendar.MINUTE);
 
         timeSet = (TextView) findViewById(R.id.time);
@@ -95,7 +98,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
 
         ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
         final CheckBox vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
-        CheckBox repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
+        repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
         everydayButton = (ToggleButton) findViewById(R.id.everydayButton);
         weekendsButton = (ToggleButton) findViewById(R.id.weekendsButton);
         weekdaysButton = (ToggleButton) findViewById(R.id.weekdaysButton);
@@ -119,18 +122,20 @@ public class EditingAlarmActivity extends AppCompatActivity {
 
 
         String alarmFrequency = alarm.getAlarmFrequency();
-        if(alarmFrequency.trim().isEmpty()){
+        if(!alarm.isRepeating()){
             repeatingSwitch.setChecked(false);
             setEnabledRepeatButtons(false);
         } else{
             repeatingSwitch.setChecked(true);
             setEnabledRepeatButtons(true);
-            boolean[] days = Computations.transformToBooleanArray(alarmFrequency.trim());
-            for (int i = 0; i < days.length; i++) {
-                daysToggle[i].setChecked(days[i]);
-            }
-            checkOtherToggles();
+
         }
+
+        boolean[] days = Computations.transformToBooleanArray(alarmFrequency.trim());
+        for (int i = 0; i < days.length; i++) {
+            daysToggle[i].setChecked(days[i]);
+        }
+        checkOtherToggles();
 
         ringtoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,10 +153,12 @@ public class EditingAlarmActivity extends AppCompatActivity {
             }
         });
 
+        vibrateSwitch.setChecked(alarm.isVibrate());
         repeatingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 setEnabledRepeatButtons(b);
+                checkOtherToggles();
             }
         });
 
@@ -197,24 +204,48 @@ public class EditingAlarmActivity extends AppCompatActivity {
         findViewById(R.id.saveAlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                String alarmDays = "";
+                int dayOfWeek = -1;
                 boolean[] days = new boolean[7];
-                for(int i =0; i<daysToggle.length; i++){
+
+                for (int i = 0; i < daysToggle.length; i++) {
                     days[i] = daysToggle[i].isChecked();
                 }
+                boolean selectedDate = false;
+                for (int i = 0; i < days.length; i++) {
+                    if (days[i]) {
+                        selectedDate = true;
+                        break;
+                    }
 
-                String alarmDays = (new JSONArray(Arrays.asList(days))).toString();
+                }
 
-                realm.beginTransaction();
-                alarm.setPrimaryKey((int)System.currentTimeMillis());
-                alarm.setAlarmFrequency(alarmDays);
-                alarm.setAlarmTime(alarmTime);
-                alarm.setIsOn(true);
-                alarm.setIsVibrate(vibrateSwitch.isChecked());
-                alarm.setAlarmAudio("Normal Ringtone");
-                realm.commitTransaction();
+                if(selectedDate){
+                    alarmDays = (new JSONArray(Arrays.asList(days))).toString();
 
-                EditingAlarmActivity.this.startActivity(new Intent(EditingAlarmActivity.this, TabbedAlarm.class));
-                EditingAlarmActivity.this.finish();
+                    realm.beginTransaction();
+                    int pk = (int) System.currentTimeMillis();
+                    alarm.setPrimaryKey((int)System.currentTimeMillis());
+                    alarm.setAlarmFrequency(alarmDays);
+                    alarm.setAlarmTime(alarmTime);
+                    alarm.setIsOn(true);
+                    alarm.setIsVibrate(vibrateSwitch.isChecked());
+                    alarm.setRepeating(repeatingSwitch.isChecked());
+                    alarm.setAlarmAudio("Normal Ringtone");
+                    realm.commitTransaction();
+
+                    Calendar now = Calendar.getInstance();
+
+                    Computations.makeAlarm(EditingAlarmActivity.this, alarmDays, now, alarmTime, pk,
+                            repeatingSwitch.isChecked(),vibrateSwitch.isChecked());
+
+                    EditingAlarmActivity.this.startActivity(new Intent(EditingAlarmActivity.this, TabbedAlarm.class));
+                    EditingAlarmActivity.this.finish();
+
+                } else{
+                    Toast.makeText(EditingAlarmActivity.this, "Please select a day to set the alarm", Toast.LENGTH_SHORT).show();
+                }
+
 
             }
         });
@@ -255,16 +286,22 @@ public class EditingAlarmActivity extends AppCompatActivity {
     }
 
     public void weekNamesClick(View view){
-        checkOtherToggles();
+        if(repeatingSwitch.isChecked()){
+            checkOtherToggles();
+        }
+        else{
+            for(ToggleButton otherdays: daysToggle){
+                if(otherdays != view){
+                    otherdays.setChecked(false);
+                }
+            }
+        }
     }
 
     public void setEnabledRepeatButtons(boolean b){
         everydayButton.setEnabled(b);
         weekdaysButton.setEnabled(b);
         weekendsButton.setEnabled(b);
-        for (int i = 0; i < daysToggle.length; i++) {
-            daysToggle[i].setEnabled(b);
-        }
     }
 
 }

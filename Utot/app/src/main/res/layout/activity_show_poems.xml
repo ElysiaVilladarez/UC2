@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mainwindow"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/utotLogo"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/poemAndImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center">
+
+        <ImageView
+            android:id="@+id/backgroundPic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/aa_5" />
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/poem"
+            style="@style/avenir_light"
+            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:maxWidth="250dp"
+            android:padding="16dp"
+            android:text="Poem Sample"
+            android:textColor="@color/whiteLogIn"
+            android:textSize="@dimen/font_size_poem"
+            app:layout_aspectRatio="100%" />
+
+    </android.support.percent.PercentRelativeLayout>
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/saveButton"
+            style="@style/avenir_light"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="save"
+            android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/save"
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/saveButton"
+            android:src="@mipmap/left_arrow" />
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/shareButton"
+            style="@style/avenir_light"
+            android:layout_width="15dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="share"
+            android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="30dp"
+            android:layout_height="100dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/shareButton"
+            android:src="@mipmap/right_arrow" />
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/discardButton"
+            style="@style/avenir_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="discard"
+            android:textSize="19sp" />
+
+        <ImageView
+            android:id="@+id/discard"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_above="@id/discardButton"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/down_arrow" />
+
+</RelativeLayout>

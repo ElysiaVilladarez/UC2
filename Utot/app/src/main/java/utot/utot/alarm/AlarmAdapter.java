@@ -20,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -30,102 +31,108 @@ import utot.utot.helpers.Computations;
 import utot.utot.triggeralarm.AlarmReceiver;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
- 
+
     private RealmResults<Alarm> alarms;
-	private static Activity act;
- 	private Realm realm;
+    private static Activity act;
+    private Realm realm;
 
 
-	
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView alarmTime, alarmFrequency;
-		public SwitchButton alarmStatus;
-		public PercentRelativeLayout mainwindow;
-		public ImageButton deleteButton;
- 
+        public SwitchButton alarmStatus;
+        public PercentRelativeLayout mainwindow, timeStuff;
+        public ImageButton deleteButton;
+
         public ViewHolder(View view) {
             super(view);
             alarmTime = (TextView) view.findViewById(R.id.alarmTime);
             alarmFrequency = (TextView) view.findViewById(R.id.alarmFrequency);
             alarmStatus = (SwitchButton) view.findViewById(R.id.alarmStatus);
-			mainwindow = (PercentRelativeLayout) view.findViewById(R.id.mainwindow);
-			deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
+            mainwindow = (PercentRelativeLayout) view.findViewById(R.id.mainwindow);
+            timeStuff = (PercentRelativeLayout) view.findViewById(R.id.timeStuff);
+            deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
 
-			view.setOnClickListener(this);
+            timeStuff.setOnClickListener(this);
         }
-		
-		public void onClick(View view){
-			Intent edits = new Intent(act, EditingAlarmActivity.class);
-			edits.putExtra("POS", getAdapterPosition());
-			act.startActivity(edits);
-			act.finish();
-		}
+
+        public void onClick(View view) {
+            Intent edits = new Intent(act, EditingAlarmActivity.class);
+            edits.putExtra("POS", getAdapterPosition());
+            act.startActivity(edits);
+            act.finish();
+        }
     }
- 
- 
+
+
     public AlarmAdapter(RealmResults<Alarm> alarms, Activity act) {
         this.alarms = alarms;
-		this.act = act;
+        this.act = act;
     }
- 
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.item_alarm, parent, false);
- 
+
         return new ViewHolder(itemView);
     }
- 
+
     @Override
     public void onBindViewHolder(ViewHolder holderT, int position) {
-		final ViewHolder holder = holderT;
-		final Alarm alarm = alarms.get(position);
-		SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
-		realm = Realm.getDefaultInstance();
-		holder.alarmTime.setText(fmt.format(alarm.getAlarmTime()));
-		holder.alarmStatus.setChecked(alarm.isOn());
-		if(holder.alarmStatus.isChecked()){
-			holder.mainwindow.setBackgroundColor(0x8C00ace6);
-		} else{
-			holder.mainwindow.setBackgroundColor(0x3300ace6);
-		}
-		holder.alarmStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        final ViewHolder holder = holderT;
+        final Alarm alarm = alarms.get(position);
+        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
+        realm = Realm.getDefaultInstance();
+        holder.alarmTime.setText(fmt.format(alarm.getAlarmTime()));
+        holder.alarmStatus.setChecked(alarm.isOn());
+        if (holder.alarmStatus.isChecked()) {
+            holder.mainwindow.setBackgroundColor(0x8C00ace6);
+        } else {
+            holder.mainwindow.setBackgroundColor(0x3300ace6);
+        }
+        holder.alarmStatus.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-			public void onCheckedChanged(CompoundButton buttonView, boolean b) {
-				if(b){
-					holder.mainwindow.setBackgroundColor(0x8C00ace6);
-				} else{
-					holder.mainwindow.setBackgroundColor(0x3300ace6);
-				}
-				realm.beginTransaction();
-				alarm.setIsOn(b);
-				realm.commitTransaction();
-			}
-		});
+            public void onCheckedChanged(CompoundButton buttonView, boolean b) {
+                if (b) {
+                    Computations.makeAlarm(act, alarm.getAlarmFrequency(), Calendar.getInstance(),
+                            alarm.getAlarmTime(), alarm.getPrimaryKey(), alarm.isRepeating(), alarm.isVibrate());
+                    holder.mainwindow.setBackgroundColor(0x8C00ace6);
+                } else {
+                    Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), (int) alarm.getPrimaryKey(),
+                            myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    pendingIntent.cancel();
+                    holder.mainwindow.setBackgroundColor(0x3300ace6);
+                }
+                realm.beginTransaction();
+                alarm.setIsOn(b);
+                realm.commitTransaction();
+            }
+        });
 
-		String freq = "";
-		if(alarm.getAlarmFrequency().trim().isEmpty()){
-			freq = "Once";
-		} else{
-			freq = Computations.translationToReadableText(Computations.transformToBooleanArray(alarm.getAlarmFrequency().trim()));
-		}
-		
-		holder.alarmFrequency.setText(freq);
+        String freq = "";
+        if (alarm.getAlarmFrequency().trim().isEmpty()) {
+            freq = "Once";
+        } else {
+            freq = Computations.translationToReadableText(Computations.transformToBooleanArray(alarm.getAlarmFrequency().trim()));
+        }
 
-		holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
+        holder.alarmFrequency.setText(freq);
+
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
                 new AlertDialog.Builder(act)
                         .setTitle("Deleting Alarm")
-                        .setMessage("Do you really want to delete "+ holder.alarmTime.getText().toString() + " alarm?")
+                        .setMessage("Do you really want to delete " + holder.alarmTime.getText().toString() + " alarm?")
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                             public void onClick(DialogInterface dialog, int whichButton) {
-								Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
-								PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), (int) alarm.getPrimaryKey(),
-										myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-								pendingIntent.cancel();
+                                Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), (int) alarm.getPrimaryKey(),
+                                        myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                                pendingIntent.cancel();
 
                                 realm.beginTransaction();
                                 alarm.deleteFromRealm();
@@ -134,13 +141,14 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
                                 AlarmAdapter.this.notifyDataSetChanged();
 
 
-                            }})
+                            }
+                        })
                         .setNegativeButton(android.R.string.no, null).show();
 
-			}
-		});
+            }
+        });
     }
- 
+
     @Override
     public int getItemCount() {
         return alarms.size();

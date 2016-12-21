@@ -86,8 +86,8 @@ public class LoginSplashScreen extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_splash_sceen);
         Realm.init(getApplicationContext());
-        Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.slide_up);
+//        Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.slide_up);
         View view2 = findViewById(R.id.utotLogo);
 
       //  Picasso.with(this).load(R.drawable.aa_1).into((CustomFrameLayout) findViewById(R.id.mainwindow));

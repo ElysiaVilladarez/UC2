@@ -4,10 +4,19 @@ import io.realm.RealmObject;
 import utot.utot.customobjects.Picture;
 
 public class Poem extends RealmObject {
+	private int primaryKey;
 	private String poem;
-	private int status; //0 - saved, 1- discarded or 3 - shared
+	private int status; //0 - saved, 1- discarded or 2 - shared
 	private Picture pic;
-	
+
+	public int getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(int primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
 	public String getPoem(){
 		return this.poem;
 	}

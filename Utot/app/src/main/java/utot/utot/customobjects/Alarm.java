@@ -61,11 +61,28 @@ public class Alarm extends RealmObject {
         this.primaryKey = primaryKey;
     }
 
+    public void setOn(boolean on) {
+        isOn = on;
+    }
+
+    public void setVibrate(boolean vibrate) {
+        isVibrate = vibrate;
+    }
+
+    public boolean isRepeating() {
+        return isRepeating;
+    }
+
+    public void setRepeating(boolean repeating) {
+        isRepeating = repeating;
+    }
+
     private int primaryKey;
     private Date alarmTime;
     private String alarmFrequency;
     private String alarmAudio;
     private boolean isOn;
     private boolean isVibrate;
+    private boolean isRepeating;
 
 }

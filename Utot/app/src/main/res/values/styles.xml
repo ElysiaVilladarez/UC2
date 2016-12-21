@@ -62,7 +62,6 @@
         <item name="android:textSize">12sp</item>
     </style>
     <style name="Alarm_Function_Buttons_2" parent="@android:style/Widget.Button">
-        <item name="android:enabled">false</item>
         <item name="font">@style/pangram_medium</item>
         <item name="android:layout_weight">1</item>
         <item name="android:onClick">weekNamesClick</item>

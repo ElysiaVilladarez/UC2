@@ -12,8 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.squareup.picasso.Picasso;
 
+import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.login.LoginActivity;
 
@@ -71,6 +73,13 @@ public class SettingsFragment extends Fragment {
         rootView.findViewById(R.id.logOutButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LoginManager.getInstance().logOut();
+
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                realm.deleteAll();
+                realm.commitTransaction();
+
                 getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                 getActivity().finish();

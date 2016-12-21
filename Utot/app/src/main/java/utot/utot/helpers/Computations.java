@@ -12,6 +12,7 @@ import org.json.JSONException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import utot.utot.alarm.CreatingAlarmActivity;
 import utot.utot.triggeralarm.AlarmReceiver;
@@ -75,11 +76,27 @@ public class Computations {
         return days;
     }
 
-    public static int getDayOfWeek(boolean[] days, Calendar now) {
+    public static int getDayOfWeek(boolean[] days, Calendar now, Calendar alarm) {
         int dayOfWeek;
         int i;
-        if (now.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) i = 6;
-        else i = 0;
+        int nowDay = now.get(Calendar.DAY_OF_WEEK);
+        if(alarm.getTimeInMillis() < now.getTimeInMillis()) {
+//            if(nowDay == Calendar.SATURDAY) i =6;
+//            else if (nowDay == Calendar.SUNDAY) i =0;
+//            else if (nowDay == Calendar.FRIDAY) i =5;
+            now.add(Calendar.DAY_OF_YEAR, 7);
+            i = nowDay-1;
+        } else{
+            if (nowDay == Calendar.SUNDAY) i = 6;
+            else if(nowDay == Calendar.MONDAY)
+                i = 0;
+            else{
+                i = nowDay - 2;
+            }
+        }
+        System.out.println("CHECK: I" + i);
+
+
         while (true) {
             if (days[i]) {
                 if (i == 6) {
@@ -97,41 +114,72 @@ public class Computations {
 
         }
 
+        System.out.println("CHECK: DAYOF WEEK" + dayOfWeek);
         return dayOfWeek;
     }
 
-    public static boolean makeAlarm(Context context, String alarmDays, boolean[] days, Date alarmTime, int pk){
-        int dayOfWeek;
+    public static boolean makeAlarm(Context context, String alarmDays, Calendar now, Date alarmTime, int pk,
+                                    boolean isRepeating, boolean isVibrating){
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
         SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
 
-        Calendar now = Calendar.getInstance();
-
-        if (alarmDays.trim().isEmpty()) {
-            dayOfWeek = now.get(Calendar.DAY_OF_WEEK);
-        } else {
-            dayOfWeek = Computations.getDayOfWeek(days, now);
-        }
-
-        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         Calendar timeA = Calendar.getInstance();
+        int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
         timeA.setTime(alarmTime);
+        timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
+        timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
+        timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+        now.set(Calendar.DAY_OF_WEEK, nowDay);
+        int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarmDays),now,timeA);
+        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         now.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
         now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
         now.set(Calendar.SECOND, 0);
 
-        Toast.makeText(context, now.getTime().toString() + "- " + dayOfWeek, Toast.LENGTH_LONG).show();
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(context, AlarmReceiver.class);
         myIntent.putExtra(CreatingAlarmActivity.ALARM_TIME_SET, fmt.format(alarmTime));
         myIntent.putExtra(CreatingAlarmActivity.ALARM_DATE_SET, alarmDays);
         myIntent.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, pk);
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, isRepeating);
+        myIntent.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, isVibrating);
 
+
+        System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: "+ timeA.getTime());
+
+        long alarmMilli = now.getTimeInMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, now.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
 
+//        long days = TimeUnit.MILLISECONDS.toDays(alarmMilli);
+//        alarmMilli -= TimeUnit.DAYS.toMillis(days);
+//        long hours = TimeUnit.MILLISECONDS.toHours(alarmMilli);
+//        alarmMilli -= TimeUnit.HOURS.toMillis(hours);
+//        long minutes = TimeUnit.MILLISECONDS.toMinutes(alarmMilli);
+//        alarmMilli -= TimeUnit.MINUTES.toMillis(minutes);
+//        long seconds = TimeUnit.MILLISECONDS.toSeconds(alarmMilli);
+//
+//        StringBuilder sb = new StringBuilder(200);
+//        sb.append("Alarm will ring in ");
+//        if(days>0){
+//            sb.append(days);
+//            sb.append(" days, " );
+//        }
+//        if(hours>0){
+//            sb.append(hours);
+//            sb.append(" hours, " );
+//        }
+//        if(hours>0){
+//            sb.append(minutes);
+//            sb.append(" minutes, " );
+//        }
+//        if(seconds>0){
+//            sb.append(seconds);
+//            sb.append(" seconds" );
+//        }
+//        Toast.makeText(context, sb, Toast.LENGTH_LONG).show();
         return true;
     }
 }
