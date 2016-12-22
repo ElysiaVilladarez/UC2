@@ -24,6 +24,7 @@ import io.realm.RealmResults;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
 import utot.utot.helpers.Computations;
+import utot.utot.helpers.FinalVariables;
 import utot.utot.triggeralarm.AlarmReceiver;
 
 public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> {
@@ -77,9 +78,9 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holderT, int position) {
         final ViewHolder holder = holderT;
         final Alarm alarm = alarms.get(position);
-        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
+
         realm = Realm.getDefaultInstance();
-        holder.alarmTime.setText(fmt.format(alarm.getAlarmTime()));
+        holder.alarmTime.setText(FinalVariables.timeAMPM.format(alarm.getAlarmTime()));
         holder.alarmStatus.setChecked(alarm.isOn());
         if (holder.alarmStatus.isChecked()) {
             holder.mainwindow.setBackgroundColor(0x8C00ace6);
@@ -106,11 +107,10 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
         });
 
         String freq = "";
-        if (alarm.getAlarmFrequency().trim().isEmpty()) {
-            freq = "Once";
-        } else {
-            freq = Computations.translationToReadableText(Computations.transformToBooleanArray(alarm.getAlarmFrequency().trim()));
-        }
+        if (!alarm.isRepeating()) freq = "Once: ";
+
+        freq += Computations.translationToReadableText(Computations.transformToBooleanArray(alarm.getAlarmFrequency().trim()));
+
 
         holder.alarmFrequency.setText(freq);
 
@@ -125,7 +125,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), (int) alarm.getPrimaryKey(),
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), alarm.getPrimaryKey(),
                                         myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 pendingIntent.cancel();
 

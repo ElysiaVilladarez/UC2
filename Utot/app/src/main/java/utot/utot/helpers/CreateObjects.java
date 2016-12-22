@@ -13,7 +13,6 @@ import utot.utot.customobjects.Alarm;
  */
 
 public class CreateObjects {
-    private static Alarm alarm;
 
     public static Alarm createAlarm(final Context c, final String alarmDays, final Date alarmTime, final String ringtoneText,
                                     final boolean isVibrating, final boolean isRepeating){
@@ -42,6 +41,7 @@ public class CreateObjects {
 //                Toast.makeText(c, "Error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
 //            }
 //        });
+        Alarm alarm;
         realm.beginTransaction();
         alarm = realm.createObject(Alarm.class); // Create a new object
         alarm.setPrimaryKey((int) System.currentTimeMillis());
@@ -60,7 +60,7 @@ public class CreateObjects {
 
     public static Alarm editAlarm(Alarm editAlarm,final Context c, final String alarmDays, final Date alarmTime, final String ringtoneText,
                                   final boolean isVibrating, final boolean isRepeating){
-        alarm = editAlarm;
+        Alarm alarm = editAlarm;
         Realm realm = Realm.getDefaultInstance();
 //        realm.executeTransactionAsync(new Realm.Transaction() {
 //            @Override

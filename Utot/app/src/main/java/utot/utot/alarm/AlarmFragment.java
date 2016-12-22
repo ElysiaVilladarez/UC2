@@ -58,7 +58,7 @@ public class AlarmFragment extends Fragment {
         TextView noAlarmText = (TextView) rootView.findViewById(R.id.noAlarmText);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Alarm> alarms = realm.where(Alarm.class).findAllAsync();
+        RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
         if(alarms.size()<=0){
             alarmList.setVisibility(View.GONE);
             noAlarmText.setVisibility(View.VISIBLE);

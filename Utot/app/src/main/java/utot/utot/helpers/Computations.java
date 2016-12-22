@@ -8,7 +8,6 @@ import android.content.Intent;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -117,7 +116,6 @@ public class Computations {
 
     public static boolean makeAlarm(Context context, Alarm alarm, Calendar now) {
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
-        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
 
         Calendar timeA = Calendar.getInstance();
         int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
@@ -132,10 +130,10 @@ public class Computations {
         now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
         now.set(Calendar.SECOND, 0);
 
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, fmt.format(alarm.getAlarmTime()));
+        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, FinalVariables.timeAMPM.format(alarm.getAlarmTime()));
         myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarm.getAlarmFrequency());
         myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, alarm.getPrimaryKey());
         myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, alarm.isRepeating());
@@ -156,7 +154,6 @@ public class Computations {
     public static boolean makeAlarm(Context context, String alarmDays, Calendar now, Date alarmTime, int pk,
                                     boolean isRepeating, boolean isVibrating, String ringtone){
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
-        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
 
         Calendar timeA = Calendar.getInstance();
         int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
@@ -174,7 +171,7 @@ public class Computations {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, fmt.format(alarmTime));
+        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, FinalVariables.timeAMPM.format(alarmTime));
         myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarmDays);
         myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, pk);
         myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, isRepeating);

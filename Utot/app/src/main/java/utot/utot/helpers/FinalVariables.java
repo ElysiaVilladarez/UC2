@@ -26,4 +26,5 @@ public class FinalVariables {
 
     public final static SimpleDateFormat timeAMPM = new SimpleDateFormat("hh:mm a");
     public final static SimpleDateFormat hourOfDayMin = new SimpleDateFormat("HH:mm");
+    public final static SimpleDateFormat triggeredFormat = new SimpleDateFormat("hh:mm\na");
 }

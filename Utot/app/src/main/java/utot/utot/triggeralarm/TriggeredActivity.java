@@ -1,5 +1,8 @@
 package utot.utot.triggeralarm;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -26,10 +30,10 @@ import utot.utot.poem.ShowPoems;
 public class TriggeredActivity extends AppCompatActivity {
     private MediaPlayer ringtone;
     private int pk;
-    private String  alarmDays;
+    private String  alarmDays, ringtoneText;
     private Date alarmDate;
     private Vibrator vibrate;
-    private boolean isVibrate;
+    private boolean isVibrate, isRepeating;
     private Uri uri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +45,12 @@ public class TriggeredActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_triggered);
 
+        alarmDays = getIntent().getStringExtra(FinalVariables.ALARM_DATE_SET);
+        pk = getIntent().getIntExtra(FinalVariables.ALARM_PRIMARY_KEY, 0);
+        isRepeating = getIntent().getBooleanExtra(FinalVariables.ALARM_IS_REPEATING, false);
+        ringtoneText = getIntent().getStringExtra(FinalVariables.ALARM_RINGTONE);
         isVibrate = getIntent().getBooleanExtra(FinalVariables.ALARM_VIBRATE, false);
+
         if(isVibrate){
             vibrate = (Vibrator) getSystemService(VIBRATOR_SERVICE);
             long[] pattern = { 0, 250, 0 };
@@ -50,8 +59,7 @@ public class TriggeredActivity extends AppCompatActivity {
             vibrate = null;
         }
 
-        System.out.println("CHECK: " + getIntent().getStringExtra(FinalVariables.ALARM_RINGTONE));
-        uri = Uri.parse(getIntent().getStringExtra(FinalVariables.ALARM_RINGTONE));
+        uri = Uri.parse(ringtoneText);
         ringtone = new MediaPlayer();
         try {
             ringtone.setDataSource(this, uri);
@@ -82,17 +90,14 @@ public class TriggeredActivity extends AppCompatActivity {
         TextView time = (TextView)findViewById(R.id.time);
 
         String alarmTime = getIntent().getStringExtra(FinalVariables.ALARM_TIME_SET);
-        SimpleDateFormat fmt = new SimpleDateFormat("hh:mm a");
-        SimpleDateFormat fmt2 = new SimpleDateFormat("hh:mm\na");
+
         alarmDate = null;
         try {
-            alarmDate = fmt.parse(alarmTime);
-            alarmTime = fmt2.format(alarmDate);
+            alarmDate = FinalVariables.timeAMPM.parse(alarmTime);
+            alarmTime = FinalVariables.triggeredFormat.format(alarmDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        alarmDays = getIntent().getStringExtra(FinalVariables.ALARM_DATE_SET);
-        pk = getIntent().getIntExtra(FinalVariables.ALARM_PRIMARY_KEY, 0);
         time.setText(alarmTime);
 
         findViewById(R.id.sleepButton).setOnClickListener(new View.OnClickListener() {
@@ -107,6 +112,7 @@ public class TriggeredActivity extends AppCompatActivity {
                     ringtone = null;
                 }
 
+                sleepFunction();
                 TriggeredActivity.this.finish();
 
             }
@@ -122,7 +128,7 @@ public class TriggeredActivity extends AppCompatActivity {
                     ringtone.stop();
                     ringtone = null;
                 }
-                if (getIntent().getBooleanExtra(FinalVariables.ALARM_IS_REPEATING, false)){
+                if (isRepeating){
                     Calendar now = Calendar.getInstance();
                     Calendar timeA = Calendar.getInstance();
                     timeA.setTime(alarmDate);
@@ -140,5 +146,23 @@ public class TriggeredActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void sleepFunction(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+
+        Intent myIntent = new Intent(this, AlarmReceiver.class);
+        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, FinalVariables.timeAMPM.format(alarmDate));
+        myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarmDays);
+        myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, pk);
+        myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, isRepeating);
+        myIntent.putExtra(FinalVariables.ALARM_VIBRATE, isVibrate);
+        myIntent.putExtra(FinalVariables.ALARM_RINGTONE, ringtoneText);
+
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
+                pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis()+5*60*1000, pendingIntent);
+        Toast.makeText(this, "Snooze for 5 minutes", Toast.LENGTH_LONG).show();
     }
 }

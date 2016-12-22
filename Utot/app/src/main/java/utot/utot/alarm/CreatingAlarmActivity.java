@@ -117,7 +117,6 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                     Alarm alarm = CreateObjects.createAlarm(CreatingAlarmActivity.this, alarmDays, cM.alarmTime, cM.ringtoneText,
                             vibrateSwitch.isChecked(), repeatingSwitch.isChecked());
 
-
                     Computations.makeAlarm(CreatingAlarmActivity.this, alarm, Calendar.getInstance());
                     CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
                     CreatingAlarmActivity.this.finish();
