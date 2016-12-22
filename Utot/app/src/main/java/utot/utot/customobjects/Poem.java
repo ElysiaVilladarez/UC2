@@ -6,7 +6,7 @@ import utot.utot.customobjects.Picture;
 public class Poem extends RealmObject {
 	private int primaryKey;
 	private String poem;
-	private int status; //0 - saved, 1- discarded or 2 - shared
+	private int status; //0 - saved, 1- discarded or 2 - shared, 3 - not shown, 4 - brodcast
 	private Picture pic;
 
 	public int getPrimaryKey() {

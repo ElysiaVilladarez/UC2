@@ -8,10 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -61,7 +58,7 @@ public class AlarmFragment extends Fragment {
         TextView noAlarmText = (TextView) rootView.findViewById(R.id.noAlarmText);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
+        RealmResults<Alarm> alarms = realm.where(Alarm.class).findAllAsync();
         if(alarms.size()<=0){
             alarmList.setVisibility(View.GONE);
             noAlarmText.setVisibility(View.VISIBLE);

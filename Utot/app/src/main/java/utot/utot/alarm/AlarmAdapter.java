@@ -16,16 +16,12 @@ import android.widget.TextView;
 
 import com.kyleduo.switchbutton.SwitchButton;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
-import utot.utot.alarm.EditingAlarmActivity;
 import utot.utot.customobjects.Alarm;
 import utot.utot.helpers.Computations;
 import utot.utot.triggeralarm.AlarmReceiver;

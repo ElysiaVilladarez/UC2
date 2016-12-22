@@ -58,8 +58,8 @@
 
             <android.support.percent.PercentRelativeLayout
                 android:id="@+id/trans"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fb_login"
@@ -141,6 +141,7 @@
 
                     <utot.utot.customviews.ButtonPlus
                         style="@style/login_buttons"
+                        android:textColor="@drawable/text_buttons_color"
                         android:layout_centerHorizontal="false"
                         android:id="@+id/forgetPasswordButton"
                         android:layout_width="100dp"
@@ -151,6 +152,7 @@
 
                     <utot.utot.customviews.ButtonPlus
                         style="@style/login_buttons"
+                        android:textColor="@drawable/text_buttons_color"
                         android:layout_centerHorizontal="false"
                         android:id="@+id/helpCenterButton"
                         android:layout_width="100dp"
@@ -167,6 +169,7 @@
                     <!--android:scaleType="center"/>-->
                     <utot.utot.customviews.ButtonPlus
                         style="@style/login_buttons"
+                        android:textColor="@drawable/text_buttons_color"
                         android:layout_centerHorizontal="false"
                         android:id="@+id/registerButton"
                         android:layout_width="100dp"

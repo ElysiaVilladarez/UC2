@@ -58,8 +58,8 @@
 
             <android.support.percent.PercentRelativeLayout
                 android:id="@+id/trans"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/fb_register"
@@ -155,7 +155,7 @@
                         android:layout_centerHorizontal="false"
                         android:background="@android:color/transparent"
                         android:text="Help Center"
-
+                        android:textColor="@drawable/text_buttons_color"
                         android:textSize="@dimen/medium_font" />
                     <!--<ImageView-->
                     <!--android:layout_width="7dp"-->
@@ -165,6 +165,7 @@
                     <!--android:scaleType="center"/>-->
                     <utot.utot.customviews.ButtonPlus
                         style="@style/login_buttons"
+                        android:textColor="@drawable/text_buttons_color"
                         android:id="@+id/loginButton"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"

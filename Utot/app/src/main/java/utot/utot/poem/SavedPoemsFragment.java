@@ -1,6 +1,5 @@
 package utot.utot.poem;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,15 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.CallbackManager;
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
+import utot.utot.alarm.TabbedAlarm;
 import utot.utot.customobjects.Poem;
+import utot.utot.helpers.FinalVariables;
 
 public class SavedPoemsFragment extends Fragment {
-    private CallbackManager callbackManager;
 
     public static SavedPoemsFragment newInstance() {
         SavedPoemsFragment fragment = new SavedPoemsFragment();
@@ -41,7 +39,7 @@ public class SavedPoemsFragment extends Fragment {
         TextView noPoemsText = (TextView) rootView.findViewById(R.id.noPoemsText);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", ShowPoems.POEM_SAVE).findAll();
+        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAll();
 
         if(poems.size() <= 0){
             poemList.setVisibility(View.GONE);
@@ -56,18 +54,13 @@ public class SavedPoemsFragment extends Fragment {
 
 
             poemList.setHasFixedSize(true);
-            callbackManager = CallbackManager.Factory.create();
-            poemList.setAdapter(new PoemAdapter(poems, getActivity(), callbackManager));
+            poemList.setAdapter(new PoemAdapter(poems, getActivity(), TabbedAlarm.callbackManager));
 
         }
 
         return rootView;
     }
 
-    @Override
-    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-    }
+
 
 }

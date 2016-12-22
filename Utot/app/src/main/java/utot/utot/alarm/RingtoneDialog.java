@@ -2,7 +2,6 @@ package utot.utot.alarm;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -12,11 +11,7 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import java.util.ArrayList;
-
 import utot.utot.R;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by elysi on 12/13/2016.
@@ -72,15 +67,12 @@ public class RingtoneDialog extends Dialog {
 
         this.ringtoneName = rName;
         if(ringtoneName == null || ringtoneName.trim().isEmpty()) {
-            System.out.println("CHECK: RINGTONE NULL");
             ringtoneName = alarms[0].toString();
             ((RadioButton)group.getChildAt(0)).setChecked(true);
         } else{
-            System.out.println("CHECK: RINGTONE NOT NULL");
             for(int i =0; i <alarmCount; i++){
                 if(alarms[i].toString().equals(ringtoneName)){
                     group.check(group.getChildAt(i).getId());
-                    System.out.println("CHECK: RAD " + ((RadioButton)group.getChildAt(i)).getText().toString());
                     break;
                 }
             }
@@ -105,15 +97,6 @@ public class RingtoneDialog extends Dialog {
 
     }
 
-    public static void setRadioChecked(String title){
-        for(int i=0; i <group.getChildCount(); i++){
-            RadioButton rad = (RadioButton) group.getChildAt(i);
-            if(rad.getText().toString().trim().equals(title)){
-                rad.setChecked(true);
-                break;
-            }
-        }
-    }
 
     @Override
     public void onBackPressed() {

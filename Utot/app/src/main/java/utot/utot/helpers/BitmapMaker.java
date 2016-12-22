@@ -1,6 +1,7 @@
 package utot.utot.helpers;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -18,7 +19,6 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareButton;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
@@ -26,7 +26,7 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 
 import utot.utot.R;
-import utot.utot.poem.ShowPoems;
+import utot.utot.alarm.TabbedAlarm;
 
 /**
  * Created by elysi on 12/20/2016.
@@ -39,7 +39,7 @@ public class BitmapMaker {
 
     public static void saveBitmap(Bitmap bitmap, String filename) {
         String root = Environment.getExternalStorageDirectory().toString();
-        File myDir = new File(root, ShowPoems.FOLDER_NAME);
+        File myDir = new File(root, FinalVariables.FOLDER_NAME);
         if (!myDir.exists()) {
             myDir.mkdirs();
         }
@@ -48,7 +48,7 @@ public class BitmapMaker {
         if (!file.exists ()) {
             try {
                 FileOutputStream out = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
 
@@ -71,7 +71,11 @@ public class BitmapMaker {
         FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
             @Override
             public void onSuccess(Sharer.Result result) {
-
+                Intent goToMain = new Intent(act, TabbedAlarm.class);
+                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SHARE);
+                act.startActivity(goToMain);
+                act.overridePendingTransition(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+                act.finish();
             }
 
             @Override
@@ -87,7 +91,7 @@ public class BitmapMaker {
             }
         };
 
-        File file = new File(Environment.getExternalStorageDirectory().toString()+ ShowPoems.FOLDER_NAME, path+".jpg");
+        File file = new File(Environment.getExternalStorageDirectory().toString()+ FinalVariables.FOLDER_NAME, path+".jpg");
 
         Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
         SharePhoto photo = new SharePhoto.Builder()
@@ -101,7 +105,6 @@ public class BitmapMaker {
         shareDialog = new ShareDialog(act);
         shareDialog.registerCallback(callbackManager, shareCallback);
         if(AccessToken.getCurrentAccessToken() == null){
-            LoginManager.getInstance().logOut();
             System.out.println("CHECK: LOG IN NEEDED");
 
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {

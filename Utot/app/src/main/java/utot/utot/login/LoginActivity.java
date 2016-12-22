@@ -1,15 +1,11 @@
 package utot.utot.login;
 
 import android.content.Intent;
-import android.media.session.PlaybackState;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatDelegate;
-import android.util.DisplayMetrics;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -17,13 +13,12 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
 import utot.utot.R;
-import utot.utot.customobjects.CustomFrameLayout;
+import utot.utot.customviews.ButtonPlus;
 import utot.utot.register.RegisterActivity;
 
 public class LoginActivity extends AppCompatActivity {
@@ -36,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
 
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
-     // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
 
         AccessToken facebookAccessToken = AccessToken.getCurrentAccessToken();
         boolean sessionExpired;
@@ -117,6 +111,23 @@ public class LoginActivity extends AppCompatActivity {
                 } else{
                     Toast.makeText(getApplicationContext(), "User does not exist", Toast.LENGTH_SHORT).show();
                 }
+            }
+        });
+
+        //Help buttons
+        final ButtonPlus helpButton = (ButtonPlus)findViewById(R.id.helpCenterButton);
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
+        final ButtonPlus forgotButton = (ButtonPlus)findViewById(R.id.forgetPasswordButton);
+
+        forgotButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
             }
         });
     }

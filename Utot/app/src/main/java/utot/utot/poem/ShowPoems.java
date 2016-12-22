@@ -1,51 +1,22 @@
 package utot.utot.poem;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.IntegerRes;
 import android.support.percent.PercentRelativeLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginManager;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.ShareApi;
-import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.SharePhoto;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
-import com.scalified.viewmover.configuration.MovingParams;
-import com.scalified.viewmover.movers.ViewMover;
-import com.scalified.viewmover.movers.ViewMoverFactory;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Arrays;
 
 import io.realm.Realm;
 import utot.utot.R;
@@ -54,19 +25,15 @@ import utot.utot.customobjects.OnSwipeListener;
 import utot.utot.customobjects.Poem;
 import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.BitmapMaker;
-import utot.utot.login.LoginActivity;
-import utot.utot.login.LoginSplashScreen;
+import utot.utot.helpers.FinalVariables;
 
 /**
  * Created by elysi on 12/16/2016.
  */
 public class ShowPoems extends AppCompatActivity {
 
-    public final static String FOLDER_NAME = "/UtotCatalog";
-    public final static int POEM_SHARE = 2;
-    public final static int POEM_DISCARD = 1;
-    public final static int POEM_SAVE = 0;
-    public final static int POEM_NOT_SHOWN = 4;
+
+
 
     private TextViewPlus poem;
     private PercentRelativeLayout displayImg;
@@ -106,10 +73,11 @@ public class ShowPoems extends AppCompatActivity {
             @Override
             public boolean onSwipe(Direction d) {
                 super.onSwipe(d);
-
+                Intent goToMain = new Intent(ShowPoems.this, TabbedAlarm.class);
                 if (d == Direction.down) {
 
-                    ShowPoems.this.startActivity(new Intent(ShowPoems.this, TabbedAlarm.class));
+                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
+                    ShowPoems.this.startActivity(goToMain);
                     ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
                     ShowPoems.this.finish();
                     return true;
@@ -119,13 +87,12 @@ public class ShowPoems extends AppCompatActivity {
                     poem = realm.createObject(Poem.class);
                     poem.setPrimaryKey((int)System.currentTimeMillis());
                     poem.setPoem("Poem Sample");
-                    poem.setStatus(POEM_SHARE);
+                    poem.setStatus(FinalVariables.POEM_SHARE);
                     realm.commitTransaction();
 
 
-                    System.out.println("CHECK: SHOW DIALOG ");
 
-                    Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(displayImg, displayImg.getWidth(), displayImg.getHeight());
+                    Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(displayImg, displayImg.getWidth(), displayImg.getWidth());
                     String filename = Integer.toString(poem.getPrimaryKey());
                     BitmapMaker.saveBitmap(bitmap1,filename);
 
@@ -142,12 +109,12 @@ public class ShowPoems extends AppCompatActivity {
                     Poem poem = realm.createObject(Poem.class);
                     poem.setPrimaryKey((int)System.currentTimeMillis());
                     poem.setPoem("Poem Sample");
-                    poem.setStatus(POEM_SAVE);
+                    poem.setStatus(FinalVariables.POEM_SAVE);
                     realm.commitTransaction();
                     
 
-
-                    ShowPoems.this.startActivity(new Intent(ShowPoems.this, TabbedAlarm.class));
+                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
+                    ShowPoems.this.startActivity(goToMain);
 
                     ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                     ShowPoems.this.finish();

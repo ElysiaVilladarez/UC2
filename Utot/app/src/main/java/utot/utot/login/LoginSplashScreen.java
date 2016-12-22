@@ -7,19 +7,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-
-
-import com.squareup.picasso.Picasso;
 
 import java.lang.ref.WeakReference;
 
 import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
-import utot.utot.customobjects.CustomFrameLayout;
 
 public class LoginSplashScreen extends Activity {
 
@@ -90,7 +83,6 @@ public class LoginSplashScreen extends Activity {
 //                R.anim.slide_up);
         View view2 = findViewById(R.id.utotLogo);
 
-      //  Picasso.with(this).load(R.drawable.aa_1).into((CustomFrameLayout) findViewById(R.id.mainwindow));
       //  Picasso.with(this).load(R.drawable.aa_4).into((ImageView)view2);
 
         // 5. Pass a new instance of StartMainActivityRunnable with reference to 'this'.

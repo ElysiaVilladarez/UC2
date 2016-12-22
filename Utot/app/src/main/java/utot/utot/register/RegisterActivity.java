@@ -17,7 +17,7 @@ import com.facebook.login.widget.LoginButton;
 import com.squareup.picasso.Picasso;
 
 import utot.utot.R;
-import utot.utot.customobjects.CustomFrameLayout;
+import utot.utot.customviews.ButtonPlus;
 import utot.utot.login.LoginActivity;
 import utot.utot.login.LoginSplashScreen;
 
@@ -31,7 +31,6 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-      // Picasso.with(this).load(R.drawable.aa_2).into((CustomFrameLayout) findViewById(R.id.mainwindow));
         Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
 
         callbackManager = CallbackManager.Factory.create();
@@ -99,6 +98,16 @@ public class RegisterActivity extends Activity {
                 }
             }
         });
+
+        //Help buttons
+        final ButtonPlus helpButton = (ButtonPlus)findViewById(R.id.helpCenterButton);
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+
     }
 
     @Override

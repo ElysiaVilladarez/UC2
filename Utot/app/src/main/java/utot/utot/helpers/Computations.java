@@ -4,7 +4,6 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -12,9 +11,7 @@ import org.json.JSONException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
-import utot.utot.alarm.CreatingAlarmActivity;
 import utot.utot.customobjects.Alarm;
 import utot.utot.triggeralarm.AlarmReceiver;
 
@@ -95,7 +92,6 @@ public class Computations {
                 i = nowDay - 2;
             }
         }
-        System.out.println("CHECK: I" + i);
 
 
         while (true) {
@@ -139,12 +135,12 @@ public class Computations {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_TIME_SET, fmt.format(alarm.getAlarmTime()));
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_DATE_SET, alarm.getAlarmFrequency());
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, alarm.getPrimaryKey());
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, alarm.isRepeating());
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, alarm.isVibrate());
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_RINGTONE, alarm.getAlarmAudio());
+        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, fmt.format(alarm.getAlarmTime()));
+        myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarm.getAlarmFrequency());
+        myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, alarm.getPrimaryKey());
+        myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, alarm.isRepeating());
+        myIntent.putExtra(FinalVariables.ALARM_VIBRATE, alarm.isVibrate());
+        myIntent.putExtra(FinalVariables.ALARM_RINGTONE, alarm.getAlarmAudio());
 
 
         System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: " + timeA.getTime());
@@ -178,12 +174,12 @@ public class Computations {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
 
         Intent myIntent = new Intent(context, AlarmReceiver.class);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_TIME_SET, fmt.format(alarmTime));
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_DATE_SET, alarmDays);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, pk);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, isRepeating);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, isVibrating);
-        myIntent.putExtra(CreatingAlarmActivity.ALARM_RINGTONE, ringtone);
+        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, fmt.format(alarmTime));
+        myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarmDays);
+        myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, pk);
+        myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, isRepeating);
+        myIntent.putExtra(FinalVariables.ALARM_VIBRATE, isVibrating);
+        myIntent.putExtra(FinalVariables.ALARM_RINGTONE, ringtone);
 
 
         System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: "+ timeA.getTime());

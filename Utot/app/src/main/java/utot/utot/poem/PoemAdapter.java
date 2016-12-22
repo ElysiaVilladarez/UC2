@@ -2,9 +2,7 @@ package utot.utot.poem;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.widget.RecyclerView;
@@ -14,27 +12,23 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.widget.ShareButton;
-import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
-import utot.utot.alarm.AlarmAdapter;
 import utot.utot.customobjects.Poem;
 import utot.utot.customviews.ButtonPlus;
 import utot.utot.helpers.BitmapMaker;
-import utot.utot.triggeralarm.AlarmReceiver;
+import utot.utot.helpers.FinalVariables;
 
 public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
  
     private RealmResults<Poem> poems;
 	private static Activity act;
-    private static CallbackManager callbackManager;
+    private CallbackManager callbackManager;
 	private static int pos;
  
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -46,6 +40,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         public PercentRelativeLayout displayImg;
         public ViewHolder(View view) {
             super(view);
+
             poemView = (TextView) view.findViewById(R.id.poem);
 			backgroundPic = (ImageView) view.findViewById(R.id.backgroundPic);
             deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
@@ -101,7 +96,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
                                                                    public void onClick(DialogInterface dialog, int whichButton) {
 
                                                                        realm.beginTransaction();
-                                                                       poem.setStatus(ShowPoems.POEM_NOT_SHOWN);
+                                                                       poem.setStatus(FinalVariables.POEM_NOT_SHOWN);
                                                                        realm.commitTransaction();
 
                                                                        PoemAdapter.this.notifyDataSetChanged();

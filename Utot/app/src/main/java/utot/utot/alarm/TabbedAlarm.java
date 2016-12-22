@@ -1,24 +1,27 @@
 package utot.utot.alarm;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-
 import android.view.View;
-
 import android.widget.ImageButton;
+import android.widget.Toast;
 
-
+import com.facebook.CallbackManager;
 import com.squareup.picasso.Picasso;
 
 import utot.utot.R;
+import utot.utot.helpers.FinalVariables;
 import utot.utot.poem.SavedPoemsFragment;
+import utot.utot.settings.SettingsFragment;
 
 public class TabbedAlarm extends AppCompatActivity {
+    public static CallbackManager callbackManager;
 
     private ImageButton savedPoemsButton, alarmButton, settingsButton;
     private FragmentManager manager;
@@ -33,6 +36,14 @@ public class TabbedAlarm extends AppCompatActivity {
         Picasso.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
         Picasso.with(this).load(R.mipmap.ic_settings_black_36dp).into((ImageButton) findViewById(R.id.settingsButton));
 
+        int action = getIntent().getIntExtra(FinalVariables.ACTION_DONE, -1);
+        if(action == FinalVariables.POEM_SAVE){
+            Toast.makeText(this, "Poem saved!", Toast.LENGTH_SHORT).show();
+        } else if(action == FinalVariables.POEM_DISCARD){
+            Toast.makeText(this, "Poem discarded!", Toast.LENGTH_SHORT).show();
+        } else if(action == FinalVariables.POEM_SHARE){
+            Toast.makeText(this, "Poem shared successfully!", Toast.LENGTH_SHORT).show();
+        }
         cur = 1; // currently in alarmFragment
 
         manager = getSupportFragmentManager();
@@ -52,6 +63,7 @@ public class TabbedAlarm extends AppCompatActivity {
             public void onClick(View view) {
                 // Go to SavedPoemsFragment
                 if(cur!=0) {
+                    callbackManager = CallbackManager.Factory.create();
                     transaction = manager.beginTransaction();
                    // transaction.setCustomAnimations(R.anim.left_to_right_slide_slow, R.anim.right_to_left_slide_slow);
                     transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
@@ -113,5 +125,9 @@ public class TabbedAlarm extends AppCompatActivity {
         b3.setBackgroundColor(ContextCompat.getColor(TabbedAlarm.this, android.R.color.transparent));
     }
 
-
+    @Override
+    public void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }

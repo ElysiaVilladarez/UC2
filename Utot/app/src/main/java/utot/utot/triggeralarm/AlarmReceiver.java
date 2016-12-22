@@ -2,13 +2,9 @@ package utot.utot.triggeralarm;
 
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.support.v4.content.WakefulBroadcastReceiver;
-import android.widget.Toast;
 
-import utot.utot.alarm.CreatingAlarmActivity;
+import utot.utot.helpers.FinalVariables;
 
 /**
  * Created by elysi on 12/15/2016.
@@ -23,12 +19,12 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
 
         Intent trigger = new Intent(context, TriggeredActivity.class);
-        trigger.putExtra(CreatingAlarmActivity.ALARM_TIME_SET, intent.getStringExtra(CreatingAlarmActivity.ALARM_TIME_SET));
-        trigger.putExtra(CreatingAlarmActivity.ALARM_DATE_SET, intent.getStringExtra(CreatingAlarmActivity.ALARM_DATE_SET));
-        trigger.putExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY, intent.getIntExtra(CreatingAlarmActivity.ALARM_PRIMARY_KEY,0));
-        trigger.putExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, intent.getBooleanExtra(CreatingAlarmActivity.ALARM_IS_REPEATING, false));
-        trigger.putExtra(CreatingAlarmActivity.ALARM_VIBRATE, intent.getBooleanExtra(CreatingAlarmActivity.ALARM_VIBRATE, false));
-        trigger.putExtra(CreatingAlarmActivity.ALARM_RINGTONE, intent.getStringExtra(CreatingAlarmActivity.ALARM_RINGTONE));
+        trigger.putExtra(FinalVariables.ALARM_TIME_SET, intent.getStringExtra(FinalVariables.ALARM_TIME_SET));
+        trigger.putExtra(FinalVariables.ALARM_DATE_SET, intent.getStringExtra(FinalVariables.ALARM_DATE_SET));
+        trigger.putExtra(FinalVariables.ALARM_PRIMARY_KEY, intent.getIntExtra(FinalVariables.ALARM_PRIMARY_KEY,0));
+        trigger.putExtra(FinalVariables.ALARM_IS_REPEATING, intent.getBooleanExtra(FinalVariables.ALARM_IS_REPEATING, false));
+        trigger.putExtra(FinalVariables.ALARM_VIBRATE, intent.getBooleanExtra(FinalVariables.ALARM_VIBRATE, false));
+        trigger.putExtra(FinalVariables.ALARM_RINGTONE, intent.getStringExtra(FinalVariables.ALARM_RINGTONE));
 
         trigger.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(trigger);
