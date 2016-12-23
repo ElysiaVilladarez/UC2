@@ -24,8 +24,7 @@
             android:id="@+id/backgroundPic"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/aa_5" />
+            android:scaleType="centerCrop"/>
 
         <utot.utot.customviews.TextViewPlus
             android:id="@+id/poem"
@@ -35,7 +34,6 @@
             android:gravity="center"
             android:maxWidth="250dp"
             android:padding="16dp"
-            android:text="Poem Sample"
             android:textColor="@color/whiteLogIn"
             android:textSize="@dimen/font_size_poem"
             app:layout_aspectRatio="100%" />

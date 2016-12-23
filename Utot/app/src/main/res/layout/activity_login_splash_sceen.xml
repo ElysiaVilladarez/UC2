@@ -13,7 +13,7 @@
         android:animateLayoutChanges="true"
         android:scaleType="centerCrop"
         android:layout_gravity="center"
-        android:src="@drawable/aa_5"
+        android:src="@mipmap/bg_splash_screen"
         android:id="@+id/mainwindow"/>
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:id="@+id/utotLogo"
-        android:src="@drawable/utotlogo1"
+        android:src="@mipmap/utotlogo1"
         android:visibility="gone"/>
 
 

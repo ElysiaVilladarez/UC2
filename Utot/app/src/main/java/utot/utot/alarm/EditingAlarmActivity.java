@@ -1,5 +1,6 @@
 package utot.utot.alarm;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -110,7 +111,9 @@ public class EditingAlarmActivity extends AppCompatActivity {
         weekendsButton.setOnClickListener(cM.weekendsButtonOnClick());
 
         findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
-        findViewById(R.id.saveAlarmButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton saveAlarm = (ImageButton)findViewById(R.id.saveAlarmButton);
+        saveAlarm.setImageResource(R.mipmap.ic_done_white_36dp);
+        saveAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

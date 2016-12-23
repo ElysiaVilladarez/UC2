@@ -3,6 +3,7 @@ package utot.utot.poem;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
     private CallbackManager callbackManager;
 	private static int pos;
  
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView poemView;
 		public ImageView backgroundPic;
         public ImageButton deleteButton;
@@ -47,10 +48,18 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
             shareButton = (ButtonPlus) view.findViewById(R.id.shareButton);
             displayImg = (PercentRelativeLayout) view.findViewById(R.id.displayImg);
             loginButton = (LoginButton) view.findViewById(R.id.login_fb);
+
+            view.setOnClickListener(this);
             
         }
-		
-		
+
+
+        @Override
+        public void onClick(View v) {
+            Intent clicked = new Intent(act, ClickPoem.class);
+            clicked.putExtra("POEM_POS", getAdapterPosition());
+            act.startActivity(clicked);
+        }
     }
  
  

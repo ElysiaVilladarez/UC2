@@ -9,91 +9,39 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/aa_11" />
+        android:src="@mipmap/bg_register_screen"
+        android:tint="@color/register_bg_tint"/>
+    <ImageView
+        android:id="@+id/utotLogo"
+        android:layout_alignParentTop="true"
+        android:layout_width="@dimen/logo_1_width"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:scaleType="fitXY"
+        app:layout_aspectRatio="30%"
+        android:layout_marginBottom="10dp"
+        android:layout_height="0dp" />
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:fillViewport="true">
 
         <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
             android:id="@+id/mainwindow"
+            android:gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
             tools:context="utot.utot.register.RegisterActivity">
 
+            <include layout="@layout/reusable_login_layout"/>
 
-            <ImageView
-                android:id="@+id/utotLogo"
-                android:layout_width="@dimen/logo_1_width"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:scaleType="fitXY"
-                app:layout_aspectRatio="35%"
-                android:layout_marginBottom="25dp"/>
-
-            <com.facebook.login.widget.LoginButton
-                android:id="@+id/register_fb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/utotLogo"
-                android:layout_centerHorizontal="true"
-                android:visibility="gone" />
-
-            <utot.utot.customviews.ButtonPlus
-                style="@style/login_buttons"
-                android:id="@+id/fb_register"
-                android:layout_height="@dimen/fb_button_height"
-                android:layout_below="@id/utotLogo"
-                android:background="@drawable/fb_login_button"
-                android:drawableStart="@drawable/fb_icon_2"
-                android:paddingLeft="10dp"
-                android:text="Register with Facebook"
-                app:layout_widthPercent="75%" />
-
-            <android.support.percent.PercentRelativeLayout
-                android:id="@+id/trans"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/fb_register"
-                android:layout_centerHorizontal="true">
-
-                <utot.utot.customviews.TextViewPlus
-                    android:id="@+id/or"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center"
-                    android:text="OR"
-                    android:textColor="#FFFFFF"
-                    android:textSize="14sp"
-                    android:textStyle="bold"
-                    app:layout_marginPercent="3%" />
-
-                <android.support.percent.PercentFrameLayout
-                    android:layout_width="@dimen/line_width"
-                    android:layout_height="@dimen/line_height"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="4dp"
-                    android:layout_toLeftOf="@id/or"
-                    android:background="@color/whiteLogIn" />
-
-                <android.support.percent.PercentFrameLayout
-                    android:layout_width="@dimen/line_width"
-                    android:layout_height="@dimen/line_height"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="4dp"
-                    android:layout_toRightOf="@id/or"
-                    android:background="@color/whiteLogIn" />
-
-            </android.support.percent.PercentRelativeLayout>
 
             <android.support.percent.PercentRelativeLayout
                 android:layout_width="match_parent"
@@ -128,7 +76,7 @@
                     android:layout_below="@id/password"
                     android:background="@drawable/edittext_rounded_lower_corners"
                     android:hint="Confirm Password"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="7dp"
                     app:layout_widthPercent="70%" />
 
                 <utot.utot.customviews.ButtonPlus
@@ -136,7 +84,6 @@
                     android:id="@+id/registerButton"
                     android:layout_height="@dimen/edittext_height"
                     android:layout_below="@id/confirmPassword"
-                    android:layout_marginBottom="8dp"
                     android:background="@drawable/register_button"
                     android:text="Create Account"
                     app:layout_widthPercent="70%" />

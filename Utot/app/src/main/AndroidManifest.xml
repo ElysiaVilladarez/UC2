@@ -45,6 +45,7 @@
         <activity
             android:name=".alarm.TabbedAlarm"
             android:label="@string/title_activity_tabbed_alarm" />
+        <activity android:name=".poem.ClickPoem" />
         <activity android:name=".login.LoginSplashScreen" />
         <activity android:name=".alarm.CreatingAlarmActivity" />
         <activity android:name=".alarm.EditingAlarmActivity" />
@@ -76,7 +77,7 @@
         <activity
             android:name=".triggeralarm.TriggeredActivity"
             android:launchMode="singleInstance" />
-        <activity android:name=".poem.ShowPoems"></activity>
+        <activity android:name=".poem.ShowPoems" />
     </application>
 
 </manifest>

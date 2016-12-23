@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/aa_8" />
+        android:tint="@color/trigger_bg_tint"
+        android:src="@mipmap/bg_trigger_alarm" />
 
     <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
@@ -26,12 +27,13 @@
             android:id="@+id/utotLogo"/>
 
         <utot.utot.customviews.TextViewPlus
+            style="@style/pangram_regular"
             android:id="@+id/time"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:textSize="28sp" />
+            android:textSize="45sp" />
 
         <!--<utot.utot.customviews.TextViewPlus-->
             <!--android:layout_width="match_parent"-->

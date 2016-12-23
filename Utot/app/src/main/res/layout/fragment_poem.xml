@@ -5,14 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="utot.utot.poem.SavedPoemsFragment">
+
     <utot.utot.customviews.TextViewPlus
         style="@style/avenir_roman"
     android:layout_width="match_parent"
         android:id="@+id/noPoemsText"
         android:padding="15dp"
         android:layout_height="match_parent"
+        android:background="@android:color/white"
         android:scrollHorizontally="false"
-        android:textColor="#FFFFFF"
+        android:textColor="@android:color/black"
         android:textSize="25sp"
         android:text="Save all your hugots here by alarming multiple times!"
         android:layout_gravity="center"

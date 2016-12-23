@@ -8,7 +8,6 @@
     android:id="@+id/mainwindow"
     android:scrollbars="vertical"
     android:scrollbarStyle="insideOverlay"
-    android:background="@drawable/aa_4"
     android:orientation="vertical">
     <FrameLayout
         android:layout_width="match_parent"

@@ -22,11 +22,14 @@
 
     <color name="button_shadow">#66000000</color>
 
-    <color name="login_button_color">#4D93D3</color>
-    <color name="login_button_color_pressed">#3A6E9E</color>
+    <color name="register_button_color">#4D93D3</color>
+    <color name="register_button_color_pressed">#3A6E9E</color>
+    <color name="register_bg_tint">#4D4D93D3</color>
 
-    <color name="register_button_color">#FD6A6C</color>
-    <color name="register_button_color_pressed">#BE5051</color>
+    <color name="login_button_color">#FD6A6C</color>
+    <color name="login_button_color_pressed">#BE5051</color>
+    <color name="login_bg_tint">#4DFD6A6C</color>
+
 
     <color name="broadcast_button_color">#99D3E1D0</color>
     <color name="broadcast_button_color_pressed">#D3E1D0</color>
@@ -40,4 +43,10 @@
     <color name="logout_button_color">#99FD6A63</color>
     <color name="logout_button_color_pressed">#FD6A63</color>
 
+
+    <color name="initial_screen_button_color">#BFFFFFFF</color>
+
+    <color name="bg_tint_gen">#40FFFFFF</color>
+
+    <color name="trigger_bg_tint">#4DB34B5F</color>
 </resources>

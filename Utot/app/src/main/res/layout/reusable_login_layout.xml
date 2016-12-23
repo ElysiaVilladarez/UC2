@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_fb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone" />
+
+    <utot.utot.customviews.ButtonPlus
+        style="@style/login_buttons"
+        android:id="@+id/fb_login"
+        android:layout_height="@dimen/fb_button_height"
+        android:layout_width="0dp"
+        android:background="@drawable/fb_login_button"
+        android:drawableStart="@mipmap/fb_icon"
+        android:paddingLeft="10dp"
+        app:layout_widthPercent="75%" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/trans"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="6dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/fb_login"
+        android:layout_centerHorizontal="true">
+
+        <utot.utot.customviews.TextViewPlus
+            android:id="@+id/or"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="OR"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/line_width"
+            android:layout_height="@dimen/line_height"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="4dp"
+            android:layout_toLeftOf="@id/or"
+            android:background="@color/whiteLogIn" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/line_width"
+            android:layout_height="@dimen/line_height"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="4dp"
+            android:layout_toRightOf="@id/or"
+            android:background="@color/whiteLogIn" />
+
+    </android.support.percent.PercentRelativeLayout>
+
+</merge>

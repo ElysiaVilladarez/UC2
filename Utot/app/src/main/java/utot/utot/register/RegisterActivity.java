@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.squareup.picasso.Picasso;
 
 import utot.utot.R;
 import utot.utot.customviews.ButtonPlus;
+import utot.utot.helpers.LoginCommon;
 import utot.utot.login.LoginActivity;
 import utot.utot.login.LoginSplashScreen;
 
@@ -31,35 +33,16 @@ public class RegisterActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Picasso.with(this).load(R.drawable.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
+        Picasso.with(this).load(R.mipmap.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
 
         callbackManager = CallbackManager.Factory.create();
-        registerButton = (LoginButton)findViewById(R.id.register_fb);
+        registerButton = (LoginButton)findViewById(R.id.login_fb);
 
-        registerButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                //              "User ID: "
-//                        + loginResult.getAccessToken().getUserId()
-//                        + "\n" +
-//                        "Auth Token: "
-//                        + loginResult.getAccessToken().getToken()
-                RegisterActivity.this.startActivity(new Intent(RegisterActivity.this, LoginSplashScreen.class));
-                RegisterActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                finish();
-            }
+        registerButton.registerCallback(callbackManager, LoginCommon.facebookCallback(RegisterActivity.this));
 
-            @Override
-            public void onCancel() {
-                Toast.makeText(RegisterActivity.this, "Login attempt cancelled", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onError(FacebookException e) {
-                Toast.makeText(RegisterActivity.this, "An error has occurred during login", Toast.LENGTH_SHORT).show();
-            }
-        });
-        findViewById(R.id.fb_register).setOnClickListener(new View.OnClickListener() {
+        Button registerButton2 = (Button)findViewById(R.id.fb_login);
+        registerButton2.setText("Register with Facebook");
+        registerButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 registerButton.performClick();

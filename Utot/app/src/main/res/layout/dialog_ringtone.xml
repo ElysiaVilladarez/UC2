@@ -2,6 +2,7 @@
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/login_button_color_pressed"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <ScrollView
         android:id="@+id/scroll"
@@ -22,7 +23,7 @@
         android:layout_below="@id/scroll"
         android:id="@+id/doneButton"
         android:layout_centerInParent="true"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/howto_button"
         android:text="Done"
         android:textColor="@color/whiteLogIn"
         app:layout_heightPercent="20%"

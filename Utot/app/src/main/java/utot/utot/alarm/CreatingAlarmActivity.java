@@ -107,7 +107,9 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         weekendsButton.setOnClickListener(cM.weekendsButtonOnClick());
 
         findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
-        findViewById(R.id.confirmAlarmButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton saveAlarm = (ImageButton)findViewById(R.id.saveAlarmButton);
+        saveAlarm.setImageResource(R.mipmap.ic_add_alarm_white_36dp);
+        saveAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
