@@ -34,6 +34,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
     private Alarm alarm;
     private CheckBox repeatingSwitch;
     private String ringtoneText;
+    private int ringtonePos;
     Calendar mcurrentTime;
 
     private CommonMethods cM;
@@ -68,7 +69,6 @@ public class EditingAlarmActivity extends AppCompatActivity {
 
         cM.setToggleButtonTypeface();
 
-        ringtoneText="";
         RealmResults<Alarm> alarms = Realm.getDefaultInstance().where(Alarm.class).findAllAsync();
         alarm = alarms.get(getIntent().getIntExtra("POS", 0));
 
@@ -97,9 +97,10 @@ public class EditingAlarmActivity extends AppCompatActivity {
         }
         cM.checkOtherToggles();
 
+        ringtonePos = alarm.getAlarmAudioPos();
         ringtoneText = alarm.getAlarmAudio();
 
-        ringtoneButton.setOnClickListener(cM.createRingtoneDialog(ringtoneText));
+        ringtoneButton.setOnClickListener(cM.createRingtoneDialog(ringtoneText, ringtonePos));
 
         vibrateSwitch.setChecked(alarm.isVibrate());
 
@@ -121,7 +122,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
                     String alarmDays = (new JSONArray(Arrays.asList(cM.days))).toString();
 
                     CreateObjects.editAlarm(alarm, EditingAlarmActivity.this, alarmDays, cM.alarmTime, cM.ringtoneText,
-                            vibrateSwitch.isChecked(), repeatingSwitch.isChecked());
+                            cM.ringtonePos, vibrateSwitch.isChecked(), repeatingSwitch.isChecked(), true);
 
                     Computations.makeAlarm(EditingAlarmActivity.this, alarm, Calendar.getInstance());
 

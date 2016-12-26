@@ -3,7 +3,9 @@ package utot.utot.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -13,6 +15,7 @@ import java.lang.ref.WeakReference;
 import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
+import utot.utot.helpers.FinalVariables;
 
 public class LoginSplashScreen extends Activity {
 
@@ -21,7 +24,7 @@ public class LoginSplashScreen extends Activity {
         // 2. Make sure we keep the source Activity as a WeakReference (more on that later)
         private WeakReference mActivity;
         /** Duration of wait **/
-        private final int LOGO_DISPLAY_LENGTH = 2500;
+        private final int LOGO_DISPLAY_LENGTH = 800;
         private View view1, view2;
 
         private StartMainActivityRunnable(Activity activity, View view1, View view2) {
@@ -68,7 +71,7 @@ public class LoginSplashScreen extends Activity {
         }
     }
 
-    private final int QUOTE_DISPLAY_LENGTH = 4000;
+    private final int QUOTE_DISPLAY_LENGTH = 1500;
 
 
     // 4. Declare the Handler as a member variable
@@ -78,14 +81,13 @@ public class LoginSplashScreen extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_splash_sceen);
+
         Realm.init(getApplicationContext());
-//        Animation slide_up = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.slide_up);
+        SharedPreferences prefs = getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
+        prefs.edit().putBoolean(FinalVariables.LOGGED_IN, true).apply();
+
         View view2 = findViewById(R.id.utotLogo);
 
-      //  Picasso.with(this).load(R.drawable.aa_4).into((ImageView)view2);
-
-        // 5. Pass a new instance of StartMainActivityRunnable with reference to 'this'.
         mHandler.postDelayed(new StartMainActivityRunnable(this, findViewById(R.id.quoteLay), view2), QUOTE_DISPLAY_LENGTH);
     }
 

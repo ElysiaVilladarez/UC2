@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
         android:scaleType="fitXY"
-        app:layout_aspectRatio="35%"
+        app:layout_aspectRatio="30%"
         android:layout_marginBottom="10dp"
         app:layout_marginBottomPercent="4%"/>
 
@@ -78,7 +78,7 @@
     </android.support.percent.PercentRelativeLayout>
         <utot.utot.customviews.ClearTextView
             android:layout_below="@id/trans"
-            android:id="@+id/loginButtonButton"
+            android:id="@+id/loginButton"
             style="@style/pangram_medium"
             android:layout_height="@dimen/edittext_height"
             android:background="@drawable/initial_screen_buttons"

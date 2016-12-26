@@ -27,7 +27,8 @@
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:layout_below="@id/utotLogo">
 
         <android.support.percent.PercentRelativeLayout
             android:id="@+id/mainwindow"
@@ -61,6 +62,7 @@
                 <utot.utot.customviews.EdittextPlus
                     android:id="@+id/password"
                     style="@style/EditTextStyle_1"
+                    android:inputType="textPassword"
                     android:layout_width="@dimen/edittext_width"
                     android:layout_height="@dimen/edittext_height"
                     android:layout_below="@id/username"
@@ -84,6 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/loginButton"
+                    app:layout_marginBottomPercent="3%"
                     android:layout_centerHorizontal="true">
 
                     <utot.utot.customviews.ButtonPlus

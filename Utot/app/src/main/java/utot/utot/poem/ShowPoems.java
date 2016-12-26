@@ -1,8 +1,11 @@
 package utot.utot.poem;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.GestureDetector;
@@ -10,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
@@ -18,22 +22,23 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.share.model.SharePhotoContent;
 import com.facebook.share.widget.ShareDialog;
 
+import java.util.Calendar;
+
 import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
 import utot.utot.customobjects.OnSwipeListener;
 import utot.utot.customobjects.Poem;
+import utot.utot.customobjects.PoemPicture;
 import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.BitmapMaker;
+import utot.utot.helpers.CreateObjects;
 import utot.utot.helpers.FinalVariables;
 
 /**
  * Created by elysi on 12/16/2016.
  */
 public class ShowPoems extends AppCompatActivity {
-
-
-
 
     private TextViewPlus poem;
     private PercentRelativeLayout displayImg;
@@ -44,8 +49,7 @@ public class ShowPoems extends AppCompatActivity {
 
     private RelativeLayout.LayoutParams rParams;
 
-    private SharePhotoContent content;
-    private ShareDialog shareDialog;
+    private Poem randomPoem;
 
 
 
@@ -60,64 +64,67 @@ public class ShowPoems extends AppCompatActivity {
         wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setContentView(R.layout.activity_show_poems);
+
         Realm.init(getApplicationContext());
 
         realm = Realm.getDefaultInstance();
+
+        randomPoem = CreateObjects.getRandomPoem();
 
         displayImg = (PercentRelativeLayout) findViewById(R.id.poemAndImage);
         rParams = (RelativeLayout.LayoutParams) displayImg.getLayoutParams();
 
         poem = (TextViewPlus) findViewById(R.id.poem);
+        ImageView bg = (ImageView)findViewById(R.id.backgroundPic);
+
+        CreateObjects.setPoemDisplay(this, poem, bg, randomPoem);
 
         mGestureDetector = new GestureDetector(this, new OnSwipeListener(displayImg) {
             @Override
             public boolean onSwipe(Direction d) {
                 super.onSwipe(d);
+                callbackManager = CallbackManager.Factory.create();
                 Intent goToMain = new Intent(ShowPoems.this, TabbedAlarm.class);
                 if (d == Direction.down) {
+
+                    realm.beginTransaction();
+                    randomPoem.setStatus(FinalVariables.POEM_DISCARD);
+                    realm.commitTransaction();
 
                     goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
                     ShowPoems.this.startActivity(goToMain);
                     ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
                     ShowPoems.this.finish();
+
                     return true;
-                } else if (d == Direction.right) {
-                    Poem poem;
-                    realm.beginTransaction();
-                    poem = realm.createObject(Poem.class);
-                    poem.setPrimaryKey((int)System.currentTimeMillis());
-                    poem.setPoem("Poem Sample");
-                    poem.setStatus(FinalVariables.POEM_SHARE);
-                    realm.commitTransaction();
-
-
-
-                    Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(displayImg, displayImg.getWidth(), displayImg.getWidth());
-                    String filename = Integer.toString(poem.getPrimaryKey());
-                    BitmapMaker.saveBitmap(bitmap1,filename);
-
-                    callbackManager = CallbackManager.Factory.create();
-                    BitmapMaker.fn_share(filename, callbackManager, ShowPoems.this, (LoginButton)findViewById(R.id.login_fb));
-
-//                    ShowPoems.this.startActivity(new Intent(ShowPoems.this, TabbedAlarm.class));
-//                    ShowPoems.this.overridePendingTransition(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
-//                    ShowPoems.this.finish();
-                    return true;
-
                 } else if (d == Direction.left) {
+
                     realm.beginTransaction();
-                    Poem poem = realm.createObject(Poem.class);
-                    poem.setPrimaryKey((int)System.currentTimeMillis());
-                    poem.setPoem("Poem Sample");
-                    poem.setStatus(FinalVariables.POEM_SAVE);
+                    randomPoem.setStatus(FinalVariables.POEM_SAVE);
                     realm.commitTransaction();
-                    
+
+
+                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                    ShowPoems.this.finish();
+
+                    return true;
+
+                } else if (d == Direction.right) {
+
+                    realm.beginTransaction();
+                    randomPoem.setStatus(FinalVariables.POEM_SHARE);
+                    randomPoem.setDateAdded(Calendar.getInstance().getTime());
+                    realm.commitTransaction();
 
                     goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
                     ShowPoems.this.startActivity(goToMain);
 
-                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                    ShowPoems.this.finish();
+
+                    String root = Environment.getExternalStorageDirectory().getAbsolutePath();
+                    BitmapMaker.fn_share(randomPoem.getPrimaryKey(), callbackManager, ShowPoems.this, (LoginButton)findViewById(R.id.login_fb),
+                            displayImg, root);
+
+
                     return true;
                 }
 
@@ -126,7 +133,7 @@ public class ShowPoems extends AppCompatActivity {
 
         });
 
-        ((RelativeLayout)findViewById(R.id.mainwindow)).setOnTouchListener(new View.OnTouchListener() {
+        findViewById(R.id.mainwindow).setOnTouchListener(new View.OnTouchListener() {
 
                                                              @Override
                                                              public boolean onTouch(View v, MotionEvent event) {

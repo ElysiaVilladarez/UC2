@@ -77,10 +77,19 @@ public class Alarm extends RealmObject {
         isRepeating = repeating;
     }
 
+    public int getAlarmAudioPos() {
+        return alarmAudioPos;
+    }
+
+    public void setAlarmAudioPos(int alarmAudioPos) {
+        this.alarmAudioPos = alarmAudioPos;
+    }
+
     private int primaryKey;
     private Date alarmTime;
     private String alarmFrequency;
     private String alarmAudio;
+    private int alarmAudioPos;
     private boolean isOn;
     private boolean isVibrate;
     private boolean isRepeating;

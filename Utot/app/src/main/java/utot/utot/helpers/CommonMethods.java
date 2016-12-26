@@ -33,6 +33,7 @@ public class CommonMethods {
 
     public Date alarmTime;
     public String ringtoneText;
+    public int ringtonePos;
     public boolean[] days;
 
 
@@ -134,17 +135,19 @@ public class CommonMethods {
 
     }
 
-    public View.OnClickListener createRingtoneDialog(String rT){
+    public View.OnClickListener createRingtoneDialog(String rT, int rP){
         ringtoneText = rT;
+        ringtonePos = rP;
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RingtoneDialog dialog = new RingtoneDialog(act, ringtoneText);
+                RingtoneDialog dialog = new RingtoneDialog(act, ringtoneText, ringtonePos);
                 dialog.show();
                 dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         ringtoneText = RingtoneDialog.ringtoneName;
+                        ringtonePos = RingtoneDialog.ringtonePos;
                     }
                 });
                 DialogSize.setSize(act, dialog);

@@ -1,7 +1,9 @@
 package utot.utot.settings;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,11 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
-import com.squareup.picasso.Picasso;
 
 import io.realm.Realm;
 import utot.utot.R;
+import utot.utot.customobjects.Alarm;
+import utot.utot.customobjects.Poem;
+import utot.utot.helpers.FinalVariables;
 import utot.utot.login.LoginActivity;
 
 public class SettingsFragment extends Fragment {
@@ -44,7 +49,7 @@ public class SettingsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container,false);
-        Picasso.with(getActivity()).load(R.mipmap.utotlogo1).into((ImageView)rootView.findViewById(R.id.logo));
+        Glide.with(getActivity()).load(R.mipmap.utotlogo1).into((ImageView)rootView.findViewById(R.id.logo));
 
         rootView.findViewById(R.id.bRODcastButton).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -74,8 +79,12 @@ public class SettingsFragment extends Fragment {
 
                 Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();
-                realm.deleteAll();
+                realm.delete(Poem.class);
+                realm.delete(Alarm.class);
                 realm.commitTransaction();
+
+                SharedPreferences prefs = getActivity().getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
+                prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
 
                 getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
                 getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);

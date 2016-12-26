@@ -23,7 +23,7 @@
     <dimen name="fb_button_height">65dp</dimen>
 
     <dimen name="font_size_small">12sp</dimen>
-    <dimen name="font_size_poem">12sp</dimen>
+    <dimen name="font_size_poem">14sp</dimen>
 
     <dimen name="line_height">1dp</dimen>
     <dimen name="line_width">80dp</dimen>

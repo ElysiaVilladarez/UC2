@@ -27,4 +27,23 @@ public class FinalVariables {
     public final static SimpleDateFormat timeAMPM = new SimpleDateFormat("hh:mm a");
     public final static SimpleDateFormat hourOfDayMin = new SimpleDateFormat("HH:mm");
     public final static SimpleDateFormat triggeredFormat = new SimpleDateFormat("hh:mm\na");
+
+    public final static SimpleDateFormat serverDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+
+
+    public static final String PREFS_NAME = "CheckingVersion";
+    public final static String PREF_VERSION_CODE_KEY = "version_code";
+    public final static int DOESNT_EXIST = -1;
+
+    public final static int pictureCount = 21;
+
+    public final static String LOGGED_IN = "LI";
+
+    public final static int REQUEST_WRITE_STORAGE = 1;
+
+    public final static String FB_ID = "idFacebook";
+    public final static String FIRST_NAME = "first_name";
+    public final static String LAST_NAME = "last_name";
+    public final static String EMAIL = "email";
+
 }

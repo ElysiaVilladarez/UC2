@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.VIBRATE" />
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
@@ -29,15 +31,18 @@
             android:authorities="com.facebook.app.FacebookContentProvider1762860773966518"
             android:exported="true" />
 
-        <activity
-            android:name=".login.LoginActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+        <activity android:name=".login.InitialScreen"
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            </activity>
+        <activity
+            android:name=".login.LoginActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+
         </activity>
         <activity
             android:name=".register.RegisterActivity"

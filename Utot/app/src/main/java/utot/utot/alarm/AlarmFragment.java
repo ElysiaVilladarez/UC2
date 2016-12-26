@@ -44,7 +44,7 @@ public class AlarmFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_alarm, container, false);
-
+        Realm.init(getActivity().getApplicationContext());
         rootView.findViewById(R.id.addAlarmButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

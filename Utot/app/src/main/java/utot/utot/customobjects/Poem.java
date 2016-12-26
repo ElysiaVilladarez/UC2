@@ -1,5 +1,7 @@
 package utot.utot.customobjects;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import utot.utot.customobjects.Picture;
 
@@ -8,6 +10,7 @@ public class Poem extends RealmObject {
 	private String poem;
 	private int status; //0 - saved, 1- discarded or 2 - shared, 3 - not shown, 4 - brodcast
 	private Picture pic;
+	private Date dateAdded;
 
 	public int getPrimaryKey() {
 		return primaryKey;
@@ -35,5 +38,13 @@ public class Poem extends RealmObject {
 	}
 	public void setPic(Picture pic){
 		this.pic = pic;
+	}
+
+	public Date getDateAdded() {
+		return dateAdded;
+	}
+
+	public void setDateAdded(Date dateAdded) {
+		this.dateAdded = dateAdded;
 	}
 }

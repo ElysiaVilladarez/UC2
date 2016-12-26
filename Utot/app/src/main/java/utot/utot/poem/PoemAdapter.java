@@ -5,8 +5,13 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
+import android.os.Environment;
 import android.support.percent.PercentRelativeLayout;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.login.widget.LoginButton;
 
@@ -23,6 +29,7 @@ import utot.utot.R;
 import utot.utot.customobjects.Poem;
 import utot.utot.customviews.ButtonPlus;
 import utot.utot.helpers.BitmapMaker;
+import utot.utot.helpers.CreateObjects;
 import utot.utot.helpers.FinalVariables;
 
 public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
@@ -30,7 +37,6 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
     private RealmResults<Poem> poems;
 	private static Activity act;
     private CallbackManager callbackManager;
-	private static int pos;
  
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView poemView;
@@ -80,19 +86,16 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(ViewHolder holderT, int position) {
 		final ViewHolder holder = holderT;
-		final Poem poem = poems.get(pos);
+		final Poem poem = poems.get(position);
         final Realm realm = Realm.getDefaultInstance();
         holder.shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(holder.displayImg, holder.displayImg.getWidth(),
-                        holder.displayImg.getHeight());
-                String filename = Integer.toString(poem.getPrimaryKey());
-                BitmapMaker.saveBitmap(bitmap1,filename);
+                BitmapMaker.fn_share(poem.getPrimaryKey(), callbackManager, act, holder.loginButton, holder.displayImg, Environment.getExternalStorageDirectory().getAbsolutePath());
 
-                BitmapMaker.fn_share(filename, callbackManager, act, holder.loginButton);
             }
         });
+
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                                                    @Override
                                                    public void onClick(View view) {
@@ -116,9 +119,9 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
                                                                .setNegativeButton(android.R.string.no, null).show();
                                                    }
                                                });
-		holder.poemView.setText(poem.getPoem());
-	//	Picasso.with(act).load().into(holder.backgroundPic);
-		
+
+        CreateObjects.setPoemDisplay(act, holder.poemView, holder.backgroundPic, poem);
+
     }
  
     @Override

@@ -8,6 +8,7 @@ import android.content.Intent;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,6 +20,7 @@ import utot.utot.triggeralarm.AlarmReceiver;
  */
 
 public class Computations {
+    public static boolean isRepeating;
 
     public static String translationToReadableText(boolean[] days) {
         String[] names = new String[7];
@@ -73,6 +75,62 @@ public class Computations {
         return days;
     }
 
+    public static String transformToBooleanJSONArray(String sDays) {
+        boolean[] days = new boolean[7];
+        String[] splitDays = sDays.split(" ");
+        if(splitDays.length>1) isRepeating = true;
+
+        String[] names = new String[10];
+        names[0] = "M";
+        names[1] = "T";
+        names[2] = "W";
+        names[3] = "R";
+        names[4] = "F";
+        names[5] = "Sa";
+        names[6] = "Su";
+        names[7] = "Everyday";
+        names[8] = "Weekends";
+        names[9] = "Weekdays";
+
+        boolean[] booleanDays = new boolean[7];
+
+        for(int i=0; i < splitDays.length; i++){
+            String d = splitDays[i].trim();
+
+            for(int j =i; j < names.length; j++){
+                if(d.equalsIgnoreCase(names[j])){
+                    if(j==7){
+                        isRepeating = true;
+                        for(int c=0; c < booleanDays.length; c++){
+                            booleanDays[c] = true;
+                        }
+                    }
+                    if(j==8){
+                        isRepeating = true;
+                        booleanDays[5] = true;
+                        booleanDays[6] = true;
+                    }
+                    if(j==9){
+                        isRepeating = true;
+                        booleanDays[0] = true;
+                        booleanDays[1] = true;
+                        booleanDays[2] = true;
+                        booleanDays[3] = true;
+                        booleanDays[4] = true;
+                    }
+                    if(j < 7){
+                        booleanDays[j] = true;
+                    }
+                    break;
+                }
+            }
+        }
+
+        JSONArray alarmDays = new JSONArray(Arrays.asList(booleanDays));
+
+        return alarmDays.toString();
+    }
+
     public static int getDayOfWeek(boolean[] days, Calendar now, Calendar alarm) {
         int dayOfWeek;
         int i;
@@ -110,19 +168,18 @@ public class Computations {
 
         }
 
-        System.out.println("CHECK: DAYOF WEEK" + dayOfWeek);
         return dayOfWeek;
     }
 
     public static boolean makeAlarm(Context context, Alarm alarm, Calendar now) {
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
-
         Calendar timeA = Calendar.getInstance();
         int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
         timeA.setTime(alarm.getAlarmTime());
         timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
         timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
         timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+        timeA.set(Calendar.DAY_OF_WEEK, nowDay);
         now.set(Calendar.DAY_OF_WEEK, nowDay);
         int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarm.getAlarmFrequency()), now, timeA);
         now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
@@ -141,7 +198,7 @@ public class Computations {
         myIntent.putExtra(FinalVariables.ALARM_RINGTONE, alarm.getAlarmAudio());
 
 
-        System.out.println("CHECK: ALARM DATE" + now.getTime().toString() + " ALARM TIME: " + timeA.getTime());
+        System.out.println("CHECK: ALARM DATE=" + now.getTime().toString() + " ALARM TIME=" + timeA.getTime());
 
         long alarmMilli = now.getTimeInMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
@@ -150,7 +207,42 @@ public class Computations {
 
         return true;
     }
-
+//    public static boolean makeAlarm(Context context, Alarm alarm, Calendar now, boolean fromServer) {
+//        //boolean[] days = Computations.transformToBooleanArray(alarmDays);
+//
+//        Calendar timeA = Calendar.getInstance();
+//        int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
+//        timeA.setTime(alarm.getAlarmTime());
+//        timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
+//        timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
+//        timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
+//        now.set(Calendar.DAY_OF_WEEK, nowDay);
+//        int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarm.getAlarmFrequency()), now, timeA);
+//        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+//        now.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
+//        now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
+//        now.set(Calendar.SECOND, 0);
+//
+//        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+//
+//        Intent myIntent = new Intent(context, AlarmReceiver.class);
+//        myIntent.putExtra(FinalVariables.ALARM_TIME_SET, FinalVariables.timeAMPM.format(alarm.getAlarmTime()));
+//        myIntent.putExtra(FinalVariables.ALARM_DATE_SET, alarm.getAlarmFrequency());
+//        myIntent.putExtra(FinalVariables.ALARM_PRIMARY_KEY, alarm.getPrimaryKey());
+//        myIntent.putExtra(FinalVariables.ALARM_IS_REPEATING, alarm.isRepeating());
+//        myIntent.putExtra(FinalVariables.ALARM_VIBRATE, alarm.isVibrate());
+//        myIntent.putExtra(FinalVariables.ALARM_RINGTONE, alarm.getAlarmAudio());
+//
+//
+//        System.out.println("CHECK: ALARM DATE=" + now.getTime().toString() + " ALARM TIME=" + timeA.getTime());
+//
+//        long alarmMilli = timeA.getTimeInMillis();
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+//                alarm.getPrimaryKey(), myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+//
+//        return true;
+//    }
     public static boolean makeAlarm(Context context, String alarmDays, Calendar now, Date alarmTime, int pk,
                                     boolean isRepeating, boolean isVibrating, String ringtone){
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
@@ -215,4 +307,5 @@ public class Computations {
 //        Toast.makeText(context, sb, Toast.LENGTH_LONG).show();
         return true;
     }
+
 }

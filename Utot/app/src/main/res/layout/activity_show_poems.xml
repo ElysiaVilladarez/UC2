@@ -22,6 +22,7 @@
 
         <ImageView
             android:id="@+id/backgroundPic"
+            android:tint="@color/bg_tint_gen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"/>

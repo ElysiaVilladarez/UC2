@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         android:layout_height="match_parent"
+        android:layout_below="@id/utotLogo"
         android:fillViewport="true">
 
         <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,6 +36,7 @@
             android:id="@+id/mainwindow"
             android:gravity="bottom"
             android:layout_width="match_parent"
+            android:layout_below="@id/utotLogo"
             android:layout_height="match_parent"
             android:scrollbarStyle="insideOverlay"
             android:scrollbars="vertical"
@@ -54,6 +56,7 @@
                 <utot.utot.customviews.EdittextPlus
                     android:id="@id/password"
                     style="@style/EditTextStyle_1"
+                    android:inputType="textPassword"
                     android:layout_width="@dimen/edittext_width"
                     android:layout_height="@dimen/edittext_height"
                     android:layout_below="@id/username"
@@ -92,6 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/registerButton"
+                    app:layout_marginBottomPercent="3%"
                     android:layout_centerHorizontal="true">
 
                     <utot.utot.customviews.ButtonPlus

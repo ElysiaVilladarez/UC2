@@ -1,6 +1,8 @@
 package utot.utot.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -9,17 +11,20 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-import com.squareup.picasso.Picasso;
 
+import java.util.Arrays;
+
+import io.realm.Realm;
 import utot.utot.R;
+import utot.utot.asynctasks.CheckingStart;
+import utot.utot.asynctasks.LoginTask;
 import utot.utot.customviews.ButtonPlus;
+import utot.utot.helpers.FinalVariables;
 import utot.utot.helpers.LoginCommon;
 import utot.utot.register.RegisterActivity;
 
@@ -30,31 +35,18 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login);
 
-        AccessToken facebookAccessToken = AccessToken.getCurrentAccessToken();
-        boolean sessionExpired;
-        if(facebookAccessToken != null){
-            sessionExpired = facebookAccessToken.isExpired();
-        }else{
-            sessionExpired = true;
-        }
 
-        if(!sessionExpired){
-            LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginSplashScreen.class));
-            LoginActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            finish();
-        }
-
-        Picasso.with(this).load(R.mipmap.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
+        Glide.with(this).load(R.mipmap.utotlogo1).into((ImageView)findViewById(R.id.utotLogo));
 
 
         callbackManager = CallbackManager.Factory.create();
         loginButton = (LoginButton)findViewById(R.id.login_fb);
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile", "email"));
 
-        loginButton.registerCallback(callbackManager, LoginCommon.facebookCallback(LoginActivity.this));
+        loginButton.registerCallback(callbackManager, LoginCommon.facebookCallback(LoginActivity.this, true));
 
         Button loginButton2 = (Button)findViewById(R.id.fb_login);
         loginButton2.setText("Login with Facebook");
@@ -81,17 +73,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 // authenticate user
-                String username = ((EditText)findViewById(R.id.username)).getText().toString();
-                String password = ((EditText)findViewById(R.id.password)).getText().toString();
+                String username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
+                String password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
 
-                boolean authenticated = true;
-                if(authenticated){
-                    LoginActivity.this.startActivity(new Intent(LoginActivity.this, LoginSplashScreen.class));
-                    LoginActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                    finish();
-
+                if(username.isEmpty() || password.isEmpty()){
+                    Toast.makeText(LoginActivity.this, "Please fill up the given fields", Toast.LENGTH_SHORT).show();
                 } else{
-                    Toast.makeText(getApplicationContext(), "User does not exist", Toast.LENGTH_SHORT).show();
+                    LoginTask loggingIn = new LoginTask(getApplicationContext(), LoginActivity.this, username, password);
+                    loggingIn.execute();
                 }
             }
         });

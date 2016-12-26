@@ -26,7 +26,10 @@ public class RingtoneDialog extends Dialog {
     public static RadioGroup group;
     public static Button doneButton;
     public static String ringtoneName;
-    public RingtoneDialog(Context context, String rName) {
+
+    public static int ringtonePos;
+
+    public RingtoneDialog(Context context, String rName, int rPos) {
         super(context);
 
         this.c = context;
@@ -47,6 +50,11 @@ public class RingtoneDialog extends Dialog {
                     r = null;
                 }
                 ringtoneManager.stopPreviousRingtone();
+
+                int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
+                ringtoneName = alarms[index].toString();
+                ringtonePos = index;
+
                 dismiss();
             }
         });
@@ -65,18 +73,20 @@ public class RingtoneDialog extends Dialog {
             group.addView(ringtone);
         }
 
+        this.ringtonePos = rPos;
         this.ringtoneName = rName;
-        if(ringtoneName == null || ringtoneName.trim().isEmpty()) {
-            ringtoneName = alarms[0].toString();
-            ((RadioButton)group.getChildAt(0)).setChecked(true);
-        } else{
-            for(int i =0; i <alarmCount; i++){
-                if(alarms[i].toString().equals(ringtoneName)){
-                    group.check(group.getChildAt(i).getId());
-                    break;
-                }
-            }
-        }
+        group.check(group.getChildAt(ringtonePos).getId());
+//        if(ringtoneName == null || ringtoneName.trim().isEmpty()) {
+//            ringtoneName = alarms[0].toString();
+//            ((RadioButton)group.getChildAt(0)).setChecked(true);
+//        } else{
+//            for(int i =0; i <alarmCount; i++){
+//                if(alarms[i].toString().equals(ringtoneName)){
+//                    group.check(group.getChildAt(i).getId());
+//                    break;
+//                }
+//            }
+//        }
 
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -89,6 +99,7 @@ public class RingtoneDialog extends Dialog {
                 int index = group.indexOfChild(radioButton);
                 r = RingtoneManager.getRingtone(c, alarms[index]);
                 ringtoneName = alarms[index].toString();
+                ringtonePos = index;
                 r.play();
             }
         });

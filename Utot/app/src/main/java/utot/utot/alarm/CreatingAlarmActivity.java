@@ -32,6 +32,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     private TextView timeSet;
     private Date alarmTime;
     private String ringtoneText;
+    private int ringtonePos;
     private ToggleButton[] daysToggle;
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
     Calendar mcurrentTime;
@@ -64,7 +65,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         cM = new CommonMethods(CreatingAlarmActivity.this,everydayButton, weekendsButton, weekdaysButton, daysToggle,
                 repeatingSwitch);
 
-        ringtoneText = "";
+
 
         mcurrentTime = Calendar.getInstance();
 
@@ -90,6 +91,8 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
         cM.setToggleButtonTypeface();
 
+        ringtonePos = 0;
+
         RingtoneManager ringtoneManager = new RingtoneManager(this);
         ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
         Cursor alarmsCursor = ringtoneManager.getCursor();
@@ -97,7 +100,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
             ringtoneText = ringtoneManager.getRingtoneUri(alarmsCursor.getPosition()).toString();
         }
 
-        ringtoneButton.setOnClickListener(cM.createRingtoneDialog(ringtoneText));
+        ringtoneButton.setOnClickListener(cM.createRingtoneDialog(ringtoneText, ringtonePos));
 
         repeatingSwitch.setOnCheckedChangeListener(cM.repeatingSwitchToggle());
 
@@ -108,7 +111,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
         findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
         ImageButton saveAlarm = (ImageButton)findViewById(R.id.saveAlarmButton);
-        saveAlarm.setImageResource(R.mipmap.ic_add_alarm_white_36dp);
+        saveAlarm.setImageResource(R.mipmap.ic_alarm_on_white_36dp);
         saveAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -116,8 +119,8 @@ public class CreatingAlarmActivity extends AppCompatActivity {
                 if(cM.hasSelectedDate()){
                     String alarmDays = (new JSONArray(Arrays.asList(cM.days))).toString();
 
-                    Alarm alarm = CreateObjects.createAlarm(CreatingAlarmActivity.this, alarmDays, cM.alarmTime, cM.ringtoneText,
-                            vibrateSwitch.isChecked(), repeatingSwitch.isChecked());
+                    Alarm alarm = CreateObjects.createAlarm(CreatingAlarmActivity.this,alarmDays, cM.alarmTime, cM.ringtoneText,
+                            cM.ringtonePos, vibrateSwitch.isChecked(), repeatingSwitch.isChecked(), true);
 
                     Computations.makeAlarm(CreatingAlarmActivity.this, alarm, Calendar.getInstance());
                     CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
