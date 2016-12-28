@@ -1,5 +1,6 @@
 package utot.utot.helpers;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,6 +13,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
 import utot.utot.customobjects.Alarm;
 import utot.utot.triggeralarm.AlarmReceiver;
 
@@ -46,6 +49,46 @@ public class Computations {
             if (days[3]) display += names[3] + " ";
             if (days[4]) display += names[4] + " ";
             display += "Weekends";
+        } else {
+            for (int i = 0; i < days.length; i++) {
+                if (days[i]) display += names[i] + " ";
+            }
+        }
+
+
+        return display;
+    }
+
+    public static String translationToReadableTextServer(String s) {
+        boolean[] days = transformToBooleanArray(s);
+        String[] names = new String[7];
+        names[0] = "M";
+        names[1] = "T";
+        names[2] = "W";
+        names[3] = "R";
+        names[4] = "F";
+        names[5] = "Sa";
+        names[6] = "Su";
+        String display = "";
+
+        if (days[0] && days[1] && days[2] && days[3] && days[4] && days[5] && days[6]) {
+            display += "Everyday ";
+        } else if (days[0] && days[1] && days[2] && days[3] && days[4]) {
+            if (days[5] || days[6]) {
+                for (int i = 0; i < days.length; i++) {
+                    if (days[i]) display += names[i] + " ";
+                }
+            } else{
+                display += "Weekdays ";
+            }
+        } else if (days[5] && days[6]) {
+            if (days[0] || days[1] || days[2] || days[3] || days[4]){
+                for (int i = 0; i < days.length; i++) {
+                    if (days[i]) display += names[i] + " ";
+                }
+            } else{
+                display += "Weekends";
+            }
         } else {
             for (int i = 0; i < days.length; i++) {
                 if (days[i]) display += names[i] + " ";
@@ -131,58 +174,57 @@ public class Computations {
         return alarmDays.toString();
     }
 
-    public static int getDayOfWeek(boolean[] days, Calendar now, Calendar alarm) {
-        int dayOfWeek;
+    public static void getDayOfWeek(boolean[] days, Calendar now, Calendar alarm) {
+//        int dayOfWeek;
         int i;
         int nowDay = now.get(Calendar.DAY_OF_WEEK);
         if(alarm.getTimeInMillis() < now.getTimeInMillis()) {
 //            if(nowDay == Calendar.SATURDAY) i =6;
-//            else if (nowDay == Calendar.SUNDAY) i =0;
+//            else
 //            else if (nowDay == Calendar.FRIDAY) i =5;
-            now.add(Calendar.DAY_OF_YEAR, 7);
+            now.add(Calendar.DAY_OF_YEAR, 1);
             i = nowDay-1;
         } else{
             if (nowDay == Calendar.SUNDAY) i = 6;
-            else if(nowDay == Calendar.MONDAY)
-                i = 0;
             else{
                 i = nowDay - 2;
             }
         }
 
-
+        int addDays = 0;
         while (true) {
             if (days[i]) {
-                if (i == 6) {
-                    dayOfWeek = Calendar.SUNDAY;
-                } else if (i == 5) {
-                    dayOfWeek = Calendar.SATURDAY;
-                } else {
-                    dayOfWeek = i + 2;
-                }
+//                if (i == 6) {
+//                    dayOfWeek = Calendar.SUNDAY;
+//                } else if (i == 5) {
+//                    dayOfWeek = Calendar.SATURDAY;
+//                } else {
+//                    dayOfWeek = i + 2;
+//                }
                 break;
+            } else{
+                addDays++;
             }
 
-            if (i == 6) i = 0;
+            if (i == 6) {
+                i = 0;
+            }
             else i++;
 
         }
-
-        return dayOfWeek;
+        now.add(Calendar.DAY_OF_MONTH, addDays);
     }
 
     public static boolean makeAlarm(Context context, Alarm alarm, Calendar now) {
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
         Calendar timeA = Calendar.getInstance();
-        int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
         timeA.setTime(alarm.getAlarmTime());
         timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
         timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
         timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
-        timeA.set(Calendar.DAY_OF_WEEK, nowDay);
-        now.set(Calendar.DAY_OF_WEEK, nowDay);
-        int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarm.getAlarmFrequency()), now, timeA);
-        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+
+        getDayOfWeek(transformToBooleanArray(alarm.getAlarmFrequency()), now, timeA);
+//        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         now.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
         now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
         now.set(Calendar.SECOND, 0);
@@ -248,14 +290,13 @@ public class Computations {
         //boolean[] days = Computations.transformToBooleanArray(alarmDays);
 
         Calendar timeA = Calendar.getInstance();
-        int nowDay = timeA.get(Calendar.DAY_OF_WEEK);
         timeA.setTime(alarmTime);
         timeA.set(Calendar.YEAR, now.get(Calendar.YEAR));
         timeA.set(Calendar.MONTH, now.get(Calendar.MONTH));
         timeA.set(Calendar.DAY_OF_MONTH, now.get(Calendar.DAY_OF_MONTH));
-        now.set(Calendar.DAY_OF_WEEK, nowDay);
-        int dayOfWeek = getDayOfWeek(transformToBooleanArray(alarmDays),now,timeA);
-        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
+
+        getDayOfWeek(transformToBooleanArray(alarmDays),now,timeA);
+//        now.set(Calendar.DAY_OF_WEEK, dayOfWeek);
         now.set(Calendar.MINUTE, timeA.get(Calendar.MINUTE));
         now.set(Calendar.HOUR_OF_DAY, timeA.get(Calendar.HOUR_OF_DAY));
         now.set(Calendar.SECOND, 0);
@@ -306,6 +347,16 @@ public class Computations {
 //        }
 //        Toast.makeText(context, sb, Toast.LENGTH_LONG).show();
         return true;
+    }
+
+    public static void cancelAllAlarms(Activity act){
+        RealmResults<Alarm> alarms = Realm.getDefaultInstance().where(Alarm.class).findAll();
+        for(Alarm a: alarms){
+            Intent myIntent = new Intent(act.getApplicationContext(), AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(act.getApplicationContext(), a.getPrimaryKey(),
+                    myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+            pendingIntent.cancel();
+        }
     }
 
 }

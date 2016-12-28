@@ -83,9 +83,12 @@ public class LoginSplashScreen extends Activity {
         setContentView(R.layout.activity_login_splash_sceen);
 
         Realm.init(getApplicationContext());
-        SharedPreferences prefs = getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
-        prefs.edit().putBoolean(FinalVariables.LOGGED_IN, true).apply();
 
+        SharedPreferences prefs = getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
+        if(!prefs.getBoolean(FinalVariables.LOGGED_IN, false)) {
+            prefs.edit().putBoolean(FinalVariables.LOGGED_IN, true).apply();
+            prefs.edit().putString(FinalVariables.EMAIL, getIntent().getStringExtra(FinalVariables.EMAIL)).apply();
+        }
         View view2 = findViewById(R.id.utotLogo);
 
         mHandler.postDelayed(new StartMainActivityRunnable(this, findViewById(R.id.quoteLay), view2), QUOTE_DISPLAY_LENGTH);

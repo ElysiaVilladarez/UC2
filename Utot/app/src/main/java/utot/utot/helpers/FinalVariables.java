@@ -29,6 +29,9 @@ public class FinalVariables {
     public final static SimpleDateFormat triggeredFormat = new SimpleDateFormat("hh:mm\na");
 
     public final static SimpleDateFormat serverDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+    public final static SimpleDateFormat serverDateFormat2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+    public final static SimpleDateFormat brodcastDateFormat = new SimpleDateFormat("MMM-dd-yyyy hh:mm");
 
 
     public static final String PREFS_NAME = "CheckingVersion";
@@ -45,5 +48,6 @@ public class FinalVariables {
     public final static String FIRST_NAME = "first_name";
     public final static String LAST_NAME = "last_name";
     public final static String EMAIL = "email";
+
 
 }

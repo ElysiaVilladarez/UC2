@@ -49,6 +49,7 @@
 
     <utot.utot.customviews.ButtonPlus
         android:id="@+id/shareButton"
+        android:layout_width="wrap_content"
         android:layout_margin="8dp"
         android:background="@drawable/fb_login_button"
         android:drawableStart="@mipmap/fb_icon"

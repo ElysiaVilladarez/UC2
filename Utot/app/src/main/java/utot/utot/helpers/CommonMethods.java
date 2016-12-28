@@ -1,6 +1,7 @@
 package utot.utot.helpers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -19,6 +20,7 @@ import java.util.Date;
 import utot.utot.R;
 import utot.utot.alarm.RingtoneDialog;
 import utot.utot.alarm.TabbedAlarm;
+import utot.utot.poem.PoemAdapter;
 
 /**
  * Created by elysi on 12/22/2016.
@@ -285,4 +287,5 @@ public class CommonMethods {
 
         return i;
     }
+
 }

@@ -19,8 +19,10 @@ import java.util.concurrent.ThreadLocalRandom;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.customobjects.Alarm;
+import utot.utot.customobjects.BrodcastDelete;
 import utot.utot.customobjects.Picture;
 import utot.utot.customobjects.Poem;
+import utot.utot.settings.Brodcast;
 
 /**
  * Created by elysi on 12/22/2016.
@@ -170,14 +172,42 @@ public class CreateObjects {
         return alarm;
     }
 
-    public static Poem createPoem(int pk, String poemMessage, String bg){
+    public static BrodcastDelete createBrodDelete(int pk){
+        Realm realm = Realm.getDefaultInstance();
+        BrodcastDelete delete;
+        realm.beginTransaction();
+        delete = realm.createObject(BrodcastDelete.class);
+        delete.setId(pk);
+        realm.commitTransaction();
+
+        return delete;
+    }
+    public static Poem createPoem(int pk, String poemMessage, String bg, int status){
         Realm realm = Realm.getDefaultInstance();
         Poem poem;
         realm.beginTransaction();
         poem = realm.createObject(Poem.class);
         poem.setPrimaryKey(pk);
         poem.setPoem(poemMessage);
-        poem.setStatus(FinalVariables.POEM_NOT_SHOWN);
+        poem.setStatus(status);
+        Picture pic = null;
+        if(!bg.trim().isEmpty()) {
+            pic = realm.where(Picture.class).equalTo("resourceName", bg).findFirst();
+        }
+        poem.setPic(pic);
+        realm.commitTransaction();
+
+        return poem;
+    }
+    public static Poem createPoem(int pk, String poemMessage, String bg, Date dateAdded, int status){
+        Realm realm = Realm.getDefaultInstance();
+        Poem poem;
+        realm.beginTransaction();
+        poem = realm.createObject(Poem.class);
+        poem.setPrimaryKey(pk);
+        poem.setPoem(poemMessage);
+        poem.setDateAdded(dateAdded);
+        poem.setStatus(status);
         Picture pic = null;
         if(!bg.trim().isEmpty()) {
             pic = realm.where(Picture.class).equalTo("resourceName", bg).findFirst();
@@ -188,15 +218,27 @@ public class CreateObjects {
         return poem;
     }
 
-    public static Poem getRandomPoem(){
+    public static Poem createBrodcast(int pk, String poemMessage, Date date){
+        System.out.println("CHECK: creating brodcast="+ pk + ", "+poemMessage+", "+date);
         Realm realm = Realm.getDefaultInstance();
-        int randomNum;
-        int randomNumPic;
-        RealmResults<Poem> poemList = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_NOT_SHOWN).findAll();
+        Poem poem;
+        Picture pic = getRandomPicture(realm);
+        realm.beginTransaction();
+        poem = realm.createObject(Poem.class);
+        poem.setPrimaryKey(pk);
+        poem.setPoem(poemMessage);
+        poem.setStatus(FinalVariables.POEM_BRODCAST);
+        poem.setDateAdded(date);
+        poem.setPic(pic);
+        pic.setIsUsed(true);
+        realm.commitTransaction();
+
+        return poem;
+    }
+    public static Picture getRandomPicture(Realm realm){
         RealmResults<Picture> picList = realm.where(Picture.class).equalTo("isUsed", false).findAll();
-        int count = poemList.size();
         int picCount = picList.size();
-        System.out.println("CHECK: count="+count+ " picCount="+picCount);
+        int randomNumPic;
         if(picCount <=0){
             picList = realm.where(Picture.class).findAll();
             realm.beginTransaction();
@@ -205,18 +247,34 @@ public class CreateObjects {
             }
             realm.commitTransaction();
             picCount = picList.size();
-            
+
         }
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            randomNum = ThreadLocalRandom.current().nextInt(0, count);
-            randomNumPic = ThreadLocalRandom.current().nextInt(0, picCount);
+            randomNumPic = ThreadLocalRandom.current().nextInt(1, picCount)-1;
+        } else{
+            Random rand = new Random();
+            randomNumPic = rand.nextInt(picCount);
+        }
+
+
+        Picture pic = picList.get(randomNumPic);
+
+        return pic;
+    }
+    public static Poem getRandomPoem(){
+        Realm realm = Realm.getDefaultInstance();
+        int randomNum;
+        RealmResults<Poem> poemList = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_NOT_SHOWN).findAll();
+        int count = poemList.size();
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            randomNum = ThreadLocalRandom.current().nextInt(1, count)-1;
         } else{
             Random rand = new Random();
             randomNum = rand.nextInt(count);
-            randomNumPic = rand.nextInt(picCount);
         }
         Poem poem = poemList.get(randomNum);
-        Picture pic = picList.get(randomNumPic);
+        Picture pic = getRandomPicture(realm);
 
         realm.beginTransaction();
         poem.setPic(pic);

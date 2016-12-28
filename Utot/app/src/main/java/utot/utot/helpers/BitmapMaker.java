@@ -109,87 +109,93 @@ public class BitmapMaker {
         int permission = ContextCompat.checkSelfPermission(act, Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
         if (permission == PackageManager.PERMISSION_GRANTED) {
-            Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(displayimg, displayimg.getWidth(), displayimg.getWidth());
-            String filename = Integer.toString(pk);
-            BitmapMaker.saveBitmap(bitmap1, filename, root);
+                fn_share_short(pk, callbackManager, act, loginButton, displayimg, root);
+        } else{
+            checkWriteExternalStoragePermission(act);
+//            fn_share_short(pk, callbackManager, act, loginButton, displayimg, root);
+        }
 
-            FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
+    }
+
+    public static void fn_share_short(int pk, CallbackManager callbackManager, final Activity act, LoginButton loginButton,
+                                      View displayimg, String root){
+        Bitmap bitmap1 = BitmapMaker.loadBitmapFromView(displayimg, displayimg.getWidth(), displayimg.getWidth());
+        String filename = Integer.toString(pk);
+        BitmapMaker.saveBitmap(bitmap1, filename, root);
+
+        FacebookCallback<Sharer.Result> shareCallback = new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Intent goToMain = new Intent(act, TabbedAlarm.class);
+                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SHARE);
+                act.startActivity(goToMain);
+                act.overridePendingTransition(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+                act.finish();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(act, "Sharing attempt canceled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(act, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                System.out.println("CHECK: " + error.getMessage());
+
+            }
+        };
+
+        File file = new File(root + File.separator + FinalVariables.FOLDER_NAME, filename + ".jpg");
+
+        System.out.println("CHECK: abspath=" + file.getAbsolutePath() + "pk=" + pk );
+        Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
+        SharePhoto photo = new SharePhoto.Builder()
+                .setBitmap(bmp)
+                .build();
+        content = new SharePhotoContent.Builder()
+                .addPhoto(photo)
+                .build();
+
+
+        shareDialog = new ShareDialog(act);
+        shareDialog.registerCallback(callbackManager, shareCallback);
+        if (AccessToken.getCurrentAccessToken() == null) {
+            System.out.println("CHECK: LOG IN NEEDED");
+
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
-                public void onSuccess(Sharer.Result result) {
-                    Intent goToMain = new Intent(act, TabbedAlarm.class);
-                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SHARE);
-                    act.startActivity(goToMain);
-                    act.overridePendingTransition(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
-                    act.finish();
-                }
-
-                @Override
-                public void onCancel() {
-                    Toast.makeText(act, "Sharing attempt canceled", Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    Toast.makeText(act, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                    System.out.println("CHECK: " + error.getMessage());
-
-                }
-            };
-
-            File file = new File(root + File.separator + FinalVariables.FOLDER_NAME, filename + ".jpg");
-
-            System.out.println("CHECK: abspath=" + file.getAbsolutePath() + "pk=" + pk );
-            Bitmap bmp = BitmapFactory.decodeFile(file.getAbsolutePath());
-            SharePhoto photo = new SharePhoto.Builder()
-                    .setBitmap(bmp)
-                    .build();
-            content = new SharePhotoContent.Builder()
-                    .addPhoto(photo)
-                    .build();
-
-
-            shareDialog = new ShareDialog(act);
-            shareDialog.registerCallback(callbackManager, shareCallback);
-            if (AccessToken.getCurrentAccessToken() == null) {
-                System.out.println("CHECK: LOG IN NEEDED");
-
-                loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        //              "User ID: "
+                public void onSuccess(LoginResult loginResult) {
+                    //              "User ID: "
 //                        + loginResult.getAccessToken().getUserId()
 //                        + "\n" +
 //                        "Auth Token: "
 //                        + loginResult.getAccessToken().getToken()
-                        if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
-                            LoginManager.getInstance().logInWithPublishPermissions(act,
-                                    Arrays.asList("publish_actions"));
-                        }
-
-                        checkFBApp(act);
-
+                    if (!AccessToken.getCurrentAccessToken().getPermissions().contains("publish_actions")) {
+                        LoginManager.getInstance().logInWithPublishPermissions(act,
+                                Arrays.asList("publish_actions"));
                     }
 
-                    @Override
-                    public void onCancel() {
-                        Toast.makeText(act, "Login attempt cancelled", Toast.LENGTH_SHORT).show();
-                    }
+                    checkFBApp(act);
 
-                    @Override
-                    public void onError(FacebookException e) {
-                        Toast.makeText(act, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
 
-                    }
-                });
+                @Override
+                public void onCancel() {
+                    Toast.makeText(act, "Login attempt cancelled", Toast.LENGTH_SHORT).show();
+                }
 
-                loginButton.performClick();
+                @Override
+                public void onError(FacebookException e) {
+                    Toast.makeText(act, "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
 
-            } else {
-                checkFBApp(act);
-            }
+                }
+            });
 
-        } else{
-            checkWriteExternalStoragePermission(act);
+            loginButton.performClick();
+
+        } else {
+            checkFBApp(act);
         }
 
     }

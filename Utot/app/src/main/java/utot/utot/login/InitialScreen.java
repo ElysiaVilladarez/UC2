@@ -42,7 +42,7 @@ public class InitialScreen extends AppCompatActivity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_initial_screen);
 
-        Realm.init(getApplicationContext());
+        Realm.init(this.getApplicationContext());
         AccessToken facebookAccessToken = AccessToken.getCurrentAccessToken();
         boolean sessionExpired;
         if(facebookAccessToken != null){
@@ -72,6 +72,8 @@ public class InitialScreen extends AppCompatActivity {
             if (!Settings.canDrawOverlays(this)) {
                 checkDrawOverlayPermission();
             }
+        } else{
+            requestGranted = true;
         }
         register.setOnClickListener(new View.OnClickListener() {
             @Override

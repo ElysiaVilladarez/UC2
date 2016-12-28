@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.RingtoneManager;
 import android.os.AsyncTask;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
+
+import com.facebook.login.LoginManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -32,9 +35,11 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+import utot.utot.helpers.CheckInternet;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.CreateObjects;
 import utot.utot.helpers.FinalVariables;
+import utot.utot.helpers.LoginCommon;
 import utot.utot.login.LoginSplashScreen;
 import utot.utot.register.RegisterActivity;
 
@@ -42,7 +47,7 @@ import utot.utot.register.RegisterActivity;
  * Created by elysi on 12/26/2016.
  */
 
-public class RegisterTask extends AsyncTask<Void, Void, Integer> {
+public class RegisterTask extends AsyncTask<Void, Void, String> {
     private String username, password, fbId, fname, lname;
     private Context c;
     private String registerLink = "http://utotcatalog.technotrekinc.com/z_registration.php";
@@ -72,44 +77,44 @@ public class RegisterTask extends AsyncTask<Void, Void, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(Void... params) {
-        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
-        urlParameters.add(new BasicNameValuePair("fbId", fbId));
-        urlParameters.add(new BasicNameValuePair("email", username));
-        urlParameters.add(new BasicNameValuePair("password", password));
-        urlParameters.add(new BasicNameValuePair("fname", fname));
-        urlParameters.add(new BasicNameValuePair("lname", lname));
+    protected String doInBackground(Void... params) {
+        if(CheckInternet.hasActiveInternetConnection(act)) {
+            List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
+            urlParameters.add(new BasicNameValuePair("fbId", fbId));
+            urlParameters.add(new BasicNameValuePair("email", username));
+            urlParameters.add(new BasicNameValuePair("password", password));
+            urlParameters.add(new BasicNameValuePair("fname", fname));
+            urlParameters.add(new BasicNameValuePair("lname", lname));
 //        urlParameters.add(new BasicNameValuePair("deviceToken", "12345"));
 
 
-        HttpClient client = new DefaultHttpClient();
-        HttpPost post = new HttpPost();
-        HttpResponse response;
-        String json;
-        JSONObject req = null;
-        String success = "";
+            HttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost();
+            HttpResponse response;
+            String json;
+            JSONObject req = null;
+            String success = "";
 
-        try {
-            post.setURI(new URI(registerLink));
-            post.setEntity(new UrlEncodedFormEntity(urlParameters));
-            response = client.execute(post);
-            json = EntityUtils.toString(response.getEntity());
-            req = new JSONObject(json);
-            success = req.getString("result");
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            try {
+                post.setURI(new URI(registerLink));
+                post.setEntity(new UrlEncodedFormEntity(urlParameters));
+                response = client.execute(post);
+                json = EntityUtils.toString(response.getEntity());
+                req = new JSONObject(json);
+                success = req.getString("result");
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-        int successInt = 0;
-        if (!success.trim().isEmpty()) {
-            successInt = 1;
-            System.out.println("CHECK: Successfully registered!");
+            if (success.equals("success")) {
+
+                System.out.println("CHECK: Successfully registered!");
 //            try {
 //
 //            } catch (JSONException e) {
@@ -117,25 +122,31 @@ public class RegisterTask extends AsyncTask<Void, Void, Integer> {
 //            } catch (ParseException e) {
 //                e.printStackTrace();
 //            }
-        } else{
-            successInt = 0;
-        }
+            }
 
-        return successInt;
+            return success;
+        } else{
+            return "";
+        }
     }
 
     @Override
-    protected void onPostExecute(Integer result) {
+    protected void onPostExecute(String result) {
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        if(result==1){
+        if(result.equals("success")){
+
             Intent next = new Intent(act, LoginSplashScreen.class);
+            next.putExtra(FinalVariables.EMAIL, username);
             act.startActivity(next);
             act.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             act.finish();
-        } else {
-            Toast.makeText(act,"An error has occured.", Toast.LENGTH_SHORT).show();
+        } else if(result.trim().isEmpty()){
+            LoginCommon.noInternetDialog(act);
+        } else{
+            LoginManager.getInstance().logOut();
+            Toast.makeText(act,result, Toast.LENGTH_SHORT).show();
 
         }
 

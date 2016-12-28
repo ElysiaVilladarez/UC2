@@ -36,8 +36,15 @@ public class ClickPoem extends AppCompatActivity {
                 return false;
             }
         });
-        Poem setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded").
-                get(getIntent().getIntExtra("POEM_POS", 0));
+        int status = getIntent().getIntExtra("STATUS", 0);
+        Poem setPoem;
+        if(status==FinalVariables.POEM_SAVE){
+            setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded").
+                    get(getIntent().getIntExtra("POEM_POS", 0));
+        } else{
+            setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_BRODCAST).
+                    findAll().get(getIntent().getIntExtra("POEM_POS", 0));
+        }
         TextViewPlus poem = (TextViewPlus) findViewById(R.id.poem);
         ImageView bg = (ImageView)findViewById(R.id.backgroundPic);
 

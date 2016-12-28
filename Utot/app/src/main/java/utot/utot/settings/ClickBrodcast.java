@@ -1,9 +1,6 @@
-package utot.utot.poem;
+package utot.utot.settings;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.percent.PercentRelativeLayout;
@@ -15,31 +12,31 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.login.widget.LoginButton;
-import com.facebook.share.model.SharePhotoContent;
-import com.facebook.share.widget.ShareDialog;
 
 import java.util.Calendar;
 
 import io.realm.Realm;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
+import utot.utot.customobjects.BrodcastDelete;
 import utot.utot.customobjects.OnSwipeListener;
 import utot.utot.customobjects.Poem;
-import utot.utot.customobjects.PoemPicture;
 import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.BitmapMaker;
 import utot.utot.helpers.CreateObjects;
 import utot.utot.helpers.FinalVariables;
-import utot.utot.settings.ClickBrodcast;
+import utot.utot.poem.ShowPoems;
 
 /**
- * Created by elysi on 12/16/2016.
+ * Created by elysi on 12/28/2016.
  */
-public class ShowPoems extends AppCompatActivity {
+
+public class ClickBrodcast extends AppCompatActivity {
 
     private TextViewPlus poem;
     private PercentRelativeLayout displayImg;
@@ -50,8 +47,9 @@ public class ShowPoems extends AppCompatActivity {
 
     private RelativeLayout.LayoutParams rParams;
 
-    private Poem randomPoem;
+    private Poem brodcastPoem;
 
+    private Intent goToMain;
 
 
     @Override
@@ -70,16 +68,21 @@ public class ShowPoems extends AppCompatActivity {
 
         realm = Realm.getDefaultInstance();
 
-        randomPoem = CreateObjects.getRandomPoem();
+        brodcastPoem = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_BRODCAST).
+                findAll().get(getIntent().getIntExtra("POEM_POS", 0));
+
+//        realm.beginTransaction();
+//        brodcastPoem.setPic(CreateObjects.getRandomPicture(realm));
+//        realm.commitTransaction();
 
         displayImg = (PercentRelativeLayout) findViewById(R.id.poemAndImage);
         rParams = (RelativeLayout.LayoutParams) displayImg.getLayoutParams();
 
         poem = (TextViewPlus) findViewById(R.id.poem);
-        ImageView bg = (ImageView) findViewById(R.id.backgroundPic);
+        ImageView bg = (ImageView)findViewById(R.id.backgroundPic);
 
-        CreateObjects.setPoemDisplay(this, poem, bg, randomPoem);
-        final Intent goToMain = new Intent(ShowPoems.this, TabbedAlarm.class);
+        CreateObjects.setPoemDisplay(this, poem, bg, brodcastPoem);
+        goToMain = new Intent(this, Brodcast.class);
 
         mGestureDetector = new GestureDetector(this, new OnSwipeListener(displayImg) {
             @Override
@@ -89,38 +92,41 @@ public class ShowPoems extends AppCompatActivity {
                 if (d == Direction.down) {
 
                     realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_DISCARD);
+                    brodcastPoem.setStatus(FinalVariables.POEM_DISCARD);
                     realm.commitTransaction();
 
-                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
-                    ShowPoems.this.startActivity(goToMain);
-                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                    ShowPoems.this.finish();
+                    CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
+
+                    ClickBrodcast.this.startActivity(goToMain);
+                    ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
+                    ClickBrodcast.this.finish();
 
                     return true;
                 } else if (d == Direction.left) {
-
                     realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_SAVE);
-                    randomPoem.setDateAdded(Calendar.getInstance().getTime());
+                    brodcastPoem.setStatus(FinalVariables.POEM_SAVE);
+                    brodcastPoem.setDateAdded(Calendar.getInstance().getTime());
                     realm.commitTransaction();
 
-                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
-                    ShowPoems.this.startActivity(goToMain);
-                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                    ShowPoems.this.finish();
+                    CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
+
+
+                    ClickBrodcast.this.startActivity(goToMain);
+                    ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                    ClickBrodcast.this.finish();
 
                     return true;
 
                 } else if (d == Direction.right) {
 
                     realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_SHARE);
+                    brodcastPoem.setStatus(FinalVariables.POEM_SHARE);
                     realm.commitTransaction();
 
+                    CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
 
                     String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    BitmapMaker.fn_share(randomPoem.getPrimaryKey(), callbackManager, ShowPoems.this, (LoginButton) findViewById(R.id.login_fb),
+                    BitmapMaker.fn_share(brodcastPoem.getPrimaryKey(), callbackManager, ClickBrodcast.this, (LoginButton)findViewById(R.id.login_fb),
                             displayImg, root);
 
 
@@ -209,15 +215,16 @@ public class ShowPoems extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_SAVE);
-                randomPoem.setDateAdded(Calendar.getInstance().getTime());
+                brodcastPoem.setStatus(FinalVariables.POEM_SAVE);
+                brodcastPoem.setDateAdded(Calendar.getInstance().getTime());
                 realm.commitTransaction();
 
-                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
+                CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
 
-                ShowPoems.this.startActivity(goToMain);
-                ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                ShowPoems.this.finish();
+
+                ClickBrodcast.this.startActivity(goToMain);
+                ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+                ClickBrodcast.this.finish();
 
 
             }
@@ -227,13 +234,14 @@ public class ShowPoems extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_DISCARD);
+                brodcastPoem.setStatus(FinalVariables.POEM_DISCARD);
                 realm.commitTransaction();
 
-                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
-                ShowPoems.this.startActivity(goToMain);
-                ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                ShowPoems.this.finish();
+                CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
+
+                ClickBrodcast.this.startActivity(goToMain);
+                ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
+                ClickBrodcast.this.finish();
             }
         });
 
@@ -241,11 +249,13 @@ public class ShowPoems extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_SHARE);
+                brodcastPoem.setStatus(FinalVariables.POEM_SHARE);
                 realm.commitTransaction();
 
+                CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
+
                 String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                BitmapMaker.fn_share(randomPoem.getPrimaryKey(), callbackManager, ShowPoems.this, (LoginButton) findViewById(R.id.login_fb),
+                BitmapMaker.fn_share(brodcastPoem.getPrimaryKey(), callbackManager, ClickBrodcast.this, (LoginButton) findViewById(R.id.login_fb),
                         displayImg, root);
 
             }
@@ -260,5 +270,11 @@ public class ShowPoems extends AppCompatActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @Override
+    public void onBackPressed(){
+        ClickBrodcast.this.startActivity(goToMain);
+        ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
+        ClickBrodcast.this.finish();
+    }
 
 }

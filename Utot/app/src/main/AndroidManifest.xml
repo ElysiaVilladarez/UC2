@@ -4,9 +4,13 @@
     package="utot.utot">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.VIBRATE" />
@@ -51,6 +55,10 @@
             android:name=".alarm.TabbedAlarm"
             android:label="@string/title_activity_tabbed_alarm" />
         <activity android:name=".poem.ClickPoem" />
+        <activity android:name=".settings.Brodcast"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
+            android:label="bRODcast"/>
+        <activity android:name=".settings.ClickBrodcast" />
         <activity android:name=".login.LoginSplashScreen" />
         <activity android:name=".alarm.CreatingAlarmActivity" />
         <activity android:name=".alarm.EditingAlarmActivity" />

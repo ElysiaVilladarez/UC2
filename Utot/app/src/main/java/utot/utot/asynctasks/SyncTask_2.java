@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,13 +41,13 @@ import utot.utot.helpers.CheckInternet;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.FinalVariables;
 import utot.utot.helpers.LoginCommon;
-import utot.utot.login.LoginSplashScreen;
+import utot.utot.login.LoginActivity;
 
 /**
- * Created by elysi on 12/22/2016.
+ * Created by elysi on 12/28/2016.
  */
 
-public class SyncTask extends AsyncTask<Void, Void, String> {
+public class SyncTask_2 extends AsyncTask<Void, Void, String> {
     private String username;
     private Context c;
     private String syncLink = "http://utotcatalog.technotrekinc.com/z_sync.php";
@@ -54,7 +55,7 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
     private static ProgressDialog progressDialog;
     private Activity act;
 
-    public SyncTask(Context c, Activity act, String username) {
+    public SyncTask_2(Context c, Activity act, String username) {
         this.username = username;
         this.c = c;
         this.act = act;
@@ -177,12 +178,30 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        if (result.contains("success")) {
+        if(result.contains("success")){
             Toast.makeText(act, "Successfully synced data!", Toast.LENGTH_SHORT).show();
-        } else if (result.trim().isEmpty()) {
+            LoginManager.getInstance().logOut();
+
+            Computations.cancelAllAlarms(act);
+
+            Realm realm = Realm.getDefaultInstance();
+            realm.beginTransaction();
+            realm.delete(Poem.class);
+            realm.delete(Alarm.class);
+            realm.commitTransaction();
+            SharedPreferences prefs = act.getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
+            prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
+            prefs.edit().putString(FinalVariables.EMAIL, "").apply();
+
+            act.startActivity(new Intent(act, LoginActivity.class));
+            act.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+            act.finish();
+
+        } else if (result.trim().isEmpty()){
             LoginCommon.noInternetDialog(act);
-        } else {
-            Toast.makeText(act, result, Toast.LENGTH_SHORT).show();
+        } else{
+
+            Toast.makeText(act,result, Toast.LENGTH_SHORT).show();
 
         }
 

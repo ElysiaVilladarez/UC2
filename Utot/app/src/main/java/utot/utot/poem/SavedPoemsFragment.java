@@ -13,6 +13,7 @@ import com.facebook.CallbackManager;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
 import utot.utot.customobjects.Poem;
@@ -42,7 +43,7 @@ public class SavedPoemsFragment extends Fragment {
         TextView noPoemsText = (TextView) rootView.findViewById(R.id.noPoemsText);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded");
+        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.ASCENDING);
 
 
         if(poems.size() <= 0){
@@ -58,7 +59,7 @@ public class SavedPoemsFragment extends Fragment {
 
 
             poemList.setHasFixedSize(true);
-            poemList.setAdapter(new PoemAdapter(poems,getActivity(), TabbedAlarm.callbackManager));
+            poemList.setAdapter(new PoemAdapter(poems,getActivity(), TabbedAlarm.callbackManager, FinalVariables.POEM_SAVE));
 
         }
 

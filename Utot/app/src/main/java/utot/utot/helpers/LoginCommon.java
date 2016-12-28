@@ -1,6 +1,8 @@
 package utot.utot.helpers;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -39,16 +41,17 @@ public class LoginCommon {
                     public void onCompleted(JSONObject object, GraphResponse response) {
                         // Get facebook data from login
                         Bundle bFacebookData = getFacebookData(object);
-                        if(isLoggingIn){
-                            new LoginTask(act.getApplicationContext(), act, bFacebookData.getString(FinalVariables.EMAIL),
-                                    bFacebookData.getString(FinalVariables.FB_ID));
-                        } else{
-                            new RegisterTask(act.getApplicationContext(), act,
-                                    bFacebookData.getString(FinalVariables.EMAIL), bFacebookData.getString(FinalVariables.FB_ID),
-                                    bFacebookData.getString(FinalVariables.FB_ID),
-                                    bFacebookData.getString(FinalVariables.FIRST_NAME),
-                                    bFacebookData.getString(FinalVariables.LAST_NAME)).execute();
-                        }
+                            if (isLoggingIn) {
+                                new LoginTask(act.getBaseContext(), act, bFacebookData.getString(FinalVariables.EMAIL),
+                                        bFacebookData.getString(FinalVariables.FB_ID)).execute();
+                            } else {
+                                new RegisterTask(act.getBaseContext(), act,
+                                        bFacebookData.getString(FinalVariables.EMAIL), bFacebookData.getString(FinalVariables.FB_ID),
+                                        bFacebookData.getString(FinalVariables.FB_ID),
+                                        bFacebookData.getString(FinalVariables.FIRST_NAME),
+                                        bFacebookData.getString(FinalVariables.LAST_NAME)).execute();
+                            }
+
                     }
                 });
                 Bundle parameters = new Bundle();
@@ -92,5 +95,18 @@ public class LoginCommon {
             Log.d("ErrorParsing","Error parsing JSON");
         }
         return null;
+    }
+
+    public static void noInternetDialog(Activity act){
+        new AlertDialog.Builder(act)
+                .setTitle("No internet connection")
+                .setMessage("Please connect to the internet to proceed")
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        dialog.dismiss();
+                    }
+                }).show();
     }
 }

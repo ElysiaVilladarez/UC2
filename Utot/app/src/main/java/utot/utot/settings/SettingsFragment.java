@@ -2,10 +2,12 @@ package utot.utot.settings;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,19 @@ import com.facebook.login.LoginManager;
 
 import io.realm.Realm;
 import utot.utot.R;
+import utot.utot.asynctasks.BrodcastTask;
+import utot.utot.asynctasks.SyncTask;
+import utot.utot.asynctasks.SyncTask_2;
 import utot.utot.customobjects.Alarm;
 import utot.utot.customobjects.Poem;
+import utot.utot.helpers.CheckInternet;
+import utot.utot.helpers.Computations;
 import utot.utot.helpers.FinalVariables;
+import utot.utot.helpers.LoginCommon;
 import utot.utot.login.LoginActivity;
 
 public class SettingsFragment extends Fragment {
-
+private SharedPreferences prefs;
     public static SettingsFragment newInstance() {
         SettingsFragment fragment = new SettingsFragment();
         Bundle args = new Bundle();
@@ -51,9 +59,12 @@ public class SettingsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_settings, container,false);
         Glide.with(getActivity()).load(R.mipmap.utotlogo1).into((ImageView)rootView.findViewById(R.id.logo));
 
+        prefs = getActivity().getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
+
         rootView.findViewById(R.id.bRODcastButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    new BrodcastTask(getContext(), getActivity(), prefs.getString(FinalVariables.EMAIL, ""), false).execute();
 
             }
         });
@@ -61,6 +72,9 @@ public class SettingsFragment extends Fragment {
         rootView.findViewById(R.id.syncButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                    new SyncTask(getActivity().getBaseContext(), getActivity(),
+                            prefs.getString(FinalVariables.EMAIL, "")).execute();
+
 
             }
         });
@@ -75,20 +89,41 @@ public class SettingsFragment extends Fragment {
         rootView.findViewById(R.id.logOutButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginManager.getInstance().logOut();
+                new android.app.AlertDialog.Builder(getActivity())
+                        .setTitle("Syncing")
+                        .setMessage("Do you want to sync your data first before logging out?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                    new SyncTask_2(getActivity().getBaseContext(), getActivity(),
+                                            prefs.getString(FinalVariables.EMAIL, "")).execute();
+                                    dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton("NO", new DialogInterface.OnClickListener() {
 
-                Realm realm = Realm.getDefaultInstance();
-                realm.beginTransaction();
-                realm.delete(Poem.class);
-                realm.delete(Alarm.class);
-                realm.commitTransaction();
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                LoginManager.getInstance().logOut();
 
-                SharedPreferences prefs = getActivity().getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
-                prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
+                                Computations.cancelAllAlarms(getActivity());
 
-                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
-                getActivity().finish();
+                                Realm realm = Realm.getDefaultInstance();
+                                realm.beginTransaction();
+                                realm.delete(Poem.class);
+                                realm.delete(Alarm.class);
+                                realm.commitTransaction();
+
+                                prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
+                                prefs.edit().putString(FinalVariables.EMAIL, "").apply();
+
+                                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                                getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                                getActivity().finish();
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
+
             }
         });
         return rootView;

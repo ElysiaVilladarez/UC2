@@ -37,6 +37,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
     private RealmResults<Poem> poems;
 	private static Activity act;
     private CallbackManager callbackManager;
+    private int status;
  
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView poemView;
@@ -64,15 +65,17 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         public void onClick(View v) {
             Intent clicked = new Intent(act, ClickPoem.class);
             clicked.putExtra("POEM_POS", getAdapterPosition());
+            clicked.putExtra("STATUS", status);
             act.startActivity(clicked);
         }
     }
  
  
-    public PoemAdapter(RealmResults<Poem> poems, Activity act, CallbackManager callbackManager) {
+    public PoemAdapter(RealmResults<Poem> poems, Activity act, CallbackManager callbackManager, int status) {
         this.poems = poems;
 		this.act = act;
         this.callbackManager = callbackManager;
+        this.status = status;
     }
  
     @Override
@@ -101,14 +104,17 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
                                                    public void onClick(View view) {
                                                        new AlertDialog.Builder(act)
                                                                .setTitle("Deleting Poem")
-                                                               .setMessage("Do you really want to delete this poem from your saved poems?")
+                                                               .setMessage("Do you really want to delete this poem?")
                                                                .setIcon(android.R.drawable.ic_dialog_alert)
                                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                                                                    public void onClick(DialogInterface dialog, int whichButton) {
 
                                                                        realm.beginTransaction();
-                                                                       poem.setStatus(FinalVariables.POEM_NOT_SHOWN);
+                                                                       if(status==FinalVariables.POEM_SAVE) {
+                                                                           poem.setStatus(FinalVariables.POEM_NOT_SHOWN);
+                                                                       }
+                                                                       poem.getPic().setIsUsed(false);
                                                                        realm.commitTransaction();
 
                                                                        PoemAdapter.this.notifyDataSetChanged();

@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -54,11 +55,18 @@ public class TabbedAlarm extends AppCompatActivity {
         } else if(action == FinalVariables.POEM_SHARE){
             Toast.makeText(this, "Poem shared successfully!", Toast.LENGTH_SHORT).show();
         }
-        cur = 1; // currently in alarmFragment
-
+        cur = getIntent().getIntExtra("TABBED", 1);
+        Fragment display;
+        if(cur==2){
+            display = SettingsFragment.newInstance();
+        } else if(cur==1){
+            display = AlarmFragment.newInstance();
+        } else{
+            display = SavedPoemsFragment.newInstance();
+        }
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, AlarmFragment.newInstance());
+        transaction.replace(R.id.container, display);
         transaction.commit();
 
 

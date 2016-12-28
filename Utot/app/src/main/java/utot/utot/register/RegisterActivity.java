@@ -17,8 +17,11 @@ import com.facebook.login.widget.LoginButton;
 import java.util.Arrays;
 
 import utot.utot.R;
+import utot.utot.asynctasks.CheckingStart;
 import utot.utot.asynctasks.RegisterTask;
 import utot.utot.customviews.ButtonPlus;
+import utot.utot.helpers.CheckInternet;
+import utot.utot.helpers.CommonMethods;
 import utot.utot.helpers.LoginCommon;
 import utot.utot.login.LoginActivity;
 import utot.utot.login.LoginSplashScreen;
@@ -47,7 +50,7 @@ public class RegisterActivity extends Activity {
         registerButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                registerButton.performClick();
+                    registerButton.performClick();
             }
         });
 
@@ -64,17 +67,17 @@ public class RegisterActivity extends Activity {
         findViewById(R.id.registerButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //check confirm password
                 String username = ((EditText)findViewById(R.id.username)).getText().toString().trim();
                 String password = ((EditText)findViewById(R.id.password)).getText().toString().trim();
                 String confirmPassword = ((EditText)findViewById(R.id.confirmPassword)).getText().toString().trim();
-                //additionally, check if username or phone already exists in the database
-                if(password.equals(confirmPassword)) {
-                    new RegisterTask(getApplicationContext(), RegisterActivity.this, username, password, "", "","");
-                } else if(username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
+
+                if(username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()){
                     Toast.makeText(getApplicationContext(), "Please fill up the necessary fields", Toast.LENGTH_SHORT).show();
                 }else if (!password.equals(confirmPassword)){
-                    Toast.makeText(getApplicationContext(), "Please confirm password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Confirm password does not match", Toast.LENGTH_SHORT).show();
+                }else if(password.equals(confirmPassword)) {
+                        new RegisterTask(getBaseContext(), RegisterActivity.this,
+                                username, password, "", "", "").execute();
                 }
             }
         });
