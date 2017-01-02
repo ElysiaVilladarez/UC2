@@ -50,6 +50,13 @@ public class ClickPoem extends AppCompatActivity {
 
         CreateObjects.setPoemDisplay(this, poem, bg, setPoem);
 
+        findViewById(R.id.exit).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 //        ScaleGestureDetector SGD;
 //        SGD = new ScaleGestureDetector(this,new ScaleListener());
     }

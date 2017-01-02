@@ -221,7 +221,6 @@ public class ClickBrodcast extends AppCompatActivity {
 
                 CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
 
-
                 ClickBrodcast.this.startActivity(goToMain);
                 ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
                 ClickBrodcast.this.finish();

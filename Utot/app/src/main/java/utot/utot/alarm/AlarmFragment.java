@@ -49,6 +49,7 @@ public class AlarmFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 AlarmFragment.this.getActivity().startActivity(new Intent(AlarmFragment.this.getActivity(), CreatingAlarmActivity.class));
+                AlarmFragment.this.getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 AlarmFragment.this.getActivity().finish();
 
             }

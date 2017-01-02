@@ -21,6 +21,7 @@ import java.util.Date;
 
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.ActionBarMaker;
 import utot.utot.helpers.CommonMethods;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.CreateObjects;
@@ -109,7 +110,9 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
         weekendsButton.setOnClickListener(cM.weekendsButtonOnClick());
 
-        findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
+//        findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
+        ActionBarMaker.makeActionBar(this, "Create Alarm", cM.cancellButtonOnClick());
+
         ImageButton saveAlarm = (ImageButton)findViewById(R.id.saveAlarmButton);
         saveAlarm.setImageResource(R.mipmap.ic_alarm_on_white_36dp);
         saveAlarm.setOnClickListener(new View.OnClickListener() {
@@ -124,6 +127,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
 
                     Computations.makeAlarm(CreatingAlarmActivity.this, alarm, Calendar.getInstance());
                     CreatingAlarmActivity.this.startActivity(new Intent(CreatingAlarmActivity.this, TabbedAlarm.class));
+                    CreatingAlarmActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     CreatingAlarmActivity.this.finish();
 
                 } else{

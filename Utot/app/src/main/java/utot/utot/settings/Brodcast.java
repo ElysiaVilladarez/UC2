@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.facebook.CallbackManager;
@@ -18,6 +19,7 @@ import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
 import utot.utot.asynctasks.BrodcastTask;
 import utot.utot.customobjects.Poem;
+import utot.utot.helpers.ActionBarMaker;
 import utot.utot.helpers.FinalVariables;
 import utot.utot.poem.PoemAdapter;
 
@@ -29,6 +31,18 @@ public class Brodcast extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_brodcast);
+
+        ImageButton exit = (ImageButton)findViewById(R.id.exit);
+
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent goToMain = new Intent(Brodcast.this, TabbedAlarm.class);
+                goToMain.putExtra("TABBED", 2);
+                Brodcast.this.startActivity(goToMain);
+                Brodcast.this.finish();
+            }
+        });
 
         brodcastList = (RecyclerView)findViewById(R.id.brodcastList);
         TextView noBrodcastText = (TextView) findViewById(R.id.noBrodcastText);

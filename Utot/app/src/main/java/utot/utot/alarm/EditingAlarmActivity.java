@@ -20,6 +20,7 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.R;
 import utot.utot.customobjects.Alarm;
+import utot.utot.helpers.ActionBarMaker;
 import utot.utot.helpers.CommonMethods;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.CreateObjects;
@@ -111,7 +112,10 @@ public class EditingAlarmActivity extends AppCompatActivity {
 
         weekendsButton.setOnClickListener(cM.weekendsButtonOnClick());
 
-        findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
+//        findViewById(R.id.cancelButton).setOnClickListener(cM.cancellButtonOnClick());
+
+        ActionBarMaker.makeActionBar(this, "Edit Alarm", cM.cancellButtonOnClick());
+
         ImageButton saveAlarm = (ImageButton)findViewById(R.id.saveAlarmButton);
         saveAlarm.setImageResource(R.mipmap.ic_done_white_36dp);
         saveAlarm.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +131,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
                     Computations.makeAlarm(EditingAlarmActivity.this, alarm, Calendar.getInstance());
 
                     EditingAlarmActivity.this.startActivity(new Intent(EditingAlarmActivity.this, TabbedAlarm.class));
+                    EditingAlarmActivity.this.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     EditingAlarmActivity.this.finish();
 
                 } else{

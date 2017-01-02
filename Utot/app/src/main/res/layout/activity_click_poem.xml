@@ -6,6 +6,8 @@
     android:id="@+id/zoomLayout"
     android:background="#000000"
     android:layout_height="match_parent">
+
+
 <android.support.percent.PercentRelativeLayout android:id="@+id/poemAndImage"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,4 +33,13 @@
         app:layout_aspectRatio="100%" />
 
 </android.support.percent.PercentRelativeLayout>
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_clear_white_36dp"
+        android:background="@android:color/transparent"
+        android:layout_alignParentEnd="true"
+        android:id="@id/exit"
+        android:layout_margin="3dp"/>
     </utot.utot.customviews.ZoomLayout>

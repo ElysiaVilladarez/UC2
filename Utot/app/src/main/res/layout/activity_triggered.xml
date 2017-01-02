@@ -29,6 +29,7 @@
         <utot.utot.customviews.TextViewPlus
             style="@style/pangram_regular"
             android:id="@+id/time"
+            android:textColor="@color/whiteLogIn"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

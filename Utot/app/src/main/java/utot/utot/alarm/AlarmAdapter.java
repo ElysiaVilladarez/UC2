@@ -56,6 +56,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
             Intent edits = new Intent(act, EditingAlarmActivity.class);
             edits.putExtra("POS", getAdapterPosition());
             act.startActivity(edits);
+            act.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             act.finish();
         }
     }

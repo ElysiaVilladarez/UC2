@@ -40,23 +40,22 @@
     <ImageButton
         android:layout_margin="8dp"
         android:id="@+id/deleteButton"
-        android:layout_alignParentBottom="true"
         android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
         android:layout_width="28dp"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_delete_forever_white_36dp"/>
 
-    <utot.utot.customviews.ButtonPlus
+    <ImageButton
         android:id="@+id/shareButton"
+        android:scaleType="fitXY"
         android:layout_width="wrap_content"
         android:layout_margin="8dp"
-        android:background="@drawable/fb_login_button"
-        android:drawableStart="@mipmap/fb_icon"
-        android:textAllCaps="false"
-        android:text="Share"
-        android:layout_alignParentEnd="true"
-        app:layout_aspectRatio="250%"
+        android:layout_toStartOf="@id/deleteButton"
+        android:background="@android:color/transparent"
+        android:src="@mipmap/ic_share_white_36dp"
+        app:layout_aspectRatio="100%"
         android:layout_height="31dp"/>
 
 

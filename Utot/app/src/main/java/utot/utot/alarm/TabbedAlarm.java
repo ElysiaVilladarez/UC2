@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -23,6 +24,8 @@ import com.facebook.CallbackManager;
 
 import io.realm.Realm;
 import utot.utot.R;
+import utot.utot.customviews.TextViewPlus;
+import utot.utot.helpers.ActionBarMaker;
 import utot.utot.helpers.BitmapMaker;
 import utot.utot.helpers.FinalVariables;
 import utot.utot.poem.SavedPoemsFragment;
@@ -34,6 +37,7 @@ public class TabbedAlarm extends AppCompatActivity {
     private ImageButton savedPoemsButton, alarmButton, settingsButton;
     private FragmentManager manager;
     private FragmentTransaction transaction;
+    private TextViewPlus titleText;
     private int cur;
 
     @Override
@@ -43,6 +47,12 @@ public class TabbedAlarm extends AppCompatActivity {
         Realm.init(getApplicationContext());
 
         setContentView(R.layout.activity_tabbed_alarm);
+
+        Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        setSupportActionBar(toolbar);
+
+        titleText = (TextViewPlus)toolbar.findViewById(R.id.actTitle);
+
         Glide.with(this).load(R.mipmap.ic_import_contacts_black_36dp).into((ImageButton) findViewById(R.id.savedPoemsButton));
         Glide.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
         Glide.with(this).load(R.mipmap.ic_settings_black_36dp).into((ImageButton) findViewById(R.id.settingsButton));
@@ -59,10 +69,13 @@ public class TabbedAlarm extends AppCompatActivity {
         Fragment display;
         if(cur==2){
             display = SettingsFragment.newInstance();
+            titleText.setText("Settings");
         } else if(cur==1){
             display = AlarmFragment.newInstance();
+            titleText.setText("Alarms");
         } else{
             display = SavedPoemsFragment.newInstance();
+            titleText.setText("Saved Poems");
         }
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
@@ -83,13 +96,16 @@ public class TabbedAlarm extends AppCompatActivity {
                 if(cur!=0) {
                     callbackManager = CallbackManager.Factory.create();
                     transaction = manager.beginTransaction();
-                   // transaction.setCustomAnimations(R.anim.left_to_right_slide_slow, R.anim.right_to_left_slide_slow);
-                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                    transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+//                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
                     transaction.commit();
 
                     changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
                     cur = 0;
+
+
+                    titleText.setText("Saved Poems");
                 }
             }
         });
@@ -100,18 +116,19 @@ public class TabbedAlarm extends AppCompatActivity {
                 if(cur!=1) {
                     transaction = manager.beginTransaction();
                     if(cur==2) {
-                      //  transaction.setCustomAnimations(R.anim.left_to_right_slide_slow, R.anim.right_to_left_slide_slow);
-                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                        transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+//                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                     if(cur==0) {
-                      //  transaction.setCustomAnimations(R.anim.pull_in_right_slow, R.anim.push_out_left_slow);
-                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                        transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+//                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                     transaction.replace(R.id.container, AlarmFragment.newInstance());
                     transaction.commit();
 
                     changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
 
+                    titleText.setText("Alarms");
                     cur = 1;
                 }
             }
@@ -124,13 +141,16 @@ public class TabbedAlarm extends AppCompatActivity {
                 // Go to SettingsFragment
                 if(cur!=2) {
                     transaction = manager.beginTransaction();
-                   // transaction.setCustomAnimations(R.anim.pull_in_right_slow, R.anim.push_out_left_slow);
-                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+                    transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+//                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
                     transaction.replace(R.id.container, SettingsFragment.newInstance());
                     transaction.commit();
 
                     changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
                     cur =2;
+
+
+                    titleText.setText("Settings");
                 }
             }
         });

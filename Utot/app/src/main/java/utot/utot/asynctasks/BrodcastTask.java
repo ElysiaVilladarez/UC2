@@ -47,7 +47,7 @@ import utot.utot.settings.Brodcast;
 public class BrodcastTask extends AsyncTask<Void, Void, String> {
     private String username;
     private Context c;
-    private String brodLink = " http://utotcatalog.technotrekinc.com/z_announcement_list.php";
+    private String brodLink = "http://utotcatalog.technotrekinc.com/z_announcement_list.php";
 //    private String brodLink = "http://utotcatalog.technotrekinc.com/z_announcement_list.php?email=alvincrisuy@gmail.com";
     private static ProgressDialog progressDialog;
     private Activity act;
@@ -81,19 +81,20 @@ public class BrodcastTask extends AsyncTask<Void, Void, String> {
             Realm realm  = Realm.getDefaultInstance();
             RealmResults<BrodcastDelete> brodcastPoemsDiscarded = realm.where(BrodcastDelete.class).findAll();
 
-            System.out.println("CHECK: DELETE COUNT="+ brodcastPoemsDiscarded.size());
 
             for(BrodcastDelete p: brodcastPoemsDiscarded){
                 deletedAnnouncements+="{" + Integer.toString(p.getId()) + "}";
             }
 
+            System.out.println("CHECK: DELETEDAn=" + deletedAnnouncements);
 
             realm.beginTransaction();
             realm.delete(BrodcastDelete.class);
             realm.commitTransaction();
 
-            brodLink += "?email=" + username + "&deletedAnnouncements=" + deletedAnnouncements;
-            System.out.println("CHECK: DELETEDAN="+ brodLink);
+            brodLink += "?email=" + username;
+            if(brodcastPoemsDiscarded.size()> 0)  brodLink += "&deletedAnnouncements=" + deletedAnnouncements;
+
 
             HttpClient client = new DefaultHttpClient();
             HttpGet request = new HttpGet();
@@ -120,17 +121,18 @@ public class BrodcastTask extends AsyncTask<Void, Void, String> {
 
 
             if (success.equals("success")) {
+                System.out.println("CHECK: SUCCESS");
+                RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_BRODCAST).findAll();
+                realm.beginTransaction();
+                poems.deleteAllFromRealm();
+                realm.commitTransaction();
                 try {
                     JSONArray brodcast_list = req.getJSONArray("announcement_list");
 
                     for (int i = 0; i < brodcast_list.length(); i++) {
                         JSONObject brod = brodcast_list.getJSONObject(i);
-                        int count = (int) realm.where(Poem.class).equalTo("status", FinalVariables.POEM_BRODCAST)
-                                .equalTo("primaryKey", Integer.parseInt(brod.getString("id"))).count();
-                        if(count <=0) {
-                            CreateObjects.createBrodcast(Integer.parseInt(brod.getString("id")), brod.getString("hugotshort"),
+                        CreateObjects.createBrodcast(Integer.parseInt(brod.getString("id")), brod.getString("hugotshort"),
                                     FinalVariables.serverDateFormat2.parse(brod.getString("date")));
-                        }
 
                     }
                 } catch (JSONException e) {

@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import java.util.ArrayList;
+
 import utot.utot.R;
 
 /**
@@ -21,7 +23,7 @@ public class RingtoneDialog extends Dialog {
 
     private Context c;
     private RingtoneManager ringtoneManager;
-    private Uri[] alarms;
+    private ArrayList<Uri> alarms;
     private Ringtone r;
     public static RadioGroup group;
     public static Button doneButton;
@@ -34,7 +36,20 @@ public class RingtoneDialog extends Dialog {
 
         this.c = context;
         setContentView(R.layout.dialog_ringtone);
-        setTitle("Ringtones");
+
+        ringtoneManager = new RingtoneManager(context);
+
+        alarms = new ArrayList<>();
+
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_01));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_02));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_03));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_04));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_05));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_06));
+        alarms.add(Uri.parse("android.resource://"+context.getPackageName()+"/" + R.raw.fart_07));
+
+        getDefaultAlarms();
 
         doneButton = (Button) findViewById(R.id.doneButton);
         doneButton.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +67,7 @@ public class RingtoneDialog extends Dialog {
                 ringtoneManager.stopPreviousRingtone();
 
                 int index = group.indexOfChild(findViewById(group.getCheckedRadioButtonId()));
-                ringtoneName = alarms[index].toString();
+                ringtoneName = alarms.get(index).toString();
                 ringtonePos = index;
 
                 dismiss();
@@ -60,21 +75,25 @@ public class RingtoneDialog extends Dialog {
         });
 
 
-        ringtoneManager = new RingtoneManager(context);
         group = (RadioGroup)findViewById(R.id.radioRingtone);
-        alarms = getDefaultAlarms();
 
 
-        final int alarmCount = alarms.length;
-        for(int i=0; i <alarmCount; i++){
+        final int alarmCount = alarms.size();
+        for(int i=0; i <7; i++){
             RadioButton ringtone = new RadioButton(context);
-            ringtone.setText(RingtoneManager.getRingtone(context, alarms[i]).getTitle(context));
+            ringtone.setText("Fart " + Integer.toString(i));
+            ringtone.setPadding(10,10,10,10);
+            group.addView(ringtone);
+        }
+        for(int i=7; i <alarmCount; i++){
+            RadioButton ringtone = new RadioButton(context);
+            ringtone.setText(RingtoneManager.getRingtone(context, alarms.get(i)).getTitle(context));
             ringtone.setPadding(10,10,10,10);
             group.addView(ringtone);
         }
 
-        this.ringtonePos = rPos;
-        this.ringtoneName = rName;
+        ringtonePos = rPos;
+        ringtoneName = rName;
         group.check(group.getChildAt(ringtonePos).getId());
 //        if(ringtoneName == null || ringtoneName.trim().isEmpty()) {
 //            ringtoneName = alarms[0].toString();
@@ -97,8 +116,9 @@ public class RingtoneDialog extends Dialog {
                 }
                 View radioButton = group.findViewById(i);
                 int index = group.indexOfChild(radioButton);
-                r = RingtoneManager.getRingtone(c, alarms[index]);
-                ringtoneName = alarms[index].toString();
+                Uri alarm = alarms.get(index);
+                r = RingtoneManager.getRingtone(c, alarm);
+                ringtoneName = alarm.toString();
                 ringtonePos = index;
                 r.play();
             }
@@ -121,20 +141,18 @@ public class RingtoneDialog extends Dialog {
     }
 
 
-    public Uri[] getDefaultAlarms(){
+    public void getDefaultAlarms(){
         ringtoneManager.setType(RingtoneManager.TYPE_ALARM);
         Cursor alarmsCursor = ringtoneManager.getCursor();
         int alarmsCount = alarmsCursor.getCount();
         if (alarmsCount == 0 && !alarmsCursor.moveToFirst()) {
-            return null;
+
         }
-        Uri[] alarms = new Uri[alarmsCount];
         while(!alarmsCursor.isAfterLast() && alarmsCursor.moveToNext()) {
             int currentPosition = alarmsCursor.getPosition();
-            alarms[currentPosition] = ringtoneManager.getRingtoneUri(currentPosition);
+            alarms.add(ringtoneManager.getRingtoneUri(currentPosition));
 
         }
         alarmsCursor.close();
-        return alarms;
     }
 }

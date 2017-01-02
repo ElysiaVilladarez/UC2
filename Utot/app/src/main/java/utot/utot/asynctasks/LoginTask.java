@@ -130,12 +130,13 @@ public class LoginTask extends AsyncTask<Void, Void, String> {
                     for (int i = 0; i < localhugot_list.length(); i++) {
                         JSONObject poem = localhugot_list.getJSONObject(i);
                         int id = Integer.parseInt(poem.getString("id"));
-                        int count = (int)Realm.getDefaultInstance().where(Poem.class).equalTo("primaryKey", id).count();
-                        if(count <=0) {
+                        String poemShort = poem.getString("short");
+                        int count = (int)Realm.getDefaultInstance().where(Poem.class).equalTo("poem", poemShort).count();
+                        if(count > 0) {
                             CreateObjects.getLocalPoems(id, poem.getString("photo"),
                                     FinalVariables.serverDateFormat.parse(poem.getString("date")));
                         } else{
-                            CreateObjects.createPoem(id, poem.getString("short"), poem.getString("photo"),
+                            CreateObjects.createPoem(id, poemShort, poem.getString("photo"),
                                     FinalVariables.serverDateFormat.parse(poem.getString("date")), FinalVariables.POEM_SAVE);
                         }
                     }

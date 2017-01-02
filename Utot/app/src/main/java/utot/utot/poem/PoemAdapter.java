@@ -43,7 +43,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
         public TextView poemView;
 		public ImageView backgroundPic;
         public ImageButton deleteButton;
-        public ButtonPlus shareButton;
+        public ImageButton shareButton;
         public LoginButton loginButton;
         public PercentRelativeLayout displayImg;
         public ViewHolder(View view) {
@@ -52,7 +52,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
             poemView = (TextView) view.findViewById(R.id.poem);
 			backgroundPic = (ImageView) view.findViewById(R.id.backgroundPic);
             deleteButton = (ImageButton) view.findViewById(R.id.deleteButton);
-            shareButton = (ButtonPlus) view.findViewById(R.id.shareButton);
+            shareButton = (ImageButton) view.findViewById(R.id.shareButton);
             displayImg = (PercentRelativeLayout) view.findViewById(R.id.displayImg);
             loginButton = (LoginButton) view.findViewById(R.id.login_fb);
 

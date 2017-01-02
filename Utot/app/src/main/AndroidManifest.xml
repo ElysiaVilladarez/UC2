@@ -35,8 +35,7 @@
             android:authorities="com.facebook.app.FacebookContentProvider1762860773966518"
             android:exported="true" />
 
-        <activity android:name=".login.InitialScreen"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+        <activity android:name=".login.InitialScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,7 +55,6 @@
             android:label="@string/title_activity_tabbed_alarm" />
         <activity android:name=".poem.ClickPoem" />
         <activity android:name=".settings.Brodcast"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:label="bRODcast"/>
         <activity android:name=".settings.ClickBrodcast" />
         <activity android:name=".login.LoginSplashScreen" />

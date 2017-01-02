@@ -9,26 +9,34 @@
     android:scrollbars="vertical"
     tools:context="utot.utot.alarm.EditingAlarmActivity">
 
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY"
+        android:scaleType="centerCrop"
         android:tint="@color/bg_tint_gen"
         android:src="@mipmap/bg_alarm_add" />
 
+    <FrameLayout android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+    <include layout="@layout/custom_action_bar" />
+    </FrameLayout>
+
     <android.support.percent.PercentRelativeLayout
+        android:layout_below="@id/toolbar"
         android:id="@+id/timePicker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:clickable="true"
-        app:layout_marginTopPercent="6%">
+        android:layout_marginTop="7dp"
+        android:clickable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            app:layout_heightPercent="17%" />
+            app:layout_heightPercent="14%" />
 
         <utot.utot.customviews.TextViewPlus
             style="@style/avenir_book"
@@ -179,32 +187,33 @@
 
     </android.support.percent.PercentRelativeLayout>
 
-    <android.support.percent.PercentRelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/week"
-        android:layout_centerHorizontal="true"
-        android:gravity="center"
-        app:layout_marginTopPercent="4%">
+    <!--<android.support.percent.PercentRelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+ <!---->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:gravity="center">-->
 
-        <ImageButton
-            android:id="@+id/cancelButton"
-            android:layout_width="@dimen/circle_button_size_big"
-            android:background="@drawable/round_buttons_3"
-            android:padding="13dp"
-            android:scaleType="fitXY"
-            android:src="@mipmap/ic_clear_white_36dp"
-            app:layout_aspectRatio="100%"
-            app:layout_marginRightPercent="20%" />
+        <!--<ImageButton-->
+            <!--android:id="@+id/cancelButton"-->
+            <!--android:layout_width="@dimen/circle_button_size_big"-->
+            <!--android:background="@drawable/round_buttons_3"-->
+            <!--android:padding="13dp"-->
+            <!--android:scaleType="fitXY"-->
+            <!--android:src="@mipmap/ic_clear_white_36dp"-->
+            <!--app:layout_aspectRatio="100%"-->
+            <!--app:layout_marginRightPercent="20%" />-->
 
         <ImageButton
             android:id="@+id/saveAlarmButton"
             android:layout_width="@dimen/circle_button_size_big"
-            android:layout_toRightOf="@id/cancelButton"
             android:background="@drawable/round_buttons_3"
             android:padding="13dp"
             android:scaleType="fitXY"
-            app:layout_aspectRatio="100%" />
-    </android.support.percent.PercentRelativeLayout>
+            android:layout_below="@id/week"
+            android:layout_centerHorizontal="true"
+            app:layout_aspectRatio="100%"
+            app:layout_marginTopPercent="4%" />
+    <!--</android.support.percent.PercentRelativeLayout>-->
 
 </android.support.percent.PercentRelativeLayout>
