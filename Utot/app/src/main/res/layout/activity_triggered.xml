@@ -20,21 +20,33 @@
         android:id="@+id/timeIndicate"
         android:layout_height="0dp"
         android:gravity="center"
-        app:layout_heightPercent="67%">
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/utotLogo"/>
+        app:layout_heightPercent="80%">
 
         <utot.utot.customviews.TextViewPlus
             style="@style/pangram_regular"
             android:id="@+id/time"
+            android:text="10:00\nPM"
             android:textColor="@color/whiteLogIn"
             android:layout_centerInParent="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="45sp" />
+
+        <ImageView
+            android:layout_width="150dp"
+            app:layout_aspectRatio="100%"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/time"
+            android:id="@+id/utotLogo"
+            android:src="@mipmap/hearts"/>
+
+        <ImageView
+            android:layout_width="150dp"
+            app:layout_aspectRatio="100%"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/time"
+            android:src="@mipmap/hearts_180"/>
 
         <!--<utot.utot.customviews.TextViewPlus-->
             <!--android:layout_width="match_parent"-->
@@ -48,9 +60,9 @@
     <android.support.percent.PercentRelativeLayout
         android:layout_below="@id/timeIndicate"
         android:layout_height="0dp"
-        android:gravity="center"
+        android:gravity="top|center"
         android:layout_width="match_parent"
-        app:layout_heightPercent="33%">
+        app:layout_heightPercent="20%">
         <utot.utot.customviews.ButtonPlus
             android:id="@+id/sleepButton"
             style="@style/Alarm_Function_Buttons"

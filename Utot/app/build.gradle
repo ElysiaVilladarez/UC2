@@ -18,7 +18,7 @@ android {
         config {
             keyAlias 'android'
             keyPassword 'android'
-            storeFile file('C:/Users/elysi/.android/debug.keystore')
+            storeFile file('C:/Users/iyese/.android/debug.keystore')
             storePassword 'android'
         }
     }
@@ -58,14 +58,12 @@ dependencies {
     compile 'com.wdullaer:materialdatetimepicker:3.0.0'
     compile 'com.kyleduo.switchbutton:library:1.4.4'
     compile 'com.facebook.android:facebook-android-sdk:4.6.0'
-
     compile files('libs/htmlunit-2.19.jar')
     compile files('libs/htmlunit-core-js-2.17.jar')
     compile files('libs/httpclient-4.5.1.jar')
     compile files('libs/httpcore-4.4.3.jar')
     compile files('libs/httpmime-4.5.1.jar')
-
-//    compile files('libs/ksoap2-android-assembly-2.4-jar-with-dependencies.jar')
-//    compile 'com.lorentzos.swipecards:library:1.0.9'
-  //  compile 'com.scalified:viewmover:1.1.1'
+    //    compile files('libs/ksoap2-android-assembly-2.4-jar-with-dependencies.jar')
+    //    compile 'com.lorentzos.swipecards:library:1.0.9'
+    //  compile 'com.scalified:viewmover:1.1.1'
 }

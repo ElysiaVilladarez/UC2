@@ -8,9 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 
@@ -36,7 +39,8 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     private int ringtonePos;
     private ToggleButton[] daysToggle;
     private ToggleButton everydayButton, weekendsButton, weekdaysButton;
-    Calendar mcurrentTime;
+    private ImageView timeAMP;
+    private Calendar mcurrentTime;
 
     private CommonMethods cM;
 
@@ -44,6 +48,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_creating_alarm);
+
 
         final ImageButton ringtoneButton = (ImageButton) findViewById(R.id.ringtoneButton);
         vibrateSwitch = (CheckBox) findViewById(R.id.vibrateButton);
@@ -53,6 +58,7 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         weekdaysButton = (ToggleButton) findViewById(R.id.weekdaysButton);
 
         timeSet = (TextView) findViewById(R.id.time);
+        timeAMP = (ImageView) findViewById(R.id.time_am_pm);
 
         daysToggle = new ToggleButton[7];
         daysToggle[0] = (ToggleButton) findViewById(R.id.mondButton);
@@ -64,22 +70,16 @@ public class CreatingAlarmActivity extends AppCompatActivity {
         daysToggle[6] = (ToggleButton) findViewById(R.id.sunButton);
 
         cM = new CommonMethods(CreatingAlarmActivity.this,everydayButton, weekendsButton, weekdaysButton, daysToggle,
-                repeatingSwitch);
-
-
+                repeatingSwitch, timeAMP);
 
         mcurrentTime = Calendar.getInstance();
 
         daysToggle[cM.setDayOfWeek(mcurrentTime)].setChecked(true);
-//        String amp;
-//        if (mcurrentTime.get(Calendar.AM_PM) == Calendar.AM) {
-//            amp = "AM";
-//        } else {
-//            amp = "PM";
-//        }
+
+        cM.setTimeAMP(mcurrentTime);
 
         String time = FinalVariables.timeAMPM.format(mcurrentTime.getTime());
-        timeSet.setText(time);
+        timeSet.setText(time.substring(0, 5));
 
         try {
             alarmTime = FinalVariables.timeAMPM.parse(time);

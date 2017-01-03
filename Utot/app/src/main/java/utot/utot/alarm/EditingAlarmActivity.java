@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -36,7 +37,8 @@ public class EditingAlarmActivity extends AppCompatActivity {
     private CheckBox repeatingSwitch;
     private String ringtoneText;
     private int ringtonePos;
-    Calendar mcurrentTime;
+    private ImageView timeAMP;
+    private Calendar mcurrentTime;
 
     private CommonMethods cM;
 
@@ -51,6 +53,7 @@ public class EditingAlarmActivity extends AppCompatActivity {
         repeatingSwitch = (CheckBox) findViewById(R.id.isRepeating);
 
         timeSet = (TextView) findViewById(R.id.time);
+        timeAMP = (ImageView) findViewById(R.id.time_am_pm);
 
         everydayButton = (ToggleButton) findViewById(R.id.everydayButton);
         weekendsButton = (ToggleButton) findViewById(R.id.weekendsButton);
@@ -66,18 +69,21 @@ public class EditingAlarmActivity extends AppCompatActivity {
         daysToggle[5] = (ToggleButton) findViewById(R.id.satButton);
         daysToggle[6] = (ToggleButton) findViewById(R.id.sunButton);
 
-        cM = new CommonMethods(EditingAlarmActivity.this, everydayButton, weekendsButton, weekdaysButton, daysToggle, repeatingSwitch);
+        cM = new CommonMethods(EditingAlarmActivity.this, everydayButton, weekendsButton, weekdaysButton, daysToggle, repeatingSwitch, timeAMP);
+
 
         cM.setToggleButtonTypeface();
 
         RealmResults<Alarm> alarms = Realm.getDefaultInstance().where(Alarm.class).findAllAsync();
         alarm = alarms.get(getIntent().getIntExtra("POS", 0));
+        alarmTime = alarm.getAlarmTime();
 
         mcurrentTime = Calendar.getInstance();
-        mcurrentTime.setTime(alarm.getAlarmTime());
+        mcurrentTime.setTime(alarmTime);
 
-        timeSet.setText(FinalVariables.timeAMPM.format(alarm.getAlarmTime()));
-        alarmTime = alarm.getAlarmTime();
+        timeSet.setText(FinalVariables.timeAMPM.format(alarmTime).substring(0, 5));
+
+        cM.setTimeAMP(alarmTime);
 
         findViewById(R.id.timePicker).setOnClickListener(cM.makeTimePickerDialog(mcurrentTime, timeSet, alarmTime));
 

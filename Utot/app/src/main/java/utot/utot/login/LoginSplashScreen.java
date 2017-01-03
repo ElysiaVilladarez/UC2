@@ -89,7 +89,7 @@ public class LoginSplashScreen extends Activity {
             prefs.edit().putBoolean(FinalVariables.LOGGED_IN, true).apply();
             prefs.edit().putString(FinalVariables.EMAIL, getIntent().getStringExtra(FinalVariables.EMAIL)).apply();
         }
-        View view2 = findViewById(R.id.utotLogo);
+        View view2 = findViewById(R.id.logo);
 
         mHandler.postDelayed(new StartMainActivityRunnable(this, findViewById(R.id.quoteLay), view2), QUOTE_DISPLAY_LENGTH);
     }

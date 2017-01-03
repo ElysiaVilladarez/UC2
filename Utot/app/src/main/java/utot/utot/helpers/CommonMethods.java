@@ -8,9 +8,11 @@ import android.graphics.Typeface;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+import com.bumptech.glide.Glide;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.ParseException;
@@ -32,6 +34,7 @@ public class CommonMethods {
     private ToggleButton[] daysToggle;
     private CheckBox repeatingSwitch;
     private Activity act;
+    private ImageView timeAMP;
 
     public Date alarmTime;
     public String ringtoneText;
@@ -40,36 +43,37 @@ public class CommonMethods {
 
 
     public CommonMethods(Activity act, ToggleButton everydayButton, ToggleButton weekendsButton, ToggleButton weekdaysButton,
-                         ToggleButton[] daysToggle, CheckBox repeatingSwitch) {
+                         ToggleButton[] daysToggle, CheckBox repeatingSwitch, ImageView timeAMP) {
         this.everydayButton = everydayButton;
         this.weekendsButton = weekendsButton;
         this.weekdaysButton = weekdaysButton;
         this.daysToggle = daysToggle;
         this.repeatingSwitch = repeatingSwitch;
+        this.timeAMP = timeAMP;
         this.act = act;
     }
 
-    public int getHour(Calendar mcurrentTime, TextView timeSet) {
-        String time = timeSet.getText().toString();
-        Date date = null;
-        try {
-            date = FinalVariables.timeAMPM.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        mcurrentTime.setTime(date);
+    public int getHour(Calendar mcurrentTime) {
+//        String time = timeSet.getText().toString();
+//        Date date = null;
+//        try {
+//            date = FinalVariables.timeAMPM.parse(time);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        mcurrentTime.setTime(alarmTime);
         return mcurrentTime.get(Calendar.HOUR_OF_DAY);
     }
 
-    public int getMinute(Calendar mcurrentTime, TextView timeSet) {
-        String time = timeSet.getText().toString();
-        Date date = null;
-        try {
-            date = FinalVariables.timeAMPM.parse(time);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        mcurrentTime.setTime(date);
+    public int getMinute(Calendar mcurrentTime) {
+//        String time = timeSet.getText().toString();
+//        Date date = null;
+//        try {
+//            date = FinalVariables.timeAMPM.parse(time);
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+        mcurrentTime.setTime(alarmTime);
         return mcurrentTime.get(Calendar.MINUTE);
     }
 
@@ -106,6 +110,24 @@ public class CommonMethods {
 
     }
 
+    public void setTimeAMP(Date alarmTime){
+        Calendar mcurrentTime = Calendar.getInstance();
+        mcurrentTime.setTime(alarmTime);
+        if (mcurrentTime.get(Calendar.AM_PM) == Calendar.AM) {
+            Glide.with(act).load(R.mipmap.time_picker_am).into(timeAMP);
+        } else {
+            Glide.with(act).load(R.mipmap.time_picker_pm).into(timeAMP);
+        }
+    }
+
+    public void setTimeAMP(Calendar mcurrentTime){
+        if (mcurrentTime.get(Calendar.AM_PM) == Calendar.AM) {
+            Glide.with(act).load(R.mipmap.time_picker_am).into(timeAMP);
+        } else {
+            Glide.with(act).load(R.mipmap.time_picker_pm).into(timeAMP);
+        }
+    }
+
     public View.OnClickListener makeTimePickerDialog(final Calendar mcurrentTime, final TextView timeSet, Date aT) {
         alarmTime = aT;
         return new View.OnClickListener() {
@@ -123,11 +145,12 @@ public class CommonMethods {
                                     e.printStackTrace();
                                 }
 
-                                timeSet.setText(FinalVariables.timeAMPM.format(alarmTime));
+                                timeSet.setText(FinalVariables.timeAMPM.format(alarmTime).substring(0, 5));
+                                setTimeAMP(alarmTime);
                             }
                         },
-                        getHour(mcurrentTime, timeSet),
-                        getMinute(mcurrentTime, timeSet),
+                        getHour(mcurrentTime),
+                        getMinute(mcurrentTime),
                         false);
                 mTimePicker.show(act.getFragmentManager(), "Timepickerdialog");
                 mTimePicker.setTitle("Set Time");

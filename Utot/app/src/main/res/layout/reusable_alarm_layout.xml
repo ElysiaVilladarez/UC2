@@ -24,19 +24,24 @@
     </FrameLayout>
 
     <android.support.percent.PercentRelativeLayout
-        android:layout_below="@id/toolbar"
-        android:id="@+id/timePicker"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="7dp"
         android:clickable="true">
 
         <ImageView
-            android:layout_width="wrap_content"
+            android:layout_width="320dp"
+            android:scaleType="fitXY"
+            android:id="@+id/time_am_pm"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            app:layout_heightPercent="14%" />
+            app:layout_aspectRatio="400%"/>
 
         <utot.utot.customviews.TextViewPlus
             style="@style/avenir_book"
@@ -56,7 +61,7 @@
         android:layout_centerHorizontal="true"
         android:src="@mipmap/ic_music_note_white_36dp"
         app:layout_aspectRatio="100%"
-        app:layout_marginTopPercent="3%" />
+        app:layout_marginTopPercent="2%"/>
 
     <CheckBox
         android:id="@+id/vibrateButton"
@@ -82,7 +87,6 @@
         android:text="Repeat  "
         android:textColor="@color/whiteLogIn"
         android:textSize="15sp"
-        app:layout_marginBottomPercent="1%"
         app:layout_marginTopPercent="3%" />
 
     <android.support.percent.PercentRelativeLayout
@@ -215,5 +219,5 @@
             app:layout_aspectRatio="100%"
             app:layout_marginTopPercent="4%" />
     <!--</android.support.percent.PercentRelativeLayout>-->
-
+    </android.support.percent.PercentRelativeLayout>
 </android.support.percent.PercentRelativeLayout>

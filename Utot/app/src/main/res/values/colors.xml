@@ -49,4 +49,6 @@
     <color name="bg_tint_gen">#40FFFFFF</color>
 
     <color name="trigger_bg_tint">#4DB34B5F</color>
+
+    <color name="am_pm_fill">#C24E5A</color>
 </resources>
