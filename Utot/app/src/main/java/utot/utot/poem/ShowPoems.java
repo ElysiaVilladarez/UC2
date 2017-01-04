@@ -57,8 +57,6 @@ public class ShowPoems extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
         Window wind = getWindow();
         wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
         wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
@@ -66,6 +64,8 @@ public class ShowPoems extends AppCompatActivity {
 
         setContentView(R.layout.activity_show_poems);
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
         Realm.init(getApplicationContext());
 
         realm = Realm.getDefaultInstance();
