@@ -37,6 +37,7 @@ public class FinalVariables {
     public static final String PREFS_NAME = "CheckingVersion";
     public final static String PREF_VERSION_CODE_KEY = "version_code";
     public final static int DOESNT_EXIST = -1;
+    public final static String SLEEP_COUNT = "SC";
 
     public final static int pictureCount = 21;
 

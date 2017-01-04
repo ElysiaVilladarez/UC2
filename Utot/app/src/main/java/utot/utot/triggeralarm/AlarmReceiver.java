@@ -25,8 +25,10 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         trigger.putExtra(FinalVariables.ALARM_IS_REPEATING, intent.getBooleanExtra(FinalVariables.ALARM_IS_REPEATING, false));
         trigger.putExtra(FinalVariables.ALARM_VIBRATE, intent.getBooleanExtra(FinalVariables.ALARM_VIBRATE, false));
         trigger.putExtra(FinalVariables.ALARM_RINGTONE, intent.getStringExtra(FinalVariables.ALARM_RINGTONE));
+        trigger.putExtra(FinalVariables.SLEEP_COUNT, intent.getIntExtra(FinalVariables.SLEEP_COUNT, 0));
 
         trigger.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        trigger.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         context.startActivity(trigger);
     }
 }

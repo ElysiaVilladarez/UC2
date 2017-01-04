@@ -88,19 +88,11 @@ public class LoginActivity extends AppCompatActivity {
         //Help buttons
         final ButtonPlus helpButton = (ButtonPlus) findViewById(R.id.helpCenterButton);
 
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        helpButton.setOnClickListener(LoginCommon.noFeatureAvailableClick(this));
 
         final ButtonPlus forgotButton = (ButtonPlus) findViewById(R.id.forgetPasswordButton);
 
-        forgotButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        forgotButton.setOnClickListener(LoginCommon.noFeatureAvailableClick(this));
     }
 
 

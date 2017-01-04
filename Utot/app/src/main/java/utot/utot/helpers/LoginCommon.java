@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.FacebookCallback;
@@ -97,6 +98,25 @@ public class LoginCommon {
         return null;
     }
 
+    public static View.OnClickListener noFeatureAvailableClick(final Activity act){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new AlertDialog.Builder(act)
+                        .setTitle("Coming soon!")
+                        .setMessage("This feature is not yet available.")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.dismiss();
+                            }
+                        }).show();
+            }
+        };
+
+
+    }
     public static void noInternetDialog(Activity act){
         new AlertDialog.Builder(act)
                 .setTitle("No internet connection")

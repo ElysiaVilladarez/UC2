@@ -62,9 +62,10 @@ public class ShowPoems extends AppCompatActivity {
         wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
         wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
+        System.out.println("CHECK: I HAVE BEEN ACTIVATED!!!");
+        if(!FacebookSdk.isInitialized()) FacebookSdk.sdkInitialize(getApplicationContext());
         setContentView(R.layout.activity_show_poems);
 
-        FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         Realm.init(getApplicationContext());
 

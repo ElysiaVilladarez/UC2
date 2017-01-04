@@ -85,11 +85,7 @@ public class RegisterActivity extends Activity {
         //Help buttons
         final ButtonPlus helpButton = (ButtonPlus)findViewById(R.id.helpCenterButton);
 
-        helpButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        helpButton.setOnClickListener(LoginCommon.noFeatureAvailableClick(this));
 
     }
 
