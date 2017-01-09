@@ -24,7 +24,7 @@ public class LoginSplashScreen extends Activity {
         // 2. Make sure we keep the source Activity as a WeakReference (more on that later)
         private WeakReference mActivity;
         /** Duration of wait **/
-        private final int LOGO_DISPLAY_LENGTH = 800;
+        private final int LOGO_DISPLAY_LENGTH = 1500;
         private View view1, view2;
 
         private StartMainActivityRunnable(Activity activity, View view1, View view2) {

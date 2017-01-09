@@ -101,4 +101,10 @@ public class LoginActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+    @Override
+    public void onBackPressed(){
+        this.startActivity(new Intent(this, InitialScreen.class));
+        this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
+        this.finish();
+    }
 }

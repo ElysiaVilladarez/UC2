@@ -41,6 +41,7 @@ import utot.utot.helpers.CheckInternet;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.FinalVariables;
 import utot.utot.helpers.LoginCommon;
+import utot.utot.login.InitialScreen;
 import utot.utot.login.LoginActivity;
 
 /**
@@ -193,7 +194,7 @@ public class SyncTask_2 extends AsyncTask<Void, Void, String> {
             prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
             prefs.edit().putString(FinalVariables.EMAIL, "").apply();
 
-            act.startActivity(new Intent(act, LoginActivity.class));
+            act.startActivity(new Intent(act, InitialScreen.class));
             act.overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             act.finish();
 

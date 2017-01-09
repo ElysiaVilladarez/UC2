@@ -81,7 +81,7 @@ public class RingtoneDialog extends Dialog {
         final int alarmCount = alarms.size();
         for(int i=0; i <7; i++){
             RadioButton ringtone = new RadioButton(context);
-            ringtone.setText("Fart " + Integer.toString(i));
+            ringtone.setText("Fart " + Integer.toString(i+1));
             ringtone.setPadding(10,10,10,10);
             group.addView(ringtone);
         }

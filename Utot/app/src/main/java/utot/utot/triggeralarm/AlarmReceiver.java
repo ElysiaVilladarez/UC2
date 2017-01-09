@@ -29,6 +29,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 
         trigger.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         trigger.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        trigger.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         context.startActivity(trigger);
     }
 }

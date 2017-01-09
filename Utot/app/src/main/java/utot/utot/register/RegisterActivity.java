@@ -23,6 +23,7 @@ import utot.utot.customviews.ButtonPlus;
 import utot.utot.helpers.CheckInternet;
 import utot.utot.helpers.CommonMethods;
 import utot.utot.helpers.LoginCommon;
+import utot.utot.login.InitialScreen;
 import utot.utot.login.LoginActivity;
 import utot.utot.login.LoginSplashScreen;
 
@@ -92,5 +93,12 @@ public class RegisterActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onBackPressed(){
+        this.startActivity(new Intent(this, InitialScreen.class));
+        this.overridePendingTransition(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+        this.finish();
     }
 }

@@ -52,6 +52,7 @@ public class ShowPoems extends AppCompatActivity {
 
     private Poem randomPoem;
 
+    private ActionMethods actionMethods;
 
 
     @Override
@@ -79,8 +80,17 @@ public class ShowPoems extends AppCompatActivity {
         poem = (TextViewPlus) findViewById(R.id.poem);
         ImageView bg = (ImageView) findViewById(R.id.backgroundPic);
 
+        TextViewPlus saveText = (TextViewPlus)findViewById(R.id.saveButton);
+        TextViewPlus discardText = (TextViewPlus)findViewById(R.id.discardButton);
+        TextViewPlus shareText = (TextViewPlus)findViewById(R.id.shareButton);
+
         CreateObjects.setPoemDisplay(this, poem, bg, randomPoem);
         final Intent goToMain = new Intent(ShowPoems.this, TabbedAlarm.class);
+
+        actionMethods = new ActionMethods(realm, this, goToMain, randomPoem);
+        actionMethods.animateText(saveText);
+        actionMethods.animateText(discardText);
+        actionMethods.animateText(shareText);
 
         mGestureDetector = new GestureDetector(this, new OnSwipeListener(displayImg) {
             @Override
@@ -89,41 +99,18 @@ public class ShowPoems extends AppCompatActivity {
                 callbackManager = CallbackManager.Factory.create();
                 if (d == Direction.down) {
 
-                    realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_DISCARD);
-                    realm.commitTransaction();
-
-                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
-                    ShowPoems.this.startActivity(goToMain);
-                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                    ShowPoems.this.finish();
+                    actionMethods.discardPoem();
 
                     return true;
                 } else if (d == Direction.left) {
 
-                    realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_SAVE);
-                    randomPoem.setDateAdded(Calendar.getInstance().getTime());
-                    realm.commitTransaction();
-
-                    goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
-                    ShowPoems.this.startActivity(goToMain);
-                    ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                    ShowPoems.this.finish();
+                    actionMethods.savePoem();
 
                     return true;
 
                 } else if (d == Direction.right) {
 
-                    realm.beginTransaction();
-                    randomPoem.setStatus(FinalVariables.POEM_SHARE);
-                    realm.commitTransaction();
-
-
-                    String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    BitmapMaker.fn_share(randomPoem.getPrimaryKey(), callbackManager, ShowPoems.this, (LoginButton) findViewById(R.id.login_fb),
-                            displayImg, root);
-
+                   actionMethods.sharePoem(callbackManager, displayImg);
 
                     return true;
                 }
@@ -209,45 +196,21 @@ public class ShowPoems extends AppCompatActivity {
         findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_SAVE);
-                randomPoem.setDateAdded(Calendar.getInstance().getTime());
-                realm.commitTransaction();
-
-                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_SAVE);
-
-                ShowPoems.this.startActivity(goToMain);
-                ShowPoems.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                ShowPoems.this.finish();
-
-
+                actionMethods.savePoem();
             }
         });
 
         findViewById(R.id.discard).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_DISCARD);
-                realm.commitTransaction();
-
-                goToMain.putExtra(FinalVariables.ACTION_DONE, FinalVariables.POEM_DISCARD);
-                ShowPoems.this.startActivity(goToMain);
-                ShowPoems.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                ShowPoems.this.finish();
+                actionMethods.discardPoem();
             }
         });
 
         findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                randomPoem.setStatus(FinalVariables.POEM_SHARE);
-                realm.commitTransaction();
-
-                String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                BitmapMaker.fn_share(randomPoem.getPrimaryKey(), callbackManager, ShowPoems.this, (LoginButton) findViewById(R.id.login_fb),
-                        displayImg, root);
+               actionMethods.sharePoem(callbackManager, displayImg);
 
             }
         });

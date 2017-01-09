@@ -22,6 +22,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.entity.StrictContentLengthStrategy;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
@@ -51,6 +52,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
     private String username, password, fbId, fname, lname;
     private Context c;
     private String registerLink = "http://utotcatalog.technotrekinc.com/z_registration.php";
+    private String hugotlist = "http://utotcatalog.technotrekinc.com/z_hugot_list.php";
     private static ProgressDialog progressDialog;
     private Activity act;
 
@@ -78,7 +80,7 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
-        if(CheckInternet.hasActiveInternetConnection(act)) {
+        if (CheckInternet.hasActiveInternetConnection(act)) {
             List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
             urlParameters.add(new BasicNameValuePair("fbId", fbId));
             urlParameters.add(new BasicNameValuePair("email", username));
@@ -86,7 +88,6 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
             urlParameters.add(new BasicNameValuePair("fname", fname));
             urlParameters.add(new BasicNameValuePair("lname", lname));
 //        urlParameters.add(new BasicNameValuePair("deviceToken", "12345"));
-
 
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost();
@@ -102,6 +103,26 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
                 json = EntityUtils.toString(response.getEntity());
                 req = new JSONObject(json);
                 success = req.getString("result");
+
+
+                if (success.equals("success")) {
+                    HttpGet get = new HttpGet();
+
+                    get.setURI(new URI(hugotlist));
+                    HttpResponse response2 = client.execute(get);
+                    String json2 = EntityUtils.toString(response2.getEntity());
+                    JSONObject req2 = new JSONObject(json2);
+                    String success2 = req2.getString("result");
+
+                    if(success2.equals("success")){
+                        JSONArray hugot_list = req.getJSONArray("hugot_list");
+                        for (int i = 0; i < hugot_list.length(); i++) {
+                            JSONObject poem = hugot_list.getJSONObject(i);
+                            CreateObjects.createPoem(Integer.parseInt(poem.getString("id")), poem.getString("short"),
+                                    poem.getString("photo"), FinalVariables.POEM_NOT_SHOWN);
+                        }
+                    }
+                }
             } catch (URISyntaxException e) {
                 e.printStackTrace();
             } catch (ClientProtocolException e) {
@@ -111,21 +132,8 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            if (success.equals("success")) {
-
-                System.out.println("CHECK: Successfully registered!");
-//            try {
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-            }
-
             return success;
-        } else{
+        } else {
             return "";
         }
     }
@@ -135,18 +143,18 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
         if (progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-        if(result.equals("success")){
+        if (result.equals("success")) {
 
             Intent next = new Intent(act, LoginSplashScreen.class);
             next.putExtra(FinalVariables.EMAIL, username);
             act.startActivity(next);
             act.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             act.finish();
-        } else if(result.trim().isEmpty()){
+        } else if (result.trim().isEmpty()) {
             LoginCommon.noInternetDialog(act);
-        } else{
+        } else {
             LoginManager.getInstance().logOut();
-            Toast.makeText(act,result, Toast.LENGTH_SHORT).show();
+            Toast.makeText(act, result, Toast.LENGTH_SHORT).show();
 
         }
 

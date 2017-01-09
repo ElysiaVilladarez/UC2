@@ -48,6 +48,8 @@ public class TriggeredActivity extends AppCompatActivity {
     private int sleepCount;
 
     private final int snoozeNum = 5;
+
+    private Intent sp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,7 +59,7 @@ public class TriggeredActivity extends AppCompatActivity {
         wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setContentView(R.layout.activity_triggered);
-
+        sp = new Intent(this, ShowPoems.class);
         isClicked = false;
         alarmDays = getIntent().getStringExtra(FinalVariables.ALARM_DATE_SET);
         pk = getIntent().getIntExtra(FinalVariables.ALARM_PRIMARY_KEY, 0);
@@ -161,9 +163,10 @@ public class TriggeredActivity extends AppCompatActivity {
                 }
 
                 isClicked = true;
-                Intent sp = new Intent(TriggeredActivity.this, ShowPoems.class);
+
                 sp.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 sp.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                sp.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 TriggeredActivity.this.startActivity(sp);
                 TriggeredActivity.this.finish();
             }
@@ -195,7 +198,7 @@ public class TriggeredActivity extends AppCompatActivity {
 
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
                     pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-            alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 1 * 60 * 1000, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000, pendingIntent);
             if(sleepCount == snoozeNum)
                 Toast.makeText(this, "Snooze for 5 minutes. Warning: this is the last snooze!", Toast.LENGTH_LONG).show();
             else
@@ -252,6 +255,7 @@ public class TriggeredActivity extends AppCompatActivity {
         }
 
         countOneMinute.removeCallbacks(runnable);
+        finish();
     }
 
 }

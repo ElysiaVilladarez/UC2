@@ -27,6 +27,7 @@ import utot.utot.helpers.CheckInternet;
 import utot.utot.helpers.Computations;
 import utot.utot.helpers.FinalVariables;
 import utot.utot.helpers.LoginCommon;
+import utot.utot.login.InitialScreen;
 import utot.utot.login.LoginActivity;
 
 public class SettingsFragment extends Fragment {
@@ -57,7 +58,7 @@ private SharedPreferences prefs;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_settings, container,false);
-        Glide.with(getActivity()).load(R.mipmap.utotlogo1).into((ImageView)rootView.findViewById(R.id.logo));
+        Glide.with(getActivity()).load(R.mipmap.logo_white).into((ImageView)rootView.findViewById(R.id.logo));
 
         prefs = getActivity().getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
 
@@ -82,7 +83,7 @@ private SharedPreferences prefs;
         rootView.findViewById(R.id.howToButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                getActivity().startActivity(new Intent(getActivity(), HowToActivity.class));
             }
         });
 
@@ -116,7 +117,7 @@ private SharedPreferences prefs;
                                 prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
                                 prefs.edit().putString(FinalVariables.EMAIL, "").apply();
 
-                                getActivity().startActivity(new Intent(getActivity(), LoginActivity.class));
+                                getActivity().startActivity(new Intent(getActivity(), InitialScreen.class));
                                 getActivity().overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
                                 getActivity().finish();
                                 dialog.dismiss();

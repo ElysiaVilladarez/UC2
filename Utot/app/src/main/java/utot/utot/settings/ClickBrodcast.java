@@ -30,6 +30,7 @@ import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.BitmapMaker;
 import utot.utot.helpers.CreateObjects;
 import utot.utot.helpers.FinalVariables;
+import utot.utot.poem.ActionMethods;
 import utot.utot.poem.ShowPoems;
 
 /**
@@ -51,19 +52,16 @@ public class ClickBrodcast extends AppCompatActivity {
 
     private Intent goToMain;
 
+    private ActionMethods actionMethods;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
-        callbackManager = CallbackManager.Factory.create();
-        Window wind = getWindow();
-        wind.addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        wind.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        wind.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
 
         setContentView(R.layout.activity_show_poems);
 
+        callbackManager = CallbackManager.Factory.create();
         Realm.init(getApplicationContext());
 
         realm = Realm.getDefaultInstance();
@@ -78,11 +76,21 @@ public class ClickBrodcast extends AppCompatActivity {
         displayImg = (PercentRelativeLayout) findViewById(R.id.poemAndImage);
         rParams = (RelativeLayout.LayoutParams) displayImg.getLayoutParams();
 
+        TextViewPlus saveText = (TextViewPlus)findViewById(R.id.saveButton);
+        TextViewPlus discardText = (TextViewPlus)findViewById(R.id.discardButton);
+        TextViewPlus shareText = (TextViewPlus)findViewById(R.id.shareButton);
+
         poem = (TextViewPlus) findViewById(R.id.poem);
         ImageView bg = (ImageView)findViewById(R.id.backgroundPic);
 
         CreateObjects.setPoemDisplay(this, poem, bg, brodcastPoem);
         goToMain = new Intent(this, Brodcast.class);
+
+        actionMethods = new ActionMethods(realm, this, goToMain, brodcastPoem);
+
+        actionMethods.animateText(saveText);
+        actionMethods.animateText(discardText);
+        actionMethods.animateText(shareText);
 
         mGestureDetector = new GestureDetector(this, new OnSwipeListener(displayImg) {
             @Override
@@ -91,44 +99,21 @@ public class ClickBrodcast extends AppCompatActivity {
                 callbackManager = CallbackManager.Factory.create();
                 if (d == Direction.down) {
 
-                    realm.beginTransaction();
-                    brodcastPoem.setStatus(FinalVariables.POEM_DISCARD);
-                    realm.commitTransaction();
+                    actionMethods.discardPoem();
 
                     CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
-
-                    ClickBrodcast.this.startActivity(goToMain);
-                    ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                    ClickBrodcast.this.finish();
-
                     return true;
                 } else if (d == Direction.left) {
-                    realm.beginTransaction();
-                    brodcastPoem.setStatus(FinalVariables.POEM_SAVE);
-                    brodcastPoem.setDateAdded(Calendar.getInstance().getTime());
-                    realm.commitTransaction();
+                    actionMethods.savePoem();
 
                     CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
-
-
-                    ClickBrodcast.this.startActivity(goToMain);
-                    ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                    ClickBrodcast.this.finish();
-
                     return true;
 
                 } else if (d == Direction.right) {
 
-                    realm.beginTransaction();
-                    brodcastPoem.setStatus(FinalVariables.POEM_SHARE);
-                    realm.commitTransaction();
+                    actionMethods.sharePoem(callbackManager, displayImg);
 
                     CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
-
-                    String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                    BitmapMaker.fn_share(brodcastPoem.getPrimaryKey(), callbackManager, ClickBrodcast.this, (LoginButton)findViewById(R.id.login_fb),
-                            displayImg, root);
-
 
                     return true;
                 }
@@ -214,48 +199,28 @@ public class ClickBrodcast extends AppCompatActivity {
         findViewById(R.id.save).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                brodcastPoem.setStatus(FinalVariables.POEM_SAVE);
-                brodcastPoem.setDateAdded(Calendar.getInstance().getTime());
-                realm.commitTransaction();
+                actionMethods.savePoem();
 
                 CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
-
-                ClickBrodcast.this.startActivity(goToMain);
-                ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_right, R.anim.push_out_left);
-                ClickBrodcast.this.finish();
-
-
             }
         });
 
         findViewById(R.id.discard).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                brodcastPoem.setStatus(FinalVariables.POEM_DISCARD);
-                realm.commitTransaction();
-
+                actionMethods.discardPoem();
                 CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
 
-                ClickBrodcast.this.startActivity(goToMain);
-                ClickBrodcast.this.overridePendingTransition(R.anim.pull_in_up, R.anim.slide_down);
-                ClickBrodcast.this.finish();
             }
         });
 
         findViewById(R.id.share).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                realm.beginTransaction();
-                brodcastPoem.setStatus(FinalVariables.POEM_SHARE);
-                realm.commitTransaction();
+                actionMethods.savePoem();
 
                 CreateObjects.createBrodDelete(brodcastPoem.getPrimaryKey());
 
-                String root = Environment.getExternalStorageDirectory().getAbsolutePath();
-                BitmapMaker.fn_share(brodcastPoem.getPrimaryKey(), callbackManager, ClickBrodcast.this, (LoginButton) findViewById(R.id.login_fb),
-                        displayImg, root);
 
             }
         });

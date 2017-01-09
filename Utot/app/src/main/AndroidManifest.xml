@@ -4,17 +4,13 @@
     package="utot.utot">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
@@ -35,18 +31,18 @@
             android:authorities="com.facebook.app.FacebookContentProvider1762860773966518"
             android:exported="true" />
 
-        <activity android:name=".login.InitialScreen">
+        <activity
+            android:name=".login.InitialScreen"
+            android:launchMode="singleInstance">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            </activity>
+        </activity>
         <activity
             android:name=".login.LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
-
-        </activity>
+            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
         <activity
             android:name=".register.RegisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
@@ -54,8 +50,9 @@
             android:name=".alarm.TabbedAlarm"
             android:label="@string/title_activity_tabbed_alarm" />
         <activity android:name=".poem.ClickPoem" />
-        <activity android:name=".settings.Brodcast"
-            android:label="bRODcast"/>
+        <activity
+            android:name=".settings.Brodcast"
+            android:label="bRODcast" />
         <activity android:name=".settings.ClickBrodcast" />
         <activity android:name=".login.LoginSplashScreen" />
         <activity android:name=".alarm.CreatingAlarmActivity" />
@@ -89,6 +86,7 @@
             android:name=".triggeralarm.TriggeredActivity"
             android:launchMode="singleInstance" />
         <activity android:name=".poem.ShowPoems" />
+        <activity android:name=".settings.HowToActivity" />
     </application>
 
 </manifest>

@@ -24,6 +24,8 @@ import com.facebook.CallbackManager;
 
 import io.realm.Realm;
 import utot.utot.R;
+import utot.utot.asynctasks.GetHugotListTask;
+import utot.utot.customobjects.Poem;
 import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.ActionBarMaker;
 import utot.utot.helpers.BitmapMaker;
@@ -47,11 +49,17 @@ public class TabbedAlarm extends AppCompatActivity {
         Realm.init(getApplicationContext());
 
         setContentView(R.layout.activity_tabbed_alarm);
+        if((int) Realm.getDefaultInstance().where(Poem.class).count() <= 0){
+            new GetHugotListTask(this).execute();
+        }
 
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 
         titleText = (TextViewPlus)toolbar.findViewById(R.id.actTitle);
+        alarmButton = (ImageButton) findViewById(R.id.alarmButton);
+        settingsButton = (ImageButton)findViewById(R.id.settingsButton);
+        savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
 
         Glide.with(this).load(R.mipmap.ic_import_contacts_black_36dp).into((ImageButton) findViewById(R.id.savedPoemsButton));
         Glide.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
@@ -65,29 +73,26 @@ public class TabbedAlarm extends AppCompatActivity {
         } else if(action == FinalVariables.POEM_SHARE){
             Toast.makeText(this, "Poem shared successfully!", Toast.LENGTH_SHORT).show();
         }
+
         cur = getIntent().getIntExtra("TABBED", 1);
         Fragment display;
         if(cur==2){
             display = SettingsFragment.newInstance();
             titleText.setText("Settings");
+            changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
         } else if(cur==1){
             display = AlarmFragment.newInstance();
             titleText.setText("Alarms");
+            changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
         } else{
             display = SavedPoemsFragment.newInstance();
             titleText.setText("Saved Poems");
+            changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
         }
         manager = getSupportFragmentManager();
         transaction = manager.beginTransaction();
         transaction.replace(R.id.container, display);
         transaction.commit();
-
-
-        alarmButton = (ImageButton) findViewById(R.id.alarmButton);
-        settingsButton = (ImageButton)findViewById(R.id.settingsButton);
-        savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
-
-        changeButtonBG(alarmButton, savedPoemsButton, settingsButton);
 
         savedPoemsButton.setOnClickListener(new View.OnClickListener() {
             @Override

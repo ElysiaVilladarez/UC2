@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
-
+        <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
       </style>
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
@@ -18,6 +18,13 @@
 
     </style>
 
+    <style name="CustomCirclePageIndicator">
+        <item name="fillColor">#000000</item>
+        <item name="strokeColor">#000000</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="radius">10dp</item>
+        <item name="centered">true</item>
+    </style>
 
     <style name="EditTextStyle_1" parent="@android:style/Widget.EditText">
         <item name="android:cursorVisible">true</item>
