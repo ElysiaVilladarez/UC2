@@ -94,12 +94,12 @@ public class TabbedAlarm extends AppCompatActivity {
         transaction.replace(R.id.container, display);
         transaction.commit();
 
+        callbackManager = CallbackManager.Factory.create();
         savedPoemsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Go to SavedPoemsFragment
                 if(cur!=0) {
-                    callbackManager = CallbackManager.Factory.create();
                     transaction = manager.beginTransaction();
                     transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
 //                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
