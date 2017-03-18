@@ -29,7 +29,6 @@ import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
 import utot.utot.customobjects.OnSwipeListener;
 import utot.utot.customobjects.Poem;
-import utot.utot.customobjects.PoemPicture;
 import utot.utot.customviews.TextViewPlus;
 import utot.utot.helpers.BitmapMaker;
 import utot.utot.helpers.CreateObjects;

@@ -39,46 +39,51 @@
 
         </RelativeLayout>
     </android.support.v7.widget.Toolbar>
-    <FrameLayout
+    <android.support.v4.view.ViewPager
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:id="@+id/container"
         android:layout_weight="3">
 
-    </FrameLayout>
-    <LinearLayout
+    </android.support.v4.view.ViewPager>
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_weight="0.3"-->
+        <!--android:background="@color/whiteLogIn">-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:padding="12dp"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:id="@+id/savedPoemsButton" />-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:padding="12dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/alarmButton" />-->
+
+        <!--<ImageButton-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:scaleType="fitCenter"-->
+            <!--android:padding="12dp"-->
+            <!--android:layout_weight="1"-->
+            <!--android:id="@+id/settingsButton" />-->
+    <!--</LinearLayout>-->
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:layout_weight="0.3"
-        android:background="@color/whiteLogIn">
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:scaleType="fitCenter"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:padding="12dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/savedPoemsButton" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:padding="12dp"
-            android:layout_weight="1"
-            android:id="@+id/alarmButton" />
-
-        <ImageButton
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@android:color/transparent"
-            android:scaleType="fitCenter"
-            android:padding="12dp"
-            android:layout_weight="1"
-            android:id="@+id/settingsButton" />
-    </LinearLayout>
-
+        style="@style/AppTheme.TabStyle"
+        android:layout_height="wrap_content"
+        android:minHeight="?attr/actionBarSize"/>
 </LinearLayout>

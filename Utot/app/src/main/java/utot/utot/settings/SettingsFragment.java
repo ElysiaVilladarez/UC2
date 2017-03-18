@@ -62,13 +62,7 @@ private SharedPreferences prefs;
 
         prefs = getActivity().getSharedPreferences(FinalVariables.PREFS_NAME, Context.MODE_PRIVATE);
 
-        rootView.findViewById(R.id.bRODcastButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    new BrodcastTask(getContext(), getActivity(), prefs.getString(FinalVariables.EMAIL, ""), false).execute();
-
-            }
-        });
+        rootView.findViewById(R.id.bRODcastButton).setOnClickListener(LoginCommon.noFeatureAvailableClick(getActivity()));
 
         rootView.findViewById(R.id.syncButton).setOnClickListener(new View.OnClickListener() {
             @Override

@@ -8,10 +8,12 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,7 +38,9 @@ import utot.utot.settings.SettingsFragment;
 public class TabbedAlarm extends AppCompatActivity {
     public static CallbackManager callbackManager;
 
-    private ImageButton savedPoemsButton, alarmButton, settingsButton;
+//    private ImageButton savedPoemsButton, alarmButton, settingsButton;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
     private FragmentManager manager;
     private FragmentTransaction transaction;
     private TextViewPlus titleText;
@@ -57,13 +61,32 @@ public class TabbedAlarm extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         titleText = (TextViewPlus)toolbar.findViewById(R.id.actTitle);
-        alarmButton = (ImageButton) findViewById(R.id.alarmButton);
-        settingsButton = (ImageButton)findViewById(R.id.settingsButton);
-        savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
 
-        Glide.with(this).load(R.mipmap.ic_import_contacts_black_36dp).into((ImageButton) findViewById(R.id.savedPoemsButton));
-        Glide.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
-        Glide.with(this).load(R.mipmap.ic_settings_black_36dp).into((ImageButton) findViewById(R.id.settingsButton));
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+        viewPager = (ViewPager) findViewById(R.id.container);
+
+//        alarmButton = (ImageButton) findViewById(R.id.alarmButton);
+//        settingsButton = (ImageButton)findViewById(R.id.settingsButton);
+//        savedPoemsButton = (ImageButton) findViewById(R.id.savedPoemsButton);
+//
+//        Glide.with(this).load(R.mipmap.ic_import_contacts_black_36dp).into((ImageButton) findViewById(R.id.savedPoemsButton));
+//        Glide.with(this).load(R.mipmap.ic_access_alarms_black_36dp).into((ImageButton) findViewById(R.id.alarmButton));
+//        Glide.with(this).load(R.mipmap.ic_settings_black_36dp).into((ImageButton) findViewById(R.id.settingsButton));
 
         int action = getIntent().getIntExtra(FinalVariables.ACTION_DONE, -1);
         if(action == FinalVariables.POEM_SAVE){
@@ -75,90 +98,113 @@ public class TabbedAlarm extends AppCompatActivity {
         }
 
         cur = getIntent().getIntExtra("TABBED", 1);
-        Fragment display;
+        TabbedAlarmAdapter taa = new TabbedAlarmAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(taa);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.mipmap.ic_import_contacts_black_36dp);
+        tabLayout.getTabAt(1).setIcon(R.mipmap.ic_access_alarms_black_36dp);
+        tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings_black_36dp);
+        viewPager.setCurrentItem(cur);
+//        Fragment display;
         if(cur==2){
-            display = SettingsFragment.newInstance();
             titleText.setText("Settings");
-            changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
         } else if(cur==1){
-            display = AlarmFragment.newInstance();
             titleText.setText("Alarms");
-            changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
         } else{
-            display = SavedPoemsFragment.newInstance();
             titleText.setText("Saved Poems");
-            changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
         }
-        manager = getSupportFragmentManager();
-        transaction = manager.beginTransaction();
-        transaction.replace(R.id.container, display);
-        transaction.commit();
-
-        callbackManager = CallbackManager.Factory.create();
-        savedPoemsButton.setOnClickListener(new View.OnClickListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onClick(View view) {
-                // Go to SavedPoemsFragment
-                if(cur!=0) {
-                    transaction = manager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
-//                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                    transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
-                    transaction.commit();
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                    changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
-                    cur = 0;
+            }
 
-
+            @Override
+            public void onPageSelected(int position) {
+                if(position==2){
+                    titleText.setText("Settings");
+                } else if(position==1){
+                    titleText.setText("Alarms");
+                } else{
                     titleText.setText("Saved Poems");
                 }
             }
-        });
-        alarmButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                // Go to AlarmFragment
-                if(cur!=1) {
-                    transaction = manager.beginTransaction();
-                    if(cur==2) {
-                        transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
-//                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                    }
-                    if(cur==0) {
-                        transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
-//                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                    }
-                    transaction.replace(R.id.container, AlarmFragment.newInstance());
-                    transaction.commit();
+            public void onPageScrollStateChanged(int state) {
 
-                    changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
-
-                    titleText.setText("Alarms");
-                    cur = 1;
-                }
             }
         });
-
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Go to SettingsFragment
-                if(cur!=2) {
-                    transaction = manager.beginTransaction();
-                    transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
-//                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-                    transaction.replace(R.id.container, SettingsFragment.newInstance());
-                    transaction.commit();
-
-                    changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
-                    cur =2;
-
-
-                    titleText.setText("Settings");
-                }
-            }
-        });
+//        manager = getSupportFragmentManager();
+//        transaction = manager.beginTransaction();
+//        transaction.replace(R.id.container, display);
+//        transaction.commit();
+//
+//        callbackManager = CallbackManager.Factory.create();
+//        savedPoemsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Go to SavedPoemsFragment
+//                if(cur!=0) {
+//                    transaction = manager.beginTransaction();
+//                    transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+////                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    transaction.replace(R.id.container, SavedPoemsFragment.newInstance()); // newInstance() is a static factory method.
+//                    transaction.commit();
+//
+//                    changeButtonBG(savedPoemsButton, settingsButton, alarmButton);
+//                    cur = 0;
+//
+//
+//                    titleText.setText("Saved Poems");
+//                }
+//            }
+//        });
+//        alarmButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Go to AlarmFragment
+//                if(cur!=1) {
+//                    transaction = manager.beginTransaction();
+//                    if(cur==2) {
+//                        transaction.setCustomAnimations(R.anim.left_to_right_slide, R.anim.right_to_left_slide);
+////                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    }
+//                    if(cur==0) {
+//                        transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+////                        transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    }
+//                    transaction.replace(R.id.container, AlarmFragment.newInstance());
+//                    transaction.commit();
+//
+//                    changeButtonBG(alarmButton, settingsButton, savedPoemsButton);
+//
+//                    titleText.setText("Alarms");
+//                    cur = 1;
+//                }
+//            }
+//        });
+//
+//
+//        settingsButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                // Go to SettingsFragment
+//                if(cur!=2) {
+//                    transaction = manager.beginTransaction();
+//                    transaction.setCustomAnimations(R.anim.pull_in_right, R.anim.push_out_left);
+////                    transaction.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
+//                    transaction.replace(R.id.container, SettingsFragment.newInstance());
+//                    transaction.commit();
+//
+//                    changeButtonBG(settingsButton, alarmButton, savedPoemsButton);
+//                    cur =2;
+//
+//
+//                    titleText.setText("Settings");
+//                }
+//            }
+//        });
 
     }
 

@@ -9,8 +9,21 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowFullscreen">false</item>
         <item name="vpiCirclePageIndicatorStyle">@style/CustomCirclePageIndicator</item>
-      </style>
+    </style>
+    <!--<style name="Base.Widget.Design.TabLayout" parent="android:Widget">-->
+        <!--<item name="tabBackground">@drawable/tab_bg</item>-->
+        <!--<item name="tabIndicatorColor">#ff00ff</item>-->
+        <!--<item name="tabIndicatorHeight">0dp</item>-->
+    <!--</style>-->
+    <style name="AppTheme.TabStyle" parent="Widget.Design.TabLayout">
+        <item name="tabTextColor">#000000</item>
+        <item name="tabBackground">@drawable/tab_bg</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="android:background">@color/whiteLogIn</item>
+    </style>
+
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="NoCaps" parent="Widget.AppCompat.Button">
@@ -37,7 +50,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:layout_height">@dimen/edittext_height</item>
     </style>
-    
+
     <style name="ButtonStyle_1" parent="@android:style/Widget.Button">
         <item name="font">@style/pangram_medium</item>
         <item name="android:textSize">20sp</item>
@@ -69,6 +82,7 @@
         <item name="android:textColor">@color/whiteLogIn</item>
         <item name="android:textSize">11sp</item>
     </style>
+
     <style name="Alarm_Function_Buttons_2" parent="@android:style/Widget.Button">
         <item name="font">@style/pangram_medium</item>
         <item name="android:layout_weight">1</item>
@@ -102,15 +116,22 @@
     <style name="pangram_regular" parent="@android:style/Widget.TextView">
         <item name="font">fonts/Pangram-Regular.otf</item>
     </style>
+
     <style name="pangram_bold" parent="@android:style/Widget.TextView">
         <item name="font">fonts/Pangram-Bold.otf</item>
     </style>
+
     <style name="pangram_extrabold" parent="@android:style/Widget.TextView">
         <item name="font">fonts/Pangram-ExtraBold.otf</item>
     </style>
+
     <style name="pangram_medium" parent="@android:style/Widget.TextView">
         <item name="font">fonts/Pangram-Medium.otf</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>

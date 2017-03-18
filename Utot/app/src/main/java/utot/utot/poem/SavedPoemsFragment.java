@@ -17,7 +17,6 @@ import io.realm.Sort;
 import utot.utot.R;
 import utot.utot.alarm.TabbedAlarm;
 import utot.utot.customobjects.Poem;
-import utot.utot.customobjects.PoemPicture;
 import utot.utot.helpers.FinalVariables;
 
 public class SavedPoemsFragment extends Fragment {

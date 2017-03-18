@@ -42,7 +42,7 @@
         </activity>
         <activity
             android:name=".login.LoginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"></activity>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".register.RegisterActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />

@@ -18,7 +18,7 @@ android {
         config {
             keyAlias 'android'
             keyPassword 'android'
-            storeFile file('C:/Users/iyese/.android/debug.keystore')
+            storeFile file('C:/Users/Visitor/.android/debug.keystore')
             storePassword 'android'
         }
     }
