@@ -42,7 +42,7 @@ public class SavedPoemsFragment extends Fragment {
         TextView noPoemsText = (TextView) rootView.findViewById(R.id.noPoemsText);
 
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.ASCENDING);
+        RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.DESCENDING);
 
 
         if(poems.size() <= 0){

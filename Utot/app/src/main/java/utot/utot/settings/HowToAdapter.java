@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 
 import utot.utot.R;
+import utot.utot.customobjects.Instructions;
+import utot.utot.customviews.TextViewPlus;
 
 /**
  * Created by tonyv on 1/10/2017.
@@ -21,17 +23,17 @@ import utot.utot.R;
 
 public class HowToAdapter extends FragmentPagerAdapter {
 
-    private static ArrayList<Integer> imgId;
+    private static ArrayList<Instructions> inst;
 
-    public HowToAdapter(FragmentManager fragmentManager, ArrayList<Integer> imgId) {
+    public HowToAdapter(FragmentManager fragmentManager, ArrayList<Instructions> inst) {
         super(fragmentManager);
-        this.imgId = imgId;
+        this.inst = inst;
     }
 
     // Returns total number of pages
     @Override
     public int getCount() {
-        return imgId.size();
+        return inst.size();
     }
 
     // Returns the fragment to display for that page
@@ -70,7 +72,8 @@ public class HowToAdapter extends FragmentPagerAdapter {
             View rootView = inflater.inflate(R.layout.fragment_how_to, container, false);
             int pos = getArguments().getInt("POS");
 
-            Glide.with(getActivity()).load(imgId).into((ImageView)rootView.findViewById(R.id.instruction));
+            Glide.with(getActivity()).load(inst.get(pos).getImg()).into((ImageView)rootView.findViewById(R.id.instruction));
+            ((TextViewPlus)rootView.findViewById(R.id.text)).setText(inst.get(pos).getText());
             
             return rootView;
         }

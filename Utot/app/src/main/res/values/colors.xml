@@ -51,4 +51,6 @@
     <color name="trigger_bg_tint">#4DB34B5F</color>
 
     <color name="am_pm_fill">#C24E5A</color>
+
+    <color name="how_to_text_bg">#80000000</color>
 </resources>

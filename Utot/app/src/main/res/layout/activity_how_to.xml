@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/mdtp_transparent_black"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/howto_button_color"
+    android:orientation="vertical">
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/upbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/how_to_text_bg">
+
+        <ImageButton
+            android:id="@id/exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_margin="3dp"
+            android:background="@android:color/transparent"
+            android:src="@mipmap/ic_clear_white_36dp" />
+    </android.support.percent.PercentRelativeLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        />
+        android:layout_below="@id/upbar"
+        android:background="@color/howto_button_color" />
+
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/indicator"
-        android:layout_height="30dp"
         android:layout_width="match_parent"
+        android:layout_height="30dp"
         android:layout_alignParentBottom="true"
-        />
-</RelativeLayout>
+        android:background="@color/how_to_text_bg"
+        android:gravity="center" />
+
+
+</android.support.percent.PercentRelativeLayout>
