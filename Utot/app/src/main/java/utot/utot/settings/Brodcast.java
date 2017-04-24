@@ -65,6 +65,7 @@ public class Brodcast extends AppCompatActivity {
             brodcastList.setAdapter(brodcastAdapter);
             brodcastAdapter.notifyDataSetChanged();
         }
+        realm.close();
     }
 
     @Override

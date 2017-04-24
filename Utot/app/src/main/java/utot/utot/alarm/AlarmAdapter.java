@@ -143,6 +143,7 @@ public class AlarmAdapter extends RecyclerView.Adapter<AlarmAdapter.ViewHolder> 
 
             }
         });
+        realm.close();
     }
 
     @Override

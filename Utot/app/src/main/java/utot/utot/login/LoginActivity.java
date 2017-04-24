@@ -22,11 +22,10 @@ import java.util.Arrays;
 
 import io.realm.Realm;
 import utot.utot.R;
-import utot.utot.asynctasks.CheckingStart;
 import utot.utot.asynctasks.LoginTask;
+import utot.utot.customobjects.Alarm;
+import utot.utot.customobjects.Poem;
 import utot.utot.customviews.ButtonPlus;
-import utot.utot.helpers.CheckInternet;
-import utot.utot.helpers.FinalVariables;
 import utot.utot.helpers.LoginCommon;
 import utot.utot.register.RegisterActivity;
 

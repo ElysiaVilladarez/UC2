@@ -65,14 +65,13 @@ public class LoginTask extends AsyncTask<Void, Void, String> {
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         progressDialog.setTitle("Signing in . . .");
         progressDialog.setMessage("Please make sure you have a stable internet connection");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
     }
 
     @Override
     protected String doInBackground(Void... params) {
-        System.out.println("CHECK: WHY YOU LOOPIN?");
         if(CheckInternet.hasActiveInternetConnection(act)) {
             loginLink += "?email=" + username + "&password=" + password;
 //        + "&deviceToken="+ Settings.Secure.getString(getApplicationContext().getContentResolver(),

@@ -61,7 +61,7 @@ public class SavedPoemsFragment extends Fragment {
             poemList.setAdapter(new PoemAdapter(poems,getActivity(), TabbedAlarm.callbackManager, FinalVariables.POEM_SAVE));
 
         }
-
+        realm.close();
         return rootView;
     }
 

@@ -48,7 +48,7 @@ public class CheckingStart extends AsyncTask<Void, Void, Integer> {
                 pic.setIsUsed(false);
                 realm.commitTransaction();
             }
-
+            realm.close();
             return 2;
 
         } else if (currentVersionCode == prefs.getInt(FinalVariables.PREF_VERSION_CODE_KEY, FinalVariables.DOESNT_EXIST)) {

@@ -67,17 +67,18 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         progressDialog.setTitle("Syncing . . .");
         progressDialog.setMessage("Please make sure you have a stable internet connection");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
     }
 
     @Override
     protected String doInBackground(Void... params) {
         if(CheckInternet.hasActiveInternetConnection(act)) {
-            Realm realm = Realm.getDefaultInstance();
-            RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
-            RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.ASCENDING);
+            Realm realm = null;
+            RealmResults<Alarm> alarms;
+            RealmResults<Poem> poems;
+
 
 
             HttpClient client = new DefaultHttpClient();
@@ -89,6 +90,12 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
 
             char q = '"';
             try {
+                    realm = Realm.getDefaultInstance();
+                    alarms = realm.where(Alarm.class).findAll();
+                    poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.ASCENDING);
+
+
+
                 String alarmJSONArray = "";
 //            int i =0;
                 for (Alarm a : alarms) {
@@ -136,6 +143,8 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
                 urlParameters.add(new BasicNameValuePair("alarms", alarmJSONArray));
                 urlParameters.add(new BasicNameValuePair("hugots", poemJSONArray));
                 urlParameters.add(new BasicNameValuePair("email", username));
+
+                System.out.println("CHECK: count=" + alarms.size());
                 System.out.println("CHECK: POEMS=" + poemJSONArray);
                 System.out.println("CHECK: Alarms=" + alarmJSONArray);
 
@@ -154,6 +163,10 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
+            } finally {
+            if (realm != null) {
+                realm.close();
+            }
             }
 
             if (success.contains("success")) {

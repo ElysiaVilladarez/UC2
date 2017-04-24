@@ -127,6 +127,7 @@ public class PoemAdapter extends RecyclerView.Adapter<PoemAdapter.ViewHolder> {
                                                });
 
         CreateObjects.setPoemDisplay(act, holder.poemView, holder.backgroundPic, poem);
+        realm.close();
 
     }
  

@@ -224,6 +224,7 @@ public class ClickBrodcast extends AppCompatActivity {
 
             }
         });
+        realm.close();
     }
 
 

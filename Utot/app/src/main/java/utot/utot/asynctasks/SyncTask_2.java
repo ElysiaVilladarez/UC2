@@ -69,8 +69,8 @@ public class SyncTask_2 extends AsyncTask<Void, Void, String> {
         progressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         progressDialog.setTitle("Syncing . . .");
         progressDialog.setMessage("Please make sure you have a stable internet connection");
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.setCancelable(true);
+        progressDialog.setCanceledOnTouchOutside(true);
         progressDialog.show();
     }
 
@@ -80,7 +80,6 @@ public class SyncTask_2 extends AsyncTask<Void, Void, String> {
             Realm realm = Realm.getDefaultInstance();
             RealmResults<Alarm> alarms = realm.where(Alarm.class).findAll();
             RealmResults<Poem> poems = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.ASCENDING);
-
 
             HttpClient client = new DefaultHttpClient();
             HttpPost post = new HttpPost();
@@ -138,6 +137,7 @@ public class SyncTask_2 extends AsyncTask<Void, Void, String> {
                 urlParameters.add(new BasicNameValuePair("alarms", alarmJSONArray));
                 urlParameters.add(new BasicNameValuePair("hugots", poemJSONArray));
                 urlParameters.add(new BasicNameValuePair("email", username));
+                System.out.println("CHECK: countAlarms=" + alarms.size());
                 System.out.println("CHECK: POEMS=" + poemJSONArray);
                 System.out.println("CHECK: Alarms=" + alarmJSONArray);
 
@@ -157,6 +157,7 @@ public class SyncTask_2 extends AsyncTask<Void, Void, String> {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            realm.close();
 
             if (success.contains("success")) {
                 System.out.println("CHECK: SUCCESS");

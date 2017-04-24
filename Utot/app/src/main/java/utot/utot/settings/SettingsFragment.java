@@ -70,7 +70,6 @@ private SharedPreferences prefs;
                     new SyncTask(getActivity().getBaseContext(), getActivity(),
                             prefs.getString(FinalVariables.EMAIL, "")).execute();
 
-
             }
         });
 
@@ -92,7 +91,7 @@ private SharedPreferences prefs;
                             public void onClick(DialogInterface dialog, int whichButton) {
                                     new SyncTask_2(getActivity().getBaseContext(), getActivity(),
                                             prefs.getString(FinalVariables.EMAIL, "")).execute();
-                                    dialog.dismiss();
+
                             }
                         })
                         .setNegativeButton("NO", new DialogInterface.OnClickListener() {
@@ -104,10 +103,11 @@ private SharedPreferences prefs;
 
                                 Realm realm = Realm.getDefaultInstance();
                                 realm.beginTransaction();
-                                realm.delete(Poem.class);
-                                realm.delete(Alarm.class);
+                              realm.delete(Poem.class);
+                               realm.delete(Alarm.class);
                                 realm.commitTransaction();
 
+                                realm.close();
                                 prefs.edit().putBoolean(FinalVariables.LOGGED_IN, false).apply();
                                 prefs.edit().putString(FinalVariables.EMAIL, "").apply();
 

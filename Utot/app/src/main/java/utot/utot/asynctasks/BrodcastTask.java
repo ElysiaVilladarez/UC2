@@ -117,6 +117,8 @@ public class BrodcastTask extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
+            } finally{
+                realm.close();
             }
 
 

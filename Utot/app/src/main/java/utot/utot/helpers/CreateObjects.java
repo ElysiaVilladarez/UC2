@@ -3,6 +3,7 @@ package utot.utot.helpers;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
+import android.os.SystemClock;
 import android.text.Html;
 import android.text.Spanned;
 import android.widget.ImageView;
@@ -77,7 +78,7 @@ public class CreateObjects {
         alarm.setIsOn(isOn);
         realm.commitTransaction();
         Toast.makeText(c, "Alarm created successfully!", Toast.LENGTH_SHORT).show();
-
+        System.out.println("ChECK: Alarm Created=" + realm.where(Alarm.class).count());
         return alarm;
 
     }
@@ -124,7 +125,8 @@ public class CreateObjects {
 //        Toast.makeText(c, "Alarm created successfully!", Toast.LENGTH_SHORT).show();
 
         if(isOn) Computations.makeAlarm(c,alarm, Calendar.getInstance());
-
+        System.out.println("ChECK: Alarm Created=" + realm.where(Alarm.class).count());
+        realm.close();
         return alarm;
 
     }
@@ -169,6 +171,7 @@ public class CreateObjects {
         Toast.makeText(c, "Alarm edited successfully!", Toast.LENGTH_SHORT).show();
 
         Computations.makeAlarm(c,alarm, Calendar.getInstance());
+        realm.close();
         return alarm;
     }
 
@@ -179,7 +182,7 @@ public class CreateObjects {
         delete = realm.createObject(BrodcastDelete.class);
         delete.setId(pk);
         realm.commitTransaction();
-
+        realm.close();
         return delete;
     }
     public static Poem createPoem(int pk, String poemMessage, String bg, int status){
@@ -196,7 +199,7 @@ public class CreateObjects {
         }
         poem.setPic(pic);
         realm.commitTransaction();
-
+realm.close();
         return poem;
     }
     public static Poem createPoem(int pk, String poemMessage, String bg, Date dateAdded, int status){
@@ -214,7 +217,7 @@ public class CreateObjects {
         }
         poem.setPic(pic);
         realm.commitTransaction();
-
+realm.close();
         return poem;
     }
 
@@ -232,7 +235,7 @@ public class CreateObjects {
         poem.setPic(pic);
         pic.setIsUsed(true);
         realm.commitTransaction();
-
+realm.close();
         return poem;
     }
     public static Picture getRandomPicture(Realm realm){
@@ -258,6 +261,7 @@ public class CreateObjects {
 
 
         Picture pic = picList.get(randomNumPic);
+        realm.close();
 
         return pic;
     }
@@ -280,7 +284,7 @@ public class CreateObjects {
         poem.setPic(pic);
         pic.setIsUsed(true);
         realm.commitTransaction();
-
+        realm.close();
         return poem;
     }
 
@@ -298,7 +302,7 @@ public class CreateObjects {
         poem.setPic(pic);
         poem.setDateAdded(dateAdded);
         realm.commitTransaction();
-
+        realm.close();
         return poem;
     }
 

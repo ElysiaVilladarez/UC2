@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.facebook.FacebookSdk;
+
 import java.lang.ref.WeakReference;
 
 import io.realm.Realm;
@@ -80,6 +82,7 @@ public class LoginSplashScreen extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_login_splash_sceen);
 
         Realm.init(getApplicationContext());

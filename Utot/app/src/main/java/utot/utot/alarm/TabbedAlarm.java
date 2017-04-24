@@ -49,10 +49,8 @@ public class TabbedAlarm extends AppCompatActivity {
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Realm.init(getApplicationContext());
-
         setContentView(R.layout.activity_tabbed_alarm);
+        Realm.init(getApplicationContext());
 
         callbackManager = CallbackManager.Factory.create();
         if((int) Realm.getDefaultInstance().where(Poem.class).count() <= 0){

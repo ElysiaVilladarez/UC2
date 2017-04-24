@@ -76,6 +76,7 @@ public class AlarmFragment extends Fragment {
             alarmAdapter.notifyDataSetChanged();
         }
 
+        realm.close();
         return rootView;
     }
 
