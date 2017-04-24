@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 import utot.utot.R;
 import utot.utot.customobjects.Poem;
 import utot.utot.customviews.TextViewPlus;
@@ -39,7 +40,7 @@ public class ClickPoem extends AppCompatActivity {
         int status = getIntent().getIntExtra("STATUS", 0);
         Poem setPoem;
         if(status==FinalVariables.POEM_SAVE){
-            setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded").
+            setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_SAVE).findAllSorted("dateAdded", Sort.DESCENDING).
                     get(getIntent().getIntExtra("POEM_POS", 0));
         } else{
             setPoem = Realm.getDefaultInstance().where(Poem.class).equalTo("status", FinalVariables.POEM_BRODCAST).

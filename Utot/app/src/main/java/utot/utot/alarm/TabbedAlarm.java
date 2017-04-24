@@ -53,6 +53,8 @@ public class TabbedAlarm extends AppCompatActivity {
         Realm.init(getApplicationContext());
 
         setContentView(R.layout.activity_tabbed_alarm);
+
+        callbackManager = CallbackManager.Factory.create();
         if((int) Realm.getDefaultInstance().where(Poem.class).count() <= 0){
             new GetHugotListTask(this).execute();
         }
@@ -140,7 +142,6 @@ public class TabbedAlarm extends AppCompatActivity {
 //        transaction.replace(R.id.container, display);
 //        transaction.commit();
 //
-//        callbackManager = CallbackManager.Factory.create();
 //        savedPoemsButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {

@@ -72,6 +72,7 @@ public class LoginTask extends AsyncTask<Void, Void, String> {
 
     @Override
     protected String doInBackground(Void... params) {
+        System.out.println("CHECK: WHY YOU LOOPIN?");
         if(CheckInternet.hasActiveInternetConnection(act)) {
             loginLink += "?email=" + username + "&password=" + password;
 //        + "&deviceToken="+ Settings.Secure.getString(getApplicationContext().getContentResolver(),
@@ -170,7 +171,7 @@ public class LoginTask extends AsyncTask<Void, Void, String> {
             LoginCommon.noInternetDialog(act);
         } else{
             LoginManager.getInstance().logOut();
-            Toast.makeText(act,result, Toast.LENGTH_LONG).show();
+            Toast.makeText(act, result, Toast.LENGTH_LONG).show();
         }
 
     }

@@ -79,7 +79,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (username.isEmpty() || password.isEmpty()) {
                     Toast.makeText(LoginActivity.this, "Please fill up the given fields", Toast.LENGTH_SHORT).show();
                 } else {
-                        LoginTask loggingIn = new LoginTask(getBaseContext(), LoginActivity.this, username, password);
+                        LoginTask loggingIn = new LoginTask(getApplicationContext(), LoginActivity.this, username, password);
                         loggingIn.execute();
                 }
             }
