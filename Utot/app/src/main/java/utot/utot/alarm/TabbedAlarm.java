@@ -105,7 +105,7 @@ public class TabbedAlarm extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.mipmap.ic_access_alarms_black_36dp);
         tabLayout.getTabAt(2).setIcon(R.mipmap.ic_settings_black_36dp);
         viewPager.setCurrentItem(cur);
-//        Fragment display;
+
         if(cur==2){
             titleText.setText("Settings");
         } else if(cur==1){
@@ -135,7 +135,7 @@ public class TabbedAlarm extends AppCompatActivity {
 
             }
         });
-//        manager = getSupportFragmentManager();
+//       manager = getSupportFragmentManager();
 //        transaction = manager.beginTransaction();
 //        transaction.replace(R.id.container, display);
 //        transaction.commit();
