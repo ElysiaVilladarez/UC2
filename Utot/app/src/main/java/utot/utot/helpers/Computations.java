@@ -3,8 +3,10 @@ package utot.utot.helpers;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +18,7 @@ import java.util.Date;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import utot.utot.customobjects.Alarm;
+import utot.utot.settings.Brodcast;
 import utot.utot.triggeralarm.AlarmReceiver;
 
 /**
@@ -245,7 +248,18 @@ public class Computations {
         long alarmMilli = now.getTimeInMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 alarm.getPrimaryKey(), myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+        if(Build.VERSION.SDK_INT < 23){
+            if(Build.VERSION.SDK_INT >= 19){
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+            }
+            else{
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+            }
+        }
+        else{
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+        }
+
 
         return true;
     }
@@ -317,7 +331,18 @@ public class Computations {
         long alarmMilli = now.getTimeInMillis();
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
                 pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+
+        if(Build.VERSION.SDK_INT < 23){
+            if(Build.VERSION.SDK_INT >= 19){
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+            }
+            else{
+                alarmManager.set(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+            }
+        }
+        else{
+            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, alarmMilli, pendingIntent);
+        }
 
 //        long days = TimeUnit.MILLISECONDS.toDays(alarmMilli);
 //        alarmMilli -= TimeUnit.DAYS.toMillis(days);
