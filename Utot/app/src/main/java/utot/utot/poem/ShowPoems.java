@@ -86,7 +86,7 @@ public class ShowPoems extends AppCompatActivity {
         CreateObjects.setPoemDisplay(this, poem, bg, randomPoem);
         final Intent goToMain = new Intent(ShowPoems.this, TabbedAlarm.class);
 
-        actionMethods = new ActionMethods(realm, this, goToMain, randomPoem);
+        actionMethods = new ActionMethods(Realm.getDefaultInstance(), this, goToMain, randomPoem);
         actionMethods.animateText(saveText);
         actionMethods.animateText(discardText);
         actionMethods.animateText(shareText);

@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
@@ -182,7 +185,7 @@ public class CreateObjects {
         delete = realm.createObject(BrodcastDelete.class);
         delete.setId(pk);
         realm.commitTransaction();
-        realm.close();
+
         return delete;
     }
     public static Poem createPoem(int pk, String poemMessage, String bg, int status){
@@ -199,7 +202,7 @@ public class CreateObjects {
         }
         poem.setPic(pic);
         realm.commitTransaction();
-realm.close();
+
         return poem;
     }
     public static Poem createPoem(int pk, String poemMessage, String bg, Date dateAdded, int status){
@@ -217,7 +220,7 @@ realm.close();
         }
         poem.setPic(pic);
         realm.commitTransaction();
-realm.close();
+
         return poem;
     }
 
@@ -235,7 +238,7 @@ realm.close();
         poem.setPic(pic);
         pic.setIsUsed(true);
         realm.commitTransaction();
-realm.close();
+
         return poem;
     }
     public static Picture getRandomPicture(Realm realm){
@@ -261,7 +264,6 @@ realm.close();
 
 
         Picture pic = picList.get(randomNumPic);
-        realm.close();
 
         return pic;
     }
@@ -284,7 +286,7 @@ realm.close();
         poem.setPic(pic);
         pic.setIsUsed(true);
         realm.commitTransaction();
-        realm.close();
+
         return poem;
     }
 
@@ -302,17 +304,25 @@ realm.close();
         poem.setPic(pic);
         poem.setDateAdded(dateAdded);
         realm.commitTransaction();
-        realm.close();
+
         return poem;
     }
 
     public static void setPoemDisplay(Activity act, TextView poemText, ImageView bg, Poem poem){
-        Spanned poemMes;
-        if (Build.VERSION.SDK_INT >= 24) {
-            poemMes = Html.fromHtml(poem.getPoem(), Html.FROM_HTML_MODE_LEGACY); // for 24 api and more
-        } else {
-            poemMes = Html.fromHtml(poem.getPoem()); // or for older api
+
+        String poemMes = "";
+        //Spanned poemMes2;
+        try {
+            poemMes = URLDecoder.decode(poem.getPoem(), "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+//        if (Build.VERSION.SDK_INT >= 24) {
+//            poemMes2 = Html.fromHtml(poem.getPoem(), Html.FROM_HTML_MODE_LEGACY); // for 24 api and more
+//            System.out.println("CHECK: POEM MESS " + poemMes + " " + poem.getPoem());
+//        } else {
+//            poemMes2 = Html.fromHtml(poem.getPoem()); // or for older api
+//        }
         poemText.setText(poemMes);
         int resourceID;
         try {
@@ -321,6 +331,7 @@ realm.close();
             throw new RuntimeException("Error getting Resource ID.", e);
         }
         Glide.with(act).load(resourceID).into(bg);
+
 
     }
 }

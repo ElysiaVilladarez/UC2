@@ -78,8 +78,11 @@
             android:name=".triggeralarm.AlarmService"
             android:enabled="true" />
 
-        <receiver android:name=".triggeralarm.AlarmReceiver">
-            <action android:name="android.intent.action.BOOT_COMPLETED" />
+        <receiver android:name=".triggeralarm.AlarmReceiver" android:enabled="true">
+             <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </receiver>
 
         <activity
