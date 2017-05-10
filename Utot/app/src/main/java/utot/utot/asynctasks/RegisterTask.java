@@ -120,7 +120,9 @@ public class RegisterTask extends AsyncTask<Void, Void, String> {
                             JSONObject poem = hugot_list.getJSONObject(i);
                             CreateObjects.createPoem(Integer.parseInt(poem.getString("id")), poem.getString("short"),
                                     poem.getString("photo"), FinalVariables.POEM_NOT_SHOWN);
+
                         }
+                    } else{
                     }
                 }
             } catch (URISyntaxException e) {

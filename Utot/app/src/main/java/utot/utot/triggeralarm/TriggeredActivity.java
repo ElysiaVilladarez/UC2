@@ -199,6 +199,7 @@ public class TriggeredActivity extends AppCompatActivity {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(this,
                     pk, myIntent, PendingIntent.FLAG_CANCEL_CURRENT);
             alarmManager.set(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() + 5 * 60 * 1000, pendingIntent);
+
             if(sleepCount == snoozeNum)
                 Toast.makeText(this, "Snooze for 5 minutes. Warning: this is the last snooze!", Toast.LENGTH_LONG).show();
             else

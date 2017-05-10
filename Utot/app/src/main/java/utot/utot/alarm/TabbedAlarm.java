@@ -57,6 +57,8 @@ public class TabbedAlarm extends AppCompatActivity {
             new GetHugotListTask(this).execute();
         }
 
+        System.out.println("CHECK: HUGOT LIST COUNT" + Realm.getDefaultInstance().where(Poem.class).count());
+
         Toolbar toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
 

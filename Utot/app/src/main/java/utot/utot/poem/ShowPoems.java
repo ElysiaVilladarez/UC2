@@ -15,6 +15,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
@@ -72,6 +73,11 @@ public class ShowPoems extends AppCompatActivity {
         realm = Realm.getDefaultInstance();
 
         randomPoem = CreateObjects.getRandomPoem();
+        if(randomPoem == null){
+            Toast.makeText(getApplicationContext(), "No poems are available", Toast.LENGTH_LONG);
+            startActivity(new Intent(this, TabbedAlarm.class));
+            finish();
+        }
 
         displayImg = (PercentRelativeLayout) findViewById(R.id.poemAndImage);
         rParams = (RelativeLayout.LayoutParams) displayImg.getLayoutParams();

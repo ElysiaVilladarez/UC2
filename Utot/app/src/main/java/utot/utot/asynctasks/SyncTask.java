@@ -191,7 +191,8 @@ public class SyncTask extends AsyncTask<Void, Void, String> {
             progressDialog.dismiss();
         }
         if (result.contains("success")) {
-            Toast.makeText(act, "Successfully synced data!", Toast.LENGTH_SHORT).show();
+            new GetHugotListTask(act).execute();
+           Toast.makeText(act, "Successfully synced data!", Toast.LENGTH_SHORT).show();
         } else if (result.trim().isEmpty()) {
             LoginCommon.noInternetDialog(act);
         } else {

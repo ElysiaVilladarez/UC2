@@ -272,22 +272,25 @@ public class CreateObjects {
         int randomNum;
         RealmResults<Poem> poemList = realm.where(Poem.class).equalTo("status", FinalVariables.POEM_NOT_SHOWN).findAll();
         int count = poemList.size();
+        if(count > 0) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                randomNum = ThreadLocalRandom.current().nextInt(1, count) - 1;
+            } else {
+                Random rand = new Random();
+                randomNum = rand.nextInt(count);
+            }
+            Poem poem = poemList.get(randomNum);
+            Picture pic = getRandomPicture(realm);
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-            randomNum = ThreadLocalRandom.current().nextInt(1, count)-1;
+            realm.beginTransaction();
+            poem.setPic(pic);
+            pic.setIsUsed(true);
+            realm.commitTransaction();
+
+            return poem;
         } else{
-            Random rand = new Random();
-            randomNum = rand.nextInt(count);
+            return null;
         }
-        Poem poem = poemList.get(randomNum);
-        Picture pic = getRandomPicture(realm);
-
-        realm.beginTransaction();
-        poem.setPic(pic);
-        pic.setIsUsed(true);
-        realm.commitTransaction();
-
-        return poem;
     }
 
     public static Poem getLocalPoems(int pk, String bg, Date dateAdded){
@@ -311,19 +314,19 @@ public class CreateObjects {
     public static void setPoemDisplay(Activity act, TextView poemText, ImageView bg, Poem poem){
 
         String poemMes = "";
-        //Spanned poemMes2;
+        Spanned poemMes2;
         try {
             poemMes = URLDecoder.decode(poem.getPoem(), "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-//        if (Build.VERSION.SDK_INT >= 24) {
-//            poemMes2 = Html.fromHtml(poem.getPoem(), Html.FROM_HTML_MODE_LEGACY); // for 24 api and more
-//            System.out.println("CHECK: POEM MESS " + poemMes + " " + poem.getPoem());
-//        } else {
-//            poemMes2 = Html.fromHtml(poem.getPoem()); // or for older api
-//        }
-        poemText.setText(poemMes);
+        if (Build.VERSION.SDK_INT >= 24) {
+            poemMes2 = Html.fromHtml(poemMes, Html.FROM_HTML_MODE_LEGACY); // for 24 api and more
+
+        } else {
+            poemMes2 = Html.fromHtml(poemMes); // or for older api
+        }
+        poemText.setText(poemMes2);
         int resourceID;
         try {
             resourceID = act.getResources().getIdentifier(poem.getPic().getResourceName(), "mipmap", act.getPackageName());
